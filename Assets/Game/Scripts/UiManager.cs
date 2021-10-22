@@ -40,7 +40,7 @@ namespace Game.Scripts
         /// updates the text on the ui element
         /// </summary>
         /// <param name="value"></param>
-        private void UpdateTimerText(int value)
+        public void UpdateTimerText(int value)
         {
             if (txtTimer) txtTimer.text = value.ToString();
         }
