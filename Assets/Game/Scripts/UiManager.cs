@@ -25,7 +25,7 @@ namespace Game.Scripts
         /// </summary>
         private void RegisterListeners()
         {
-            EventManager.Instance.OnTimer1SecondTick += UpdateTimerText;
+            // EventManager.Instance.OnTimer1SecondTick += UpdateTimerText;
         }
         
         /// <summary>
@@ -33,7 +33,7 @@ namespace Game.Scripts
         /// </summary>
         private void DeregisterListeners()
         {
-            EventManager.Instance.OnTimer1SecondTick -= UpdateTimerText;
+            // EventManager.Instance.OnTimer1SecondTick -= UpdateTimerText;
         }
 
         /// <summary>

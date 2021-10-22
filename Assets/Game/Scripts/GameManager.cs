@@ -22,7 +22,7 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     private void RegisterListeners()
     {
-        EventManager.Instance.OnTimerDone += GameOver;
+        // EventManager.Instance.OnTimerDone += GameOver;
     }
         
     /// <summary>
@@ -30,7 +30,7 @@ public class GameManager : MonoSingleton<GameManager>
     /// </summary>
     private void DeregisterListeners()
     {
-        EventManager.Instance.OnTimerDone -= GameOver;
+        // EventManager.Instance.OnTimerDone -= GameOver;
     }
 
     /// <summary>

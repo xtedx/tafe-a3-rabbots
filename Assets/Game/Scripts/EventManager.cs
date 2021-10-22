@@ -5,8 +5,8 @@ using UnityEngine;
 namespace Game.Scripts
 {
     /// <summary>
-    /// Manages Events in the game to reduce dependency, using Observer design pattern
-    /// The interested classes will register/listen and do action themselves
+    /// Manages C# Events (not the UnityEvents) in the game to reduce dependency, using Observer design pattern
+    /// The interested classes will register/listen and do action themselves.
     /// </summary>
     public class EventManager : MonoSingleton<EventManager>
     {
