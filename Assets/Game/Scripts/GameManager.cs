@@ -1,55 +1,54 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Game.Scripts;
 using TeddyToolKit.Core;
 using UnityEngine;
 
-public class GameManager : MonoSingleton<GameManager>
+namespace Game.Scripts
 {
-    private void OnEnable()
+    public class GameManager : MonoSingleton<GameManager>
     {
-        RegisterListeners();
-    }
+        private void OnEnable()
+        {
+            RegisterListeners();
+        }
 
-    private void OnDisable()
-    {
-        DeregisterListeners();
-    }
+        private void OnDisable()
+        {
+            DeregisterListeners();
+        }
     
-    /// <summary>
-    /// listen to the event and call method when that happens
-    /// </summary>
-    private void RegisterListeners()
-    {
-        // EventManager.Instance.OnTimerDone += GameOver;
-    }
+        /// <summary>
+        /// listen to the event and call method when that happens
+        /// </summary>
+        private void RegisterListeners()
+        {
+            // EventManager.Instance.OnTimerDone += GameOver;
+        }
         
-    /// <summary>
-    /// make sure to un-listen, always as a pair with the onenable
-    /// </summary>
-    private void DeregisterListeners()
-    {
-        // EventManager.Instance.OnTimerDone -= GameOver;
-    }
+        /// <summary>
+        /// make sure to un-listen, always as a pair with the onenable
+        /// </summary>
+        private void DeregisterListeners()
+        {
+            // EventManager.Instance.OnTimerDone -= GameOver;
+        }
 
-    /// <summary>
-    /// what happens when the gameover event occurs
-    /// </summary>
-    public void GameOver()
-    {
-        Debug.Log("Game Over");
-    }
+        /// <summary>
+        /// what happens when the gameover event occurs
+        /// </summary>
+        public void GameOver()
+        {
+            Debug.Log("Game Over");
+        }
     
-    // Start is called before the first frame update
-    void Start()
-    {
+        // Start is called before the first frame update
+        void Start()
+        {
         
-    }
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
+        // Update is called once per frame
+        void Update()
+        {
         
+        }
     }
 }
