@@ -1,8 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditor.IMGUI.Controls;
-using UnityEngine;
 
 namespace TeddyToolKit.HighScore
 {
