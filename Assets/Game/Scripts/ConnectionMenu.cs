@@ -12,18 +12,7 @@ namespace Game.Scripts
         public MyNetworkDiscovery networkDiscovery;
         [Space] [SerializeField] private Button buttonTemplateIP;
         private Dictionary<long, Button> buttonIPs = new Dictionary<long, Button>();
-#if UNITY_EDITOR
-        void OnValidate()
-        {
-            if (networkDiscovery == null)
-            {
-                Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
-                networkDiscovery = GetComponent<MyNetworkDiscovery>();
-                UnityEditor.Events.UnityEventTools.AddPersistentListener(networkDiscovery.OnServerFound, OnDiscoveredServer);
-                UnityEditor.Undo.RecordObjects(new Object[] { this, networkDiscovery }, "Set NetworkDiscovery");
-            }
-        }
-#endif
+
         public void ButtonStartHost()
         {
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
