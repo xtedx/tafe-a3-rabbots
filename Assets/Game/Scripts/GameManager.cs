@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using TeddyToolKit.Core;
 using UnityEngine;
 
@@ -5,6 +7,18 @@ namespace Game.Scripts
 {
     public class GameManager : MonoSingleton<GameManager>
     {
+        /// <summary> The dictionary of all connected players using their NetID as the key. </summary>
+        private readonly Dictionary<uint, NetworkPlayer> players = new Dictionary<uint, NetworkPlayer>();
+
+        /// <summary> Adds a player to the dictionary. </summary>
+        public void AddPlayer([NotNull] NetworkPlayer player)
+        {
+            players.Add(player.netId, player);
+        }
+        
+        /// <summary> Removes a player from the dictionary. </summary>
+        public void RemovePlayer([NotNull] NetworkPlayer player) => players.Remove(player.netId);
+        
         private void OnEnable()
         {
             RegisterListeners();
