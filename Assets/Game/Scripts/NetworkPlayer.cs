@@ -55,12 +55,6 @@ namespace Game.Scripts
                 {
                     CmdSpawnEnemy();
                 }
-                
-                if(Input.GetKeyDown(KeyCode.L))
-                {
-                    //this should only be in the online lobby, by the host and not anytime in the game 
-                    GetComponent<NetworkSceneManager>().LoadNetworkScene("Map 1");
-                }
             }
         }
 

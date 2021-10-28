@@ -1,15 +1,26 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Mirror;
+using NetworkGame.Networking;
 using TeddyToolKit.Core;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game.Scripts
 {
     public class GameManager : MonoSingleton<GameManager>
     {
+        #region constant definitions
+
+        public const string MAP1_SCENE = "Map 1";
+        public const string MAP2_SCENE = "Map 2";
+        public const string OFFLINE_SCENE = "Offline Start Scene";
+        public const string ONLINE_SCENE = "Online Lobby";
+        
+        #endregion
         /// <summary> The dictionary of all connected players using their NetID as the key. </summary>
         private readonly Dictionary<uint, NetworkPlayer> players = new Dictionary<uint, NetworkPlayer>();
-
+        
         /// <summary> Adds a player to the dictionary. </summary>
         public void AddPlayer([NotNull] NetworkPlayer player)
         {
@@ -21,6 +32,7 @@ namespace Game.Scripts
         
         private void OnEnable()
         {
+            FlagAsPersistant();
             RegisterListeners();
         }
 
@@ -52,7 +64,25 @@ namespace Game.Scripts
         {
             Debug.Log("Game Over");
         }
-    
+
+        /// <summary>
+        /// Is this the host?
+        /// </summary>
+        /// <returns></returns>
+        public bool IsHost()
+        {
+            return (NetworkManager.singleton.mode == NetworkManagerMode.Host);
+        }
+
+        /// <summary>
+        /// are we in online lobby now?
+        /// </summary>
+        /// <returns></returns>
+        public bool IsInLobby()
+        {
+            return (SceneManager.GetActiveScene().name == ONLINE_SCENE);
+        }
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -62,7 +92,22 @@ namespace Game.Scripts
         // Update is called once per frame
         void Update()
         {
-        
+            
+        }
+
+
+        public void StartGame(string sceneMapName)
+        {
+            //if in online lobby
+            if (IsInLobby() && IsHost())
+            {
+                //this should only be in the online lobby, by the host and not anytime in the game 
+                GetComponent<NetworkSceneManager>().LoadNetworkScene(sceneMapName);
+            }
+            else
+            {
+                Debug.LogError($"not host and/or in lobby");
+            }
         }
     }
 }

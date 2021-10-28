@@ -4,6 +4,7 @@ using Mirror;
 using TeddyToolKit.Core;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Game.Scripts
@@ -23,6 +24,12 @@ namespace Game.Scripts
         [Tooltip("the body for each tab")]
         [SerializeField]
         private List<GameObject> tabBody;
+        
+        [Space]
+        [Tooltip("the button group for map choice")]
+        [SerializeField]
+        private GameObject mapChoice;
+        
         private int activeTabIndex; 
         
         /// <summary>
@@ -55,16 +62,31 @@ namespace Game.Scripts
         private void Update()
         {
             UIKeyPress();
-            NetworkStatus();
         }
 
-        private void NetworkStatus()
+        private void LateUpdate()
         {
-            txtNetworkStatus.text = NetworkManager.singleton.mode.ToString();
+            ShowNetworkStatus();
+            ShowMapChoiceButtons();
+        }
+
+        private void ShowMapChoiceButtons()
+        {
+            //if in online lobby
+            var isHostInLobby = (GameManager.Instance.IsHost() && GameManager.Instance.IsInLobby());
+            mapChoice.SetActive(isHostInLobby);
+            //Debug.Log($"isInLobby {isInLobby} active {SceneManager.GetActiveScene().name} network {NetworkManager.singleton.onlineScene}");
+        }
+
+        private void ShowNetworkStatus()
+        {
+            txtNetworkStatus.text =
+                $"{NetworkManager.singleton.mode.ToString()} :: {SceneManager.GetActiveScene().name}";
         }
 
         private void OnEnable()
         {
+            FlagAsPersistant();
             RegisterListeners();
         }
 
@@ -125,6 +147,11 @@ namespace Game.Scripts
                 int.TryParse(s[(s.Length - 1)], out bodyIndex);
                 body.SetActive(bodyIndex == activeTabIndex);
             }
+        }
+
+        public void ButtonMapChoice(string sceneMapName)
+        {
+            GameManager.Instance.StartGame(sceneMapName);
         }
     }
 }
