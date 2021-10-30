@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ece4cccd48e37954a92d63bef379f747
+guid: bef12238b85aea449a83abce1311ef32
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: polished_concrete
-    second: {fileID: 2100000, guid: 05ffac6c1238e9144a12a17864cd7505, type: 2}
+    second: {fileID: 2100000, guid: 75dc09a1a1e87c84dad3d8c15e4d099b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

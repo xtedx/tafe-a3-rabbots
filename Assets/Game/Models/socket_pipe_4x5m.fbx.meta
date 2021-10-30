@@ -3,7 +3,12 @@ guid: 999c9ae5cbc6b994cbd322bfb72888d3
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: polished_concrete
+    second: {fileID: 2100000, guid: 72a24f224a975b94084598b9dc00eb87, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
