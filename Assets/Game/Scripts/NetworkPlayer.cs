@@ -56,6 +56,15 @@ namespace Game.Scripts
                     CmdSpawnEnemy();
                 }
             }
+
+            if (GameManager.Instance.IsInLobby() && GameManager.Instance.IsHost())
+            {
+                if (Input.GetKeyDown(KeyCode.Z))
+                {
+                    //this should only be in the online lobby, by the host and not anytime in the game 
+                    GameManager.Instance.StartGame("Map 1");
+                }
+            }
         }
 
         [Command]
@@ -103,6 +112,10 @@ namespace Game.Scripts
         public override void OnStartLocalPlayer()
         {
             // This is run if we are the local player and NOT a remote player
+            GetComponent<NetworkSceneManager>().LoadNetworkScene("GUI");
+            Debug.Log("loaded scene in network player");
+            //TODO: NOT WORKING YET object not found. how to fix make sure uimanager is available??
+            UiManager.Instance.OnStartOnline();
         }
 
         // This is run via the network starting and the player connecting...
@@ -116,12 +129,12 @@ namespace Game.Scripts
             PlayerController controller = gameObject.GetComponent<PlayerController>();
             controller.enabled = isLocalPlayer;
             
-            GameManager.Instance.AddPlayer(this);
+            MyNetworkManager.AddPlayer(this);
         }
 
         public override void OnStopClient()
         {
-            GameManager.Instance.RemovePlayer(this);
+            MyNetworkManager.RemovePlayer(this);
         }
 
         // This runs when the server starts... ON the server on all clients

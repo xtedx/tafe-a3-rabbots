@@ -1,5 +1,6 @@
 using System.Collections;
 using Mirror;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace NetworkGame.Networking
@@ -10,9 +11,11 @@ namespace NetworkGame.Networking
     {
         public void LoadNetworkScene(string _scene)
         {
+            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            Debug.Log($"isLocalPlayer {isLocalPlayer}");
             if(isLocalPlayer) CmdLoadNetworkScene(_scene);
         }
-        
+
         [Command]
         public void CmdLoadNetworkScene(string _scene) => RpcLoadNetworkScene(_scene);
 
@@ -30,7 +33,6 @@ namespace NetworkGame.Networking
         private IEnumerator LoadScene_CR(string _sceneName, SceneLoadedDelegate _onSceneLoaded = null)
         {
             yield return SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Additive);
-            
             _onSceneLoaded?.Invoke(SceneManager.GetSceneByName(_sceneName));
         }
 

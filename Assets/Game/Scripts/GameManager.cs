@@ -34,6 +34,8 @@ namespace Game.Scripts
         {
             FlagAsPersistant();
             RegisterListeners();
+            SceneManager.LoadScene("GUI", LoadSceneMode.Additive);
+            Debug.Log("loaded gui scene");
         }
 
         private void OnDisable()
@@ -86,7 +88,7 @@ namespace Game.Scripts
         // Start is called before the first frame update
         void Start()
         {
-        
+
         }
 
         // Update is called once per frame
@@ -103,6 +105,7 @@ namespace Game.Scripts
             {
                 //this should only be in the online lobby, by the host and not anytime in the game 
                 GetComponent<NetworkSceneManager>().LoadNetworkScene(sceneMapName);
+                Debug.Log($"loaded {sceneMapName}");
             }
             else
             {

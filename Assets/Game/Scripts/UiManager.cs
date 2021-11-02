@@ -35,9 +35,15 @@ namespace Game.Scripts
         /// <summary>
         /// Drag the Menu GUI GameObject here for the UIManager to manage
         /// </summary>
-        [SerializeField] 
+        [SerializeField]
         [Tooltip("Drag the Menu GUI GameObject here for the UIManager to manage")]
-        private GameObject menuGUI;
+        private GameObject mainPanelGUI;
+        [SerializeField]
+        private GameObject topPanel;
+        [SerializeField]
+        private GameObject topTimerBlock;
+        [SerializeField]
+        private GameObject bottomPanel;
         
         /// <summary>
         /// toggles the display of menu
@@ -49,13 +55,22 @@ namespace Game.Scripts
         }
         
         /// <summary>
+        /// toggles the display of the PanelMain menu
+        /// </summary>
+        public void ToggleMenu()
+        {
+            var current = mainPanelGUI.activeSelf;
+            mainPanelGUI.SetActive(!current);
+        }
+        
+        /// <summary>
         /// catches keypresses related for the UI, usually the main menu
         /// </summary>
         public void UIKeyPress()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                ToggleMenu(menuGUI);
+                ToggleMenu(mainPanelGUI);
             }
         }
 
@@ -67,7 +82,7 @@ namespace Game.Scripts
         private void LateUpdate()
         {
             ShowNetworkStatus();
-            ShowMapChoiceButtons();
+            //ShowMapChoiceButtons();
         }
 
         private void ShowMapChoiceButtons()
@@ -86,13 +101,36 @@ namespace Game.Scripts
 
         private void OnEnable()
         {
-            FlagAsPersistant();
             RegisterListeners();
         }
 
         private void OnDisable()
         {
             DeregisterListeners();
+        }
+
+        /// <summary>
+        /// set up the gui layout to show what is necessary for online mode after logging in
+        /// main menu off, bottom bar on, to bar on
+        /// </summary>
+        public void OnStartOnline()
+        {
+            topPanel.SetActive(true);
+            topTimerBlock.SetActive(false);
+            mainPanelGUI.SetActive(false);
+            bottomPanel.SetActive(true);
+        }
+
+        /// <summary>
+        /// set up the gui layout to show what is necessary for online mode after starting a game
+        /// main menu off, bottom bar on with players, to bar on, timer on
+        /// </summary>
+        public void OnStartGame()
+        {
+            topPanel.SetActive(true);
+            topTimerBlock.SetActive(true);
+            mainPanelGUI.SetActive(false);
+            bottomPanel.SetActive(true);
         }
 
         #region events related

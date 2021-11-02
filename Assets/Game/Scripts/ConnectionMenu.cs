@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Mirror;
 using Mirror.Discovery;
@@ -9,8 +10,18 @@ namespace Game.Scripts
     public class ConnectionMenu : MonoBehaviour
     {
         readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
-        public MyNetworkDiscovery networkDiscovery;
-        [Space] [SerializeField] private Button buttonTemplateIP;
+        private MyNetworkDiscovery networkDiscovery;
+        
+        [Space]
+        [SerializeField] private Button btnStartHost;
+        [SerializeField] private Button btnStartServer;
+        [SerializeField] private Button btnConnectLocalhost;
+        [SerializeField] private Button btnStopServer;
+        [SerializeField] private Button btnStopClient;
+        [SerializeField] private Button btnDiscoverServers;
+        [SerializeField] private Button btnDebug;
+        [SerializeField] private Button buttonTemplateIP;
+
         private Dictionary<long, Button> buttonIPs = new Dictionary<long, Button>();
 
         public void ButtonStartHost()
@@ -27,6 +38,13 @@ namespace Game.Scripts
             discoveredServers.Clear();
             NetworkManager.singleton.StartServer();
             networkDiscovery.AdvertiseServer();
+        }
+        
+        public void ButtonConnectLocalhost()
+        {
+            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            NetworkManager.singleton.networkAddress = "localhost";
+            NetworkManager.singleton.StartClient();
         }
         
         public void ButtonStopServer()
@@ -107,8 +125,32 @@ namespace Game.Scripts
         // Start is called before the first frame update
         void Start()
         {
+            networkDiscovery = NetworkManager.singleton.GetComponent<MyNetworkDiscovery>();
+            networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
+            Debug.Log($"networkDiscovery {networkDiscovery} {networkDiscovery.OnServerFound}");
             //automatically start to discover servers
             ButtonDiscoverServers();
+        }
+
+        private void OnValidate()
+        {
+        }
+
+        private void OnEnable()
+        {
+            Debug.Log($"Called {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            RegisterListeners();
+        }
+
+        private void RegisterListeners()
+        {
+            btnStartHost.onClick.AddListener(ButtonStartHost);
+            btnStartServer.onClick.AddListener(ButtonStartServer);
+            btnConnectLocalhost.onClick.AddListener(ButtonConnectLocalhost);
+            btnStopServer.onClick.AddListener(ButtonStopServer);
+            btnStopClient.onClick.AddListener(ButtonStopClient);
+            btnDiscoverServers.onClick.AddListener(ButtonDiscoverServers);
+            btnDebug.onClick.AddListener(ButtonDebug);
         }
 
         // Update is called once per frame
@@ -116,5 +158,7 @@ namespace Game.Scripts
         {
             //PopulateServerList();
         }
+        
+        
     }
 }
