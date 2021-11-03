@@ -25,12 +25,14 @@ namespace Game.Scripts
         // }
         
         private Material cachedMaterial;
+        [Tooltip("this is the real player model object, in the child of the root player prefab")]
+        [SerializeField] private GameObject playerChildGameObject;
 
         // Typical naming convention for SyncVarHooks is OnSet<VariableName>
         private void OnSetPlayerColor(Color oldColor, Color newColor)
         {
             if(cachedMaterial == null)
-                cachedMaterial = gameObject.GetComponent<MeshRenderer>().material;
+                cachedMaterial = playerChildGameObject.GetComponent<MeshRenderer>().material;
 
             cachedMaterial.color = newColor;
         }
@@ -45,13 +47,14 @@ namespace Game.Scripts
             // First determine if this function is being run on the local player
             if(isLocalPlayer)
             {
-                if(Input.GetKeyDown(KeyCode.Space))
+                if(Input.GetKeyDown(KeyCode.Return))
                 {
                     // Run a function that tells every client to change the colour of this gameObject
                     CmdRandomColor();
+                    Debug.Log($"player colour is now {playerColor}");
                 }
 
-                if(Input.GetKeyDown(KeyCode.E))
+                if(Input.GetKeyDown(KeyCode.X))
                 {
                     CmdSpawnEnemy();
                 }
@@ -86,7 +89,6 @@ namespace Game.Scripts
         {
             // SyncVar MUST be set on the server, otherwise it won't be synced between clients
             playerColor = Random.ColorHSV(0, 1, 1, 1, 1, 1);
-
             // This is running on the server
             // RpcRandomColor(Random.Range(0f, 1f));
         }
