@@ -29,12 +29,16 @@ namespace Game.Scripts
         
         /// <summary> Removes a player from the dictionary. </summary>
         public void RemovePlayer([NotNull] NetworkPlayer player) => players.Remove(player.netId);
-        
+
+        public void LoadLocalScene(string scenename)
+        {
+            SceneManager.LoadScene(scenename, LoadSceneMode.Additive);
+        }
         private void OnEnable()
         {
             FlagAsPersistant();
             RegisterListeners();
-            SceneManager.LoadScene("GUI", LoadSceneMode.Additive);
+            LoadLocalScene("GUI");
             Debug.Log("loaded gui scene");
         }
 

@@ -112,7 +112,8 @@ namespace Game.Scripts
         public override void OnStartLocalPlayer()
         {
             // This is run if we are the local player and NOT a remote player
-            GetComponent<NetworkSceneManager>().LoadNetworkScene("GUI");
+            //GetComponent<NetworkSceneManager>().LoadNetworkScene("GUI");
+            GameManager.Instance.LoadLocalScene("GUI");
             Debug.Log("loaded scene in network player");
             //TODO: NOT WORKING YET object not found. how to fix make sure uimanager is available??
             UiManager.Instance.OnStartOnline();
