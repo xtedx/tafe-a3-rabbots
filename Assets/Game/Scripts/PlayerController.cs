@@ -7,6 +7,7 @@ namespace Game.Scripts
 	{
 		[Header("Movement Settings")]
 		public float moveSpeed = 8f;
+		public float dashSpeed = 3f;
 		public float turnSensitivity = 5f;
 		public float maxTurnSpeed = 150f;
 
@@ -95,14 +96,23 @@ namespace Game.Scripts
 
 			transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
 
+			//effeciency according to rider:
+			var mytransform = transform;
+
 			Vector3 direction = new Vector3(horizontal, jumpSpeed, vertical);
 			direction = Vector3.ClampMagnitude(direction, 1f);
-			direction = transform.TransformDirection(direction);
+			direction = mytransform.TransformDirection(direction);
 			direction *= moveSpeed;
 
 			if (jumpSpeed > 0)
-				characterController.Move(direction * Time.fixedDeltaTime);
+			{
+				//characterController.Move(direction * Time.fixedDeltaTime);
+				//dash forward to the transform face direction instead of jump
+				characterController.Move(transform.forward * dashSpeed);
+				//Debug.Log($"dash facing {facing}");
+			}
 			else
+				//normal movement asdf
 				characterController.SimpleMove(direction);
 
 			isGrounded = characterController.isGrounded;
