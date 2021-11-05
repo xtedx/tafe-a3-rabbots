@@ -65,15 +65,7 @@ namespace Game.Scripts
 			horizontal = Input.GetAxis("Horizontal");
 			vertical = Input.GetAxis("Vertical");
 
-			// Q and E cancel each other out, reducing the turn to zero
-			if (Input.GetKey(KeyCode.Q))
-				turn = Mathf.MoveTowards(turn, -maxTurnSpeed, turnSensitivity);
-			if (Input.GetKey(KeyCode.E))
-				turn = Mathf.MoveTowards(turn, maxTurnSpeed, turnSensitivity);
-			if (Input.GetKey(KeyCode.Q) && Input.GetKey(KeyCode.E))
-				turn = Mathf.MoveTowards(turn, 0, turnSensitivity);
-			if (!Input.GetKey(KeyCode.Q) && !Input.GetKey(KeyCode.E))
-				turn = Mathf.MoveTowards(turn, 0, turnSensitivity);
+			// see CameraMovement.cs for right mouse hold and rotate camera.
 
 			if (isGrounded)
 				isFalling = false;
