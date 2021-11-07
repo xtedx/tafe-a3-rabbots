@@ -74,6 +74,21 @@ namespace Game.Scripts
             }
         }
 
+        private void Start()
+        {
+            var sceneName = SceneManager.GetActiveScene().name;
+            switch (sceneName)
+            {
+                case "Offline Start Game":
+                    OnStartOffline();
+                    break;
+                case "Online Lobby":
+                    OnStartOnline();
+                    break;
+                default:
+                    break;
+            }
+        }
         private void Update()
         {
             UIKeyPress();
@@ -116,21 +131,17 @@ namespace Game.Scripts
         public void OnStartOnline()
         {
             topPanel.SetActive(true);
-            topTimerBlock.SetActive(false);
             mainPanelGUI.SetActive(false);
-            bottomPanel.SetActive(true);
         }
 
         /// <summary>
         /// set up the gui layout to show what is necessary for online mode after starting a game
         /// main menu off, bottom bar on with players, to bar on, timer on
         /// </summary>
-        public void OnStartGame()
+        public void OnStartOffline()
         {
             topPanel.SetActive(true);
-            topTimerBlock.SetActive(true);
-            mainPanelGUI.SetActive(false);
-            bottomPanel.SetActive(true);
+            mainPanelGUI.SetActive(true);
         }
 
         #region events related
