@@ -70,7 +70,7 @@ namespace Game.Scripts
 			if (isGrounded)
 				isFalling = false;
 
-			if ((isGrounded || !isFalling) && jumpSpeed < 1f && Input.GetKey(KeyCode.Space))
+			if ((isGrounded || !isFalling) && jumpSpeed < 1f && Input.GetKeyUp(KeyCode.Space))
 			{
 				jumpSpeed = Mathf.Lerp(jumpSpeed, 1f, 0.5f);
 			}
@@ -79,6 +79,7 @@ namespace Game.Scripts
 				isFalling = true;
 				jumpSpeed = 0;
 			}
+
 		}
 		
 		void FixedUpdate()
@@ -91,7 +92,7 @@ namespace Game.Scripts
 			//effeciency according to rider:
 			var mytransform = transform;
 
-			Vector3 direction = new Vector3(horizontal, jumpSpeed, vertical);
+			Vector3 direction = new Vector3(horizontal, 0, vertical);
 			direction = Vector3.ClampMagnitude(direction, 1f);
 			direction = mytransform.TransformDirection(direction);
 			direction *= moveSpeed;

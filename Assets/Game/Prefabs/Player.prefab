@@ -1861,7 +1861,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   moveSpeed: 8
-  dashSpeed: 3
+  dashSpeed: 10
   turnSensitivity: 5
   maxTurnSpeed: 150
   horizontal: 0
