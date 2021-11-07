@@ -28,6 +28,8 @@ namespace Game.Scripts
         [Tooltip("Invoked when a server is found")]
         public ServerFoundUnityEvent OnServerFound;
 
+        public ServerResponse myRespond;
+
         public override void Start()
         {
             ServerId = RandomLong();
@@ -61,11 +63,11 @@ namespace Game.Scripts
             {
                 // this is an example reply message,  return your own
                 // to include whatever is relevant for your game
-                return new ServerResponse
-                {
+                myRespond = new ServerResponse {
                     serverId = ServerId,
                     uri = transport.ServerUri()
                 };
+                return myRespond;
             }
             catch (NotImplementedException)
             {

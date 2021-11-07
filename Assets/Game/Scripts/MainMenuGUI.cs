@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Game.Scripts
 {
-    public class UiManager : MonoSingleton<UiManager>
+    public class MainMenuGUI : MonoBehaviour
     {
         [Tooltip("the Text UI element for Timer")]
         [SerializeField]
@@ -90,13 +90,13 @@ namespace Game.Scripts
             //if in online lobby
             var isHostInLobby = (GameManager.Instance.IsHost() && GameManager.Instance.IsInLobby());
             mapChoice.SetActive(isHostInLobby);
-            //Debug.Log($"isInLobby {isInLobby} active {SceneManager.GetActiveScene().name} network {NetworkManager.singleton.onlineScene}");
+            //Debug.Log($"isInLobby {isInLobby} active {SceneManager.GetActiveScene().name} network {MyNetworkManager.Instance.onlineScene}");
         }
 
         private void ShowNetworkStatus()
         {
             txtNetworkStatus.text =
-                $"{NetworkManager.singleton.mode.ToString()} :: {SceneManager.GetActiveScene().name}";
+                $"{MyNetworkManager.Instance.mode.ToString()} :: {SceneManager.GetActiveScene().name}";
         }
 
         private void OnEnable()

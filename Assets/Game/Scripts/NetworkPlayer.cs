@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Game.Scripts
 {
     [RequireComponent(typeof(PlayerController))]
+    [RequireComponent(typeof(CameraMovement))]
     public class NetworkPlayer : NetworkBehaviour
     {
         [SyncVar(hook = nameof(OnSetPlayerColor)), SerializeField] private Color playerColor;
@@ -118,7 +119,7 @@ namespace Game.Scripts
             GameManager.Instance.LoadLocalScene("GUI");
             Debug.Log("loaded scene in network player");
             //TODO: NOT WORKING YET object not found. how to fix make sure uimanager is available??
-            UiManager.Instance.OnStartOnline();
+            //how to how show player gui
         }
 
         // This is run via the network starting and the player connecting...

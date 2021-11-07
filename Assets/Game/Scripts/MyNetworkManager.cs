@@ -4,9 +4,6 @@ using Game.Scripts;
 using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Mirror;
-using NetworkGame.Networking;
 using NetworkPlayer = Game.Scripts.NetworkPlayer;
 
 /*
@@ -25,7 +22,7 @@ public class MyNetworkManager : NetworkManager
         /// <summary> Whether or not this NetworkManager is the host. </summary>
         public bool IsHost { get; private set; }
         
-        public MyNetworkDiscovery networkDiscovery;
+        public MyNetworkDiscovery myNetworkDiscovery;
 
         /// <summary> The dictionary of all connected players using their NetID as the key. </summary>
         private readonly Dictionary<uint, NetworkPlayer> players = new Dictionary<uint, NetworkPlayer>();
@@ -39,6 +36,9 @@ public class MyNetworkManager : NetworkManager
             return player;
         }
         
+        #region game manager
+        
+        #endregion
         /// <summary> Adds a player to the dictionary. </summary>
         public static void AddPlayer([NotNull] NetworkPlayer _player) => Instance.players.Add(_player.netId, _player);
         /// <summary> Removes a player from the dictionary. </summary>
@@ -73,10 +73,10 @@ public class MyNetworkManager : NetworkManager
 
     public override void OnValidate()
     {
-            if (networkDiscovery == null)
+            if (myNetworkDiscovery == null)
             {
-                Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
-                networkDiscovery = GetComponent<MyNetworkDiscovery>();
+                Debug.Log($"My Network Manager Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+                myNetworkDiscovery = GetComponent<MyNetworkDiscovery>();
             }
         base.OnValidate();
     }
@@ -118,15 +118,6 @@ public class MyNetworkManager : NetworkManager
     #endregion
 
     #region Start & Stop
-
-        /// <summary>
-        /// Set the frame rate for a headless server.
-        /// <para>Override if you wish to disable the behavior or set your own tick rate.</para>
-        /// </summary>
-        public override void ConfigureServerFrameRate()
-        {
-            base.ConfigureServerFrameRate();
-        }
 
     /// <summary>
     /// called when quitting the application by closing the window / pressing stop in the editor
@@ -295,8 +286,8 @@ public class MyNetworkManager : NetworkManager
     /// </summary>
         public override void OnStartServer()
         {
-            networkDiscovery.AdvertiseServer();
-            Debug.Log("advertising server");
+            myNetworkDiscovery.AdvertiseServer();
+            Debug.Log("advertising server after being host");
         }
 
     /// <summary>

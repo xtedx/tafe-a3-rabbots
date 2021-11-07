@@ -18,17 +18,6 @@ namespace Game.Scripts
         public const string ONLINE_SCENE = "Online Lobby";
         
         #endregion
-        /// <summary> The dictionary of all connected players using their NetID as the key. </summary>
-        private readonly Dictionary<uint, NetworkPlayer> players = new Dictionary<uint, NetworkPlayer>();
-        
-        /// <summary> Adds a player to the dictionary. </summary>
-        public void AddPlayer([NotNull] NetworkPlayer player)
-        {
-            players.Add(player.netId, player);
-        }
-        
-        /// <summary> Removes a player from the dictionary. </summary>
-        public void RemovePlayer([NotNull] NetworkPlayer player) => players.Remove(player.netId);
 
         public void LoadLocalScene(string scenename)
         {
@@ -77,7 +66,7 @@ namespace Game.Scripts
         /// <returns></returns>
         public bool IsHost()
         {
-            return (NetworkManager.singleton.mode == NetworkManagerMode.Host);
+            return (MyNetworkManager.Instance.mode == NetworkManagerMode.Host);
         }
 
         /// <summary>

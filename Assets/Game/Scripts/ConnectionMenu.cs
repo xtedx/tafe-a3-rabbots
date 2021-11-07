@@ -21,6 +21,7 @@ namespace Game.Scripts
         [SerializeField] private Button btnDiscoverServers;
         [SerializeField] private Button btnDebug;
         [SerializeField] private Button buttonTemplateIP;
+        [SerializeField] private InputField txtAddress;
 
         private Dictionary<long, Button> buttonIPs = new Dictionary<long, Button>();
 
@@ -28,7 +29,7 @@ namespace Game.Scripts
         {
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
-            NetworkManager.singleton.StartHost();
+            MyNetworkManager.Instance.StartHost();
             networkDiscovery.AdvertiseServer();
         }
         
@@ -36,30 +37,30 @@ namespace Game.Scripts
         {
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
-            NetworkManager.singleton.StartServer();
+            MyNetworkManager.Instance.StartServer();
             networkDiscovery.AdvertiseServer();
         }
         
         public void ButtonConnectLocalhost()
         {
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
-            NetworkManager.singleton.networkAddress = "localhost";
-            NetworkManager.singleton.StartClient();
+            MyNetworkManager.Instance.networkAddress = txtAddress.text;
+            MyNetworkManager.Instance.StartClient();
         }
         
         public void ButtonStopServer()
         {
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
-            NetworkManager.singleton.StopHost();
+            MyNetworkManager.Instance.StopHost();
         }
         
         public void ButtonStopClient()
         {
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
-            NetworkManager.singleton.StopClient();
-            NetworkManager.singleton.OnStartServer();
+            MyNetworkManager.Instance.StopClient();
+            MyNetworkManager.Instance.OnStartServer();
         }
         
         public void ButtonDiscoverServers()
@@ -111,7 +112,7 @@ namespace Game.Scripts
         public void Connect(ServerResponse info)
         {
             networkDiscovery.StopDiscovery();
-            NetworkManager.singleton.StartClient(info.uri);
+            MyNetworkManager.Instance.StartClient(info.uri);
         }
 
         public void OnDiscoveredServer(ServerResponse info)
@@ -125,9 +126,6 @@ namespace Game.Scripts
         // Start is called before the first frame update
         void Start()
         {
-            networkDiscovery = NetworkManager.singleton.GetComponent<MyNetworkDiscovery>();
-            networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
-            Debug.Log($"networkDiscovery {networkDiscovery} {networkDiscovery.OnServerFound}");
             //automatically start to discover servers
             ButtonDiscoverServers();
         }
@@ -144,6 +142,9 @@ namespace Game.Scripts
 
         private void RegisterListeners()
         {
+            networkDiscovery = MyNetworkManager.Instance.GetComponent<MyNetworkDiscovery>();
+            networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
+            Debug.Log($"networkDiscovery {networkDiscovery} {networkDiscovery.OnServerFound}");
             btnStartHost.onClick.AddListener(ButtonStartHost);
             btnStartServer.onClick.AddListener(ButtonStartServer);
             btnConnectLocalhost.onClick.AddListener(ButtonConnectLocalhost);
