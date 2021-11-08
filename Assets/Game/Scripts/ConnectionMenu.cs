@@ -10,7 +10,7 @@ namespace Game.Scripts
     public class ConnectionMenu : MonoBehaviour
     {
         readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
-        private MyNetworkDiscovery networkDiscovery;
+        private MyNetworkDiscovery myNetworkDiscovery;
         
         [Space]
         [SerializeField] private Button btnStartHost;
@@ -30,7 +30,7 @@ namespace Game.Scripts
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
             MyNetworkManager.Instance.StartHost();
-            networkDiscovery.AdvertiseServer();
+            myNetworkDiscovery.AdvertiseServer();
         }
         
         public void ButtonStartServer()
@@ -38,12 +38,14 @@ namespace Game.Scripts
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
             MyNetworkManager.Instance.StartServer();
-            networkDiscovery.AdvertiseServer();
+            myNetworkDiscovery.AdvertiseServer();
         }
         
         public void ButtonConnectLocalhost()
         {
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            //make the default value localhost
+            if (txtAddress.text == "") txtAddress.text = "localhost";
             MyNetworkManager.Instance.networkAddress = txtAddress.text;
             MyNetworkManager.Instance.StartClient();
         }
@@ -67,7 +69,7 @@ namespace Game.Scripts
         {
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
-            networkDiscovery.StartDiscovery();
+            myNetworkDiscovery.StartDiscovery();
         }
         
         public void ButtonDebug()
@@ -111,7 +113,7 @@ namespace Game.Scripts
         
         public void Connect(ServerResponse info)
         {
-            networkDiscovery.StopDiscovery();
+            myNetworkDiscovery.StopDiscovery();
             MyNetworkManager.Instance.StartClient(info.uri);
         }
 
@@ -142,9 +144,9 @@ namespace Game.Scripts
 
         private void RegisterListeners()
         {
-            networkDiscovery = MyNetworkManager.Instance.GetComponent<MyNetworkDiscovery>();
-            networkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
-            Debug.Log($"networkDiscovery {networkDiscovery} {networkDiscovery.OnServerFound}");
+            myNetworkDiscovery = MyNetworkManager.Instance.GetComponent<MyNetworkDiscovery>();
+            myNetworkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
+            Debug.Log($"register listener networkDiscovery {myNetworkDiscovery} {myNetworkDiscovery.OnServerFound}");
             btnStartHost.onClick.AddListener(ButtonStartHost);
             btnStartServer.onClick.AddListener(ButtonStartServer);
             btnConnectLocalhost.onClick.AddListener(ButtonConnectLocalhost);
