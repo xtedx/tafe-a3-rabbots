@@ -18,14 +18,18 @@ namespace Game.Scripts
 		public float jumpSpeed;
 		public bool isGrounded = true;
 		public bool isFalling;
+		public Vector3 direction;
 		public Vector3 velocity;
 		
 		public CharacterController characterController;
+		private GameObject playerChildGameObject;
 
 		void Start()
 		{
 			//only enable control if is local player
 			characterController.enabled = isLocalPlayer;
+			//get the actual model to turn when moving
+			playerChildGameObject = gameObject.GetComponent<NetworkPlayer>().playerChildGameObject;
 		}
 		
 		public override void OnStartLocalPlayer()
@@ -70,6 +74,9 @@ namespace Game.Scripts
 			if (isGrounded)
 				isFalling = false;
 
+			//don't dash when there is no input
+			if (horizontal == 0 && vertical == 0) jumpSpeed = 0;
+			
 			if ((isGrounded || !isFalling) && jumpSpeed < 1f && Input.GetKeyUp(KeyCode.Space))
 			{
 				jumpSpeed = Mathf.Lerp(jumpSpeed, 1f, 0.5f);
@@ -87,7 +94,9 @@ namespace Game.Scripts
 			if (!isLocalPlayer || characterController == null)
 				return;
 
-			transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
+			var rotation = new Vector3(0f, turn * Time.fixedDeltaTime, 0f);
+			transform.Rotate(rotation);
+			
 
 			//effeciency according to rider:
 			var mytransform = transform;
@@ -97,19 +106,30 @@ namespace Game.Scripts
 			direction = mytransform.TransformDirection(direction);
 			direction *= moveSpeed;
 
+			//use atan x/y because we are facing positive y, standard atan y/x starts the angle 0deg from positive x if drawn on cartesian
+			//atan is in rad, and convert to deg by multiplying
+			//use z instead of y because we don't move up
+			float turnTo = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+			
 			if (jumpSpeed > 0)
 			{
 				//characterController.Move(direction * Time.fixedDeltaTime);
 				//dash forward to the transform face direction instead of jump
-				characterController.Move(transform.forward * dashSpeed);
+				// characterController.SimpleMove(transform.forward * dashSpeed);
+				characterController.SimpleMove(direction * dashSpeed);
 				//Debug.Log($"dash facing {facing}");
 			}
 			else
+			{
 				//normal movement asdf
 				characterController.SimpleMove(direction);
+				playerChildGameObject.transform.rotation = Quaternion.Euler(0,turnTo,0);
+			}
+
 
 			isGrounded = characterController.isGrounded;
 			velocity = characterController.velocity;
+			this.direction = direction;
 		}
 	}
 }

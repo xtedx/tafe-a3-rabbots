@@ -27,7 +27,7 @@ namespace Game.Scripts
         
         private Material cachedMaterial;
         [Tooltip("this is the real player model object, in the child of the root player prefab")]
-        [SerializeField] private GameObject playerChildGameObject;
+        [SerializeField] public GameObject playerChildGameObject;
 
         // Typical naming convention for SyncVarHooks is OnSet<VariableName>
         private void OnSetPlayerColor(Color oldColor, Color newColor)
