@@ -25,7 +25,7 @@ public class MyNetworkManager : NetworkManager
         public MyNetworkDiscovery myNetworkDiscovery;
 
         /// <summary> The dictionary of all connected players using their NetID as the key. </summary>
-        private readonly Dictionary<uint, NetworkPlayer> players = new Dictionary<uint, NetworkPlayer>();
+        public readonly Dictionary<uint, NetworkPlayer> players = new Dictionary<uint, NetworkPlayer>();
 
         /// <summary> Attempts to find a player using the passed NetID, this can return null. </summary>
         /// <param name="_id"> The NetID of the player that we are trying to find. </param>
@@ -39,8 +39,14 @@ public class MyNetworkManager : NetworkManager
         #region game manager
         
         #endregion
+
         /// <summary> Adds a player to the dictionary. </summary>
-        public static void AddPlayer([NotNull] NetworkPlayer _player) => Instance.players.Add(_player.netId, _player);
+        public static void AddPlayer([NotNull] NetworkPlayer _player)
+        {
+            Instance.players.Add(_player.netId, _player);
+            Debug.Log($"player id {_player.netId}");
+        }
+
         /// <summary> Removes a player from the dictionary. </summary>
         public static void RemovePlayer([NotNull] NetworkPlayer _player) => Instance.players.Remove(_player.netId);
 

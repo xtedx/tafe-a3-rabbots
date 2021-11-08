@@ -1,6 +1,8 @@
+using System;
 using Mirror;
 using NetworkGame.Networking;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Game.Scripts
 {
@@ -8,8 +10,10 @@ namespace Game.Scripts
     [RequireComponent(typeof(CameraMovement))]
     public class NetworkPlayer : NetworkBehaviour
     {
-        [SyncVar(hook = nameof(OnSetPlayerColor)), SerializeField] private Color playerColor;
-        //a list to be synced, containing player data if requrired
+        //[SyncVar(hook = nameof(OnSetPlayerColor)), SerializeField] private Color[] playerColor = new Color[4];
+        public readonly SyncDictionary<uint, string> playerNames = new SyncDictionary<uint, string>();
+        public readonly SyncList<Color> playerColor = new SyncList<Color>();
+        //a list to be synced, containing player data if requried
         //private readonly SyncList<float> syncedFloats = new SyncList<float>();
 
         // SyncVarHooks get called in the order the VARIABLES are defined not the functions
@@ -29,13 +33,18 @@ namespace Game.Scripts
         [Tooltip("this is the real player model object, in the child of the root player prefab")]
         [SerializeField] public GameObject playerChildGameObject;
 
+        public PlayerGUI playerGUI;
         // Typical naming convention for SyncVarHooks is OnSet<VariableName>
-        private void OnSetPlayerColor(Color oldColor, Color newColor)
+        
+        private void OnSetPlayerColor(SyncList<Color>.Operation op, int index, Color oldValue, Color newValue)
         {
             if(cachedMaterial == null)
                 cachedMaterial = playerChildGameObject.GetComponent<MeshRenderer>().material;
 
-            cachedMaterial.color = newColor;
+            cachedMaterial.color = newValue;
+            //Debug.Log($"playerGUI is {playerGUI}");
+            // playerGUI.OnSetPlayerColour(index, newValue);
+            playerGUI.UpdateGUI();
         }
         
         private void Awake()
@@ -52,21 +61,12 @@ namespace Game.Scripts
                 {
                     // Run a function that tells every client to change the colour of this gameObject
                     CmdRandomColor();
-                    Debug.Log($"player colour is now {playerColor}");
+                    Debug.Log($"player colour is now {playerColor[playerGUI.playerIndex]}");
                 }
 
                 if(Input.GetKeyDown(KeyCode.X))
                 {
                     CmdSpawnEnemy();
-                }
-            }
-
-            if (GameManager.Instance.IsInLobby() && GameManager.Instance.IsHost())
-            {
-                if (Input.GetKeyDown(KeyCode.Z))
-                {
-                    //this should only be in the online lobby, by the host and not anytime in the game 
-                    GameManager.Instance.StartGame("Map 1");
                 }
             }
         }
@@ -89,7 +89,13 @@ namespace Game.Scripts
         public void CmdRandomColor()
         {
             // SyncVar MUST be set on the server, otherwise it won't be synced between clients
-            playerColor = Random.ColorHSV(0, 1, 1, 1, 1, 1);
+            try
+            {
+                playerColor[playerGUI.playerIndex] = Random.ColorHSV(0, 1, 1, 1, 1, 1);
+            } catch (ArgumentOutOfRangeException e)
+            {
+                Debug.Log($"playerColor count is {playerColor.Count}, id is {playerGUI.playerIndex}");
+            }
             // This is running on the server
             // RpcRandomColor(Random.Range(0f, 1f));
         }
@@ -118,8 +124,6 @@ namespace Game.Scripts
             //GetComponent<NetworkSceneManager>().LoadNetworkScene("GUI");
             GameManager.Instance.LoadLocalScene("GUI");
             Debug.Log("loaded scene in network player");
-            //TODO: NOT WORKING YET object not found. how to fix make sure uimanager is available??
-            //how to how show player gui
         }
 
         // This is run via the network starting and the player connecting...
@@ -144,6 +148,12 @@ namespace Game.Scripts
         // This runs when the server starts... ON the server on all clients
         public override void OnStartServer()
         {
+            //subscribe to events on the synced dicts
+            playerColor.Callback += OnSetPlayerColor;
+            for (var i = 0; i < 4; i++)
+            {
+                playerColor.Add(new Color(0,0,0, 1));
+            }
         }
     }
 }
