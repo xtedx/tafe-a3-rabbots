@@ -283,7 +283,6 @@ public class MyNetworkManager : NetworkManager
         public override void OnStartHost()
         {
             IsHost = true;
-            OnStartServer();
         }
 
     /// <summary>

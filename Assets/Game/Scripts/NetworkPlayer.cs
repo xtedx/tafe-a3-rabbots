@@ -13,6 +13,9 @@ namespace Game.Scripts
         //[SyncVar(hook = nameof(OnSetPlayerColor)), SerializeField] private Color[] playerColor = new Color[4];
         public readonly SyncDictionary<uint, string> playerNames = new SyncDictionary<uint, string>();
         public readonly SyncList<Color> playerColor = new SyncList<Color>();
+
+        [SyncVar(hook =  nameof(OnSetPlayerCol))] public Color playerCol;
+        [SyncVar] public string playerName;
         //a list to be synced, containing player data if requried
         //private readonly SyncList<float> syncedFloats = new SyncList<float>();
 
@@ -35,6 +38,14 @@ namespace Game.Scripts
 
         public PlayerGUI playerGUI;
         // Typical naming convention for SyncVarHooks is OnSet<VariableName>
+
+        private void OnSetPlayerCol(Color old, Color newValue)
+        {
+            if(cachedMaterial == null)
+                cachedMaterial = playerChildGameObject.GetComponent<MeshRenderer>().material;
+
+            cachedMaterial.color = newValue;
+        }
         
         private void OnSetPlayerColor(SyncList<Color>.Operation op, int index, Color oldValue, Color newValue)
         {
@@ -44,7 +55,7 @@ namespace Game.Scripts
             cachedMaterial.color = newValue;
             //Debug.Log($"playerGUI is {playerGUI}");
             // playerGUI.OnSetPlayerColour(index, newValue);
-            playerGUI.UpdateGUI();
+            //playerGUI.UpdateGUI();
         }
         
         private void Awake()
@@ -60,8 +71,8 @@ namespace Game.Scripts
                 if(Input.GetKeyDown(KeyCode.Return))
                 {
                     // Run a function that tells every client to change the colour of this gameObject
-                    CmdRandomColor();
-                    Debug.Log($"player colour is now {playerColor[playerGUI.playerIndex]}");
+                    CmdRandomColor(netId);
+                    Debug.Log($"player {netId }colour is now {playerCol}");
                 }
 
                 if(Input.GetKeyDown(KeyCode.X))
@@ -86,18 +97,23 @@ namespace Game.Scripts
         // 3. The function must have the attribute [Command] found in Mirror namespace
         // 4. Can only be certain serializable types (see Command in the documentation)
         [Command]
-        public void CmdRandomColor()
+        public void CmdRandomColor(uint _netId)
         {
             // SyncVar MUST be set on the server, otherwise it won't be synced between clients
             try
             {
-                playerColor[playerGUI.playerIndex] = Random.ColorHSV(0, 1, 1, 1, 1, 1);
+                playerCol = Random.ColorHSV(0, 1, 1, 1, 1, 1);
             } catch (ArgumentOutOfRangeException e)
             {
                 Debug.Log($"playerColor count is {playerColor.Count}, id is {playerGUI.playerIndex}");
             }
-            // This is running on the server
-            // RpcRandomColor(Random.Range(0f, 1f));
+        }
+
+        [ClientRpc]
+        private void RpcUpdateGUI(uint _netId)
+        {
+            Debug.Log($"RpcUpdateGUI netid {_netId}");
+            playerGUI.UpdateGUI(_netId);
         }
         
         // RULES FOR CLIENT RPC:
@@ -138,6 +154,7 @@ namespace Game.Scripts
             controller.enabled = isLocalPlayer;
             
             MyNetworkManager.AddPlayer(this);
+            playerGUI.AssignPlayer(netId);
         }
 
         public override void OnStopClient()
@@ -148,6 +165,8 @@ namespace Game.Scripts
         // This runs when the server starts... ON the server on all clients
         public override void OnStartServer()
         {
+            //playerGUI.ClearNetIds();
+
             //subscribe to events on the synced dicts
             playerColor.Callback += OnSetPlayerColor;
             for (var i = 0; i < 4; i++)
