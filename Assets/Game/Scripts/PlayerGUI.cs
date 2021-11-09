@@ -10,7 +10,6 @@ namespace Game.Scripts
 {
     public class PlayerGUI : NetworkBehaviour
     {
-        private const int defaultid = 50000000; 
         [Serializable]
         public class PlayerGUIRendering
         {
@@ -19,7 +18,7 @@ namespace Game.Scripts
             public Text hp;
             public Slider slider;
 
-            public uint netId = defaultid;
+            public uint netId;
         }
 
         public List<PlayerGUIRendering> renders = new List<PlayerGUIRendering>();
@@ -27,97 +26,32 @@ namespace Game.Scripts
             //todo: use dictionary instead of array?
         //private readonly Dictionary<uint, NetworkPlayer> players = new Dictionary<uint, NetworkPlayer>();
     
-        // private readonly SyncDictionary<uint, Image> imagePlayerAvatars = new SyncDictionary<uint, Image>();
-        //private readonly SyncDictionary<uint, Text> textPlayerNames = new SyncDictionary<uint, Text>();
-        [SerializeField]
-        public Image[] imagePlayerAvatar;
-        [SerializeField]
-        public Text[] textPlayerName;
-        [SerializeField]
-        public Text[] textPlayerHP;
-        [SerializeField]
-        public Slider[] sliderPlayerHP;
-        [SerializeField]
         public Text textTimer;
-    
-        // [SyncVar(hook = nameof(OnSetTimerValue)), SerializeField] private int[] timer;
-        // [SyncVar(hook = nameof(OnSetPlayerHP)), SerializeField] private int[] playerHP;
-        //[SyncVar(hook = nameof(OnSetPlayerColour)), SerializeField] private Color[] playerColour;
-        
         public int playerIndex = 0;
-
-
-        [ClientRpc]
-        public void OnSetTimerValue(int oldValue, int newValue)
-        {
         
-            //update the text value of timer
-            textTimer.text = newValue.ToString("00");
-            //timer = newValue;
-        }
-    
         [ClientRpc]
-        public void OnSetPlayerHP(int oldValue, int newValue)
-        {
-            //update the text value and slider of hp
-            textPlayerHP[playerIndex].text = newValue.ToString("00");
-            sliderPlayerHP[playerIndex].value = (float)newValue;
-            //playerHP = newValue;
-        }
-
-        [ClientRpc]
-        public void OnSetPlayerColour(uint index, Color newValue)
-        // public void OnSetPlayerColour(SyncList<Color> newValue)
-        {
-            Debug.Log($"player gui index {playerIndex} {System.Reflection.MethodBase.GetCurrentMethod().Name}");
-            var _index = (int)index;
-            imagePlayerAvatar[_index].color = newValue;
-            
-            // foreach (var pair in newValue)
-            // {
-            //     imagePlayerAvatar[playerIndex].color = pair;
-            // }
-        }
-
-        public void AssignPlayer(uint _netId)
-        {
-            for (int i = 0; i < renders.Count; i++)
-            {
-                PlayerGUIRendering render = renders[i];
-                if (render.netId == defaultid)
-                {
-                    render.netId = _netId;
-                    Debug.Log($"assign player {render.netId}, renders.count {renders.Count}");
-
-                }
-            }
-        }
-
-        public void UpdateGUI(uint _netId)
-        {
-            /*(foreach (var pair in MyNetworkManager.Instance.players)
-            {
-                var pindex = (int) pair.Key - 1;
-                Debug.Log($"pindex is {pindex}");
-                imagePlayerAvatar[pindex].color = pair.Value.playerColor[pindex];
-            }*/
-            foreach (PlayerGUIRendering render in renders)
-            {
-                Debug.Log($"in update gui render {render.netId} passed _netid {_netId}");
-                if (render.netId == _netId)
-                {
-                    NetworkPlayer player = MyNetworkManager.Instance.players[_netId];
-                    render.avatar.color = player.playerCol;
-                    render.playerName.text = player.playerName;
-                }
-            }
-        }
-
-        public void ClearNetIds()
+        public void UpdateGUIcolour(uint key, Color value)
         {
             foreach (PlayerGUIRendering render in renders)
             {
-                render.netId = defaultid;
+                if (render.netId == key)
+                {
+                    Debug.Log($"in update gui render {render.avatar.name} for {key} color is {value}");
+                    render.avatar.color = value;
+                }
+            }
+        }
+        
+        [ClientRpc]
+        public void UpdateGUIname(uint key, string value)
+        {
+            foreach (PlayerGUIRendering render in renders)
+            {
+                if (render.netId == key)
+                {
+                    Debug.Log($"in update gui render {render.playerName.text} for {key} color is {value}");
+                    render.playerName.text = value;
+                }
             }
         }
         

@@ -1,7 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
 using Mirror;
+using Mirror.Examples.Chat;
 using NetworkGame.Networking;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 namespace Game.Scripts
@@ -12,50 +18,44 @@ namespace Game.Scripts
     {
         //[SyncVar(hook = nameof(OnSetPlayerColor)), SerializeField] private Color[] playerColor = new Color[4];
         public readonly SyncDictionary<uint, string> playerNames = new SyncDictionary<uint, string>();
-        public readonly SyncList<Color> playerColor = new SyncList<Color>();
-
-        [SyncVar(hook =  nameof(OnSetPlayerCol))] public Color playerCol;
-        [SyncVar] public string playerName;
-        //a list to be synced, containing player data if requried
-        //private readonly SyncList<float> syncedFloats = new SyncList<float>();
-
-        // SyncVarHooks get called in the order the VARIABLES are defined not the functions
-        // [SyncVar(hook = "SetX")] public float x;
-        // [SyncVar(hook = "SetY")] public float y;
-        // [SyncVar(hook = "SetZ")] public float z;
-        //
-        // [Command]
-        // public void CmdSetPosition(float _x, float _y, float _z)
-        // {
-        //     z = _z;
-        //     x = _x;
-        //     y = _y;
-        // }
         
-        private Material cachedMaterial;
+        [SyncVar(hook = nameof(OnSetPlayerColour)), SerializeField] private Color playerColour;
+        [SyncVar(hook = nameof(OnSetPlayerName)), SerializeField] private string playerName;
+        
+        public readonly Dictionary<uint, Color> playerColoursNormal = new Dictionary<uint, Color>();
+
+        public Dictionary<uint, Material> cachedMaterial = new Dictionary<uint, Material>();
+
         [Tooltip("this is the real player model object, in the child of the root player prefab")]
         [SerializeField] public GameObject playerChildGameObject;
 
         public PlayerGUI playerGUI;
+        //for debugging
+        public uint playerID;
         // Typical naming convention for SyncVarHooks is OnSet<VariableName>
-
-        private void OnSetPlayerCol(Color old, Color newValue)
+        
+        /// <summary>
+        /// when player colour is changed, this function is called
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="key"></param>
+        /// <param name="newValue"></param>
+        private void OnSetPlayerColour(Color oldValue, Color newValue)
         {
-            if(cachedMaterial == null)
-                cachedMaterial = playerChildGameObject.GetComponent<MeshRenderer>().material;
-
-            cachedMaterial.color = newValue;
+            var cm = playerChildGameObject.GetComponent<MeshRenderer>().material;
+            cm.color = newValue;
+            playerGUI.renders[(int) netId].avatar.color = newValue;
         }
         
-        private void OnSetPlayerColor(SyncList<Color>.Operation op, int index, Color oldValue, Color newValue)
+        /// <summary>
+        /// when player name is changed, this function is called
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="key"></param>
+        /// <param name="newValue"></param>
+        private void OnSetPlayerName(string oldValue, string newValue)
         {
-            if(cachedMaterial == null)
-                cachedMaterial = playerChildGameObject.GetComponent<MeshRenderer>().material;
-
-            cachedMaterial.color = newValue;
-            //Debug.Log($"playerGUI is {playerGUI}");
-            // playerGUI.OnSetPlayerColour(index, newValue);
-            //playerGUI.UpdateGUI();
+            playerGUI.renders[(int) netId].playerName.text = newValue;
         }
         
         private void Awake()
@@ -72,7 +72,9 @@ namespace Game.Scripts
                 {
                     // Run a function that tells every client to change the colour of this gameObject
                     CmdRandomColor(netId);
-                    Debug.Log($"player {netId }colour is now {playerCol}");
+                    CmdRandomName(netId);
+                    //CmdTestToggleGUI();
+                    Debug.Log($"player {netId }colour changed");
                 }
 
                 if(Input.GetKeyDown(KeyCode.X))
@@ -100,20 +102,74 @@ namespace Game.Scripts
         public void CmdRandomColor(uint _netId)
         {
             // SyncVar MUST be set on the server, otherwise it won't be synced between clients
-            try
-            {
-                playerCol = Random.ColorHSV(0, 1, 1, 1, 1, 1);
-            } catch (ArgumentOutOfRangeException e)
-            {
-                Debug.Log($"playerColor count is {playerColor.Count}, id is {playerGUI.playerIndex}");
-            }
+            playerColour = Random.ColorHSV(0, 1, 1, 1, 1, 1);
+            RpcUpdateGUIcolor(netId, playerColour);
+        }
+        
+        [ClientRpc]
+        public void RpcRandomColor(uint _netId)
+        {
+            //this is run on client
+            
         }
 
-        [ClientRpc]
-        private void RpcUpdateGUI(uint _netId)
+        [Command]
+        public void CmdRandomName(uint _netId)
         {
-            Debug.Log($"RpcUpdateGUI netid {_netId}");
-            playerGUI.UpdateGUI(_netId);
+            // SyncVar MUST be set on the server, otherwise it won't be synced between clients
+            playerName = DateTime.Now.ToString("hhmmss");
+            RpcUpdateGUIname(netId, playerName);
+        }
+        
+        [Command]
+        public void CmdTestToggleGUI()
+        {
+            //test if a client can toggle a server gui and shown on every client
+            //if this works it means the gui doesn't need to be in player prefab
+            //this works by togling the menu in the server only.
+            //the second client doesn't see anything.
+            //now test if rpc can do this?
+            //yes rpc can do this, the command just need to call the RPC
+            //so it means both command and rpc need to be called for it to be the same on all
+            //LocalTestToggleGUI();
+            RpcTestToggleGUI();
+        }
+
+        public void LocalTestToggleGUI()
+        {
+            RpcTestToggleGUI();
+        }
+        
+        [ClientRpc]
+        public void RpcTestToggleGUI()
+        {
+            var guiObjects = SceneManager.GetSceneByName("GUI").GetRootGameObjects();
+            foreach (var go in guiObjects)
+            {
+                var menu = go.GetComponent<MainMenuGUI>();
+                try
+                {
+                    menu.ToggleMenu();
+                    break;
+                }
+                catch (NullReferenceException)
+                {
+                    continue;
+                }
+            }
+        }
+        [ClientRpc]
+        private void RpcUpdateGUIcolor(uint key, Color value)
+        {
+            Debug.Log($"RpcUpdateGUIcolor netid {netId}");
+            playerGUI.UpdateGUIcolour(key, value);
+        }
+        
+        [ClientRpc]
+        private void RpcUpdateGUIname(uint key, string value)
+        {
+            Debug.Log($"RpcUpdateGUItext netid {netId}");
+            playerGUI.UpdateGUIname(key, value);
         }
         
         // RULES FOR CLIENT RPC:
@@ -154,7 +210,8 @@ namespace Game.Scripts
             controller.enabled = isLocalPlayer;
             
             MyNetworkManager.AddPlayer(this);
-            playerGUI.AssignPlayer(netId);
+            playerID = netId;
+//            playerGUI.AssignPlayer(netId);
         }
 
         public override void OnStopClient()
@@ -165,14 +222,6 @@ namespace Game.Scripts
         // This runs when the server starts... ON the server on all clients
         public override void OnStartServer()
         {
-            //playerGUI.ClearNetIds();
-
-            //subscribe to events on the synced dicts
-            playerColor.Callback += OnSetPlayerColor;
-            for (var i = 0; i < 4; i++)
-            {
-                playerColor.Add(new Color(0,0,0, 1));
-            }
         }
     }
 }
