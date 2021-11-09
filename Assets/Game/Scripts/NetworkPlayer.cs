@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
 using Mirror;
-using Mirror.Examples.Chat;
-using NetworkGame.Networking;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Game.Scripts
@@ -16,6 +12,24 @@ namespace Game.Scripts
     [RequireComponent(typeof(CameraMovement))]
     public class NetworkPlayer : NetworkBehaviour
     {
+        //for debugging
+        public uint playerID;
+
+        [Serializable]
+        public class PlayerGUIRendering
+        {
+            public Image avatar;
+            public Text playerName;
+            public Text hp;
+            public Slider slider;
+
+            public uint netId;
+        }
+
+        [SerializeField] public List<PlayerGUIRendering> renders = new List<PlayerGUIRendering>();
+
+        public Text textTimer;
+        
         //[SyncVar(hook = nameof(OnSetPlayerColor)), SerializeField] private Color[] playerColor = new Color[4];
         public readonly SyncDictionary<uint, string> playerNames = new SyncDictionary<uint, string>();
         
@@ -29,9 +43,6 @@ namespace Game.Scripts
         [Tooltip("this is the real player model object, in the child of the root player prefab")]
         [SerializeField] public GameObject playerChildGameObject;
 
-        public PlayerGUI playerGUI;
-        //for debugging
-        public uint playerID;
         // Typical naming convention for SyncVarHooks is OnSet<VariableName>
         
         /// <summary>
@@ -44,7 +55,7 @@ namespace Game.Scripts
         {
             var cm = playerChildGameObject.GetComponent<MeshRenderer>().material;
             cm.color = newValue;
-            playerGUI.renders[(int) netId].avatar.color = newValue;
+            renders[(int) netId].avatar.color = newValue;
         }
         
         /// <summary>
@@ -55,7 +66,7 @@ namespace Game.Scripts
         /// <param name="newValue"></param>
         private void OnSetPlayerName(string oldValue, string newValue)
         {
-            playerGUI.renders[(int) netId].playerName.text = newValue;
+            renders[(int) netId].playerName.text = newValue;
         }
         
         private void Awake()
@@ -162,14 +173,28 @@ namespace Game.Scripts
         private void RpcUpdateGUIcolor(uint key, Color value)
         {
             Debug.Log($"RpcUpdateGUIcolor netid {netId}");
-            playerGUI.UpdateGUIcolour(key, value);
+            foreach (PlayerGUIRendering render in renders)
+            {
+                if (render.netId == key)
+                {
+                    Debug.Log($"in update gui render {render.avatar.name} for {key} color is {value}");
+                    render.avatar.color = value;
+                }
+            }
         }
         
         [ClientRpc]
         private void RpcUpdateGUIname(uint key, string value)
         {
-            Debug.Log($"RpcUpdateGUItext netid {netId}");
-            playerGUI.UpdateGUIname(key, value);
+            Debug.Log($"RpcUpdateGUIname netid {netId}");
+            foreach (PlayerGUIRendering render in renders)
+            {
+                if (render.netId == key)
+                {
+                    Debug.Log($"in update gui render {render.playerName.text} for {key} color is {value}");
+                    render.playerName.text = value;
+                }
+            }
         }
         
         // RULES FOR CLIENT RPC:
