@@ -456,7 +456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ee819993e4047fa80bdb344bd2991a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  txtTimer: {fileID: 0}
+  txtTimer: {fileID: 1012075408}
   txtNetworkStatus: {fileID: 2044729513}
   tabGroup: {fileID: 1837197059}
   tabBody:
@@ -464,11 +464,11 @@ MonoBehaviour:
   - {fileID: 872225728}
   - {fileID: 265280067}
   - {fileID: 733807526}
-  mapChoice: {fileID: 0}
+  mapChoice: {fileID: 1804891120}
   mainPanelGUI: {fileID: 501375956}
   topPanel: {fileID: 707728368}
-  topTimerBlock: {fileID: 0}
-  bottomPanel: {fileID: 0}
+  topTimerBlock: {fileID: 312941493}
+  bottomPanel: {fileID: 218995186}
   renders:
   - avatar: {fileID: 1666139840}
     playerName: {fileID: 365395416}

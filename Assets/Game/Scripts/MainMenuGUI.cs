@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 namespace Game.Scripts
 {
+    /// <summary>
+    /// used to update the values on the gui
+    /// </summary>
     [Serializable]
     public class PlayerGUIRendering
     {
@@ -17,9 +20,16 @@ namespace Game.Scripts
         public Text hp;
         public Slider slider;
 
+        /// <summary>
+        /// used to check if this netid/player id is the same
+        /// may not work if we have players disconnecting and reconnecting? as the index here is hard coded on inspector
+        /// </summary>
         public uint netId;
     }
     
+    /// <summary>
+    /// this is not a networked class and only deals with the GUI
+    /// </summary>
     public class MainMenuGUI : MonoBehaviour
     {
         [Tooltip("the Text UI element for Timer")]
@@ -92,7 +102,7 @@ namespace Game.Scripts
             var sceneName = SceneManager.GetActiveScene().name;
             switch (sceneName)
             {
-                case "Offline Start Game":
+                case "Offline Start Scene":
                     OnStartOffline();
                     break;
                 case "Online Lobby":
@@ -144,7 +154,9 @@ namespace Game.Scripts
         public void OnStartOnline()
         {
             topPanel.SetActive(true);
+            topTimerBlock.SetActive(false);
             mainPanelGUI.SetActive(false);
+            bottomPanel.SetActive(true);
         }
 
         /// <summary>
@@ -154,7 +166,9 @@ namespace Game.Scripts
         public void OnStartOffline()
         {
             topPanel.SetActive(true);
+            topTimerBlock.SetActive(false);
             mainPanelGUI.SetActive(true);
+            bottomPanel.SetActive(false);
         }
 
         #region events related
