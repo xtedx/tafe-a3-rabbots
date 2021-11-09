@@ -9,6 +9,17 @@ using UnityEngine.UI;
 
 namespace Game.Scripts
 {
+    [Serializable]
+    public class PlayerGUIRendering
+    {
+        public Image avatar;
+        public Text playerName;
+        public Text hp;
+        public Slider slider;
+
+        public uint netId;
+    }
+    
     public class MainMenuGUI : MonoBehaviour
     {
         [Tooltip("the Text UI element for Timer")]
@@ -29,9 +40,7 @@ namespace Game.Scripts
         [Tooltip("the button group for map choice")]
         [SerializeField]
         private GameObject mapChoice;
-        
-        private int activeTabIndex; 
-        
+
         /// <summary>
         /// Drag the Menu GUI GameObject here for the UIManager to manage
         /// </summary>
@@ -44,6 +53,10 @@ namespace Game.Scripts
         private GameObject topTimerBlock;
         [SerializeField]
         private GameObject bottomPanel;
+        
+        [Space]
+        [SerializeField] public List<PlayerGUIRendering> renders = new List<PlayerGUIRendering>(4);
+        private int activeTabIndex;
         
         /// <summary>
         /// toggles the display of menu

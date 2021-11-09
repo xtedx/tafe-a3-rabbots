@@ -14,20 +14,63 @@ namespace Game.Scripts
     {
         //for debugging
         public uint playerID;
-
-        [Serializable]
-        public class PlayerGUIRendering
+        public int GuiIndex
         {
-            public Image avatar;
-            public Text playerName;
-            public Text hp;
-            public Slider slider;
-
-            public uint netId;
+            get
+            {
+                var index = netId - 1;
+                if (index >= 0)
+                {
+                    return (int) index;
+                }
+                else
+                {
+                    throw new Exception("player id used for index cannot be less than 0");
+                }
+            }
         }
+        public MainMenuGUI mainMenuGUI;
+        public MainMenuGUI MainMenuGUI
+        {
+            get
+            {
+                //prevent null
+                if (mainMenuGUI != null)
+                {
+                    return mainMenuGUI;
+                }
+                else
+                {
+                    //initialise the GUI
+                    var guiObjects = SceneManager.GetSceneByName("GUI").GetRootGameObjects();
+                    bool hasGui = false;
+                    foreach (var go in guiObjects)
+                    {
+                        mainMenuGUI = go.GetComponent<MainMenuGUI>();
+                        try
+                        {
+                            var testnull = mainMenuGUI.renders.Count;
+                            //if no exception after this line, then all good
+                            hasGui = true;
+                            break;
+                        }
+                        catch (NullReferenceException nre)
+                        {
+                            continue;
+                        }
+                    }
 
-        [SerializeField] public List<PlayerGUIRendering> renders = new List<PlayerGUIRendering>();
+                    //if after looping but still no gui then fatal error
+                    if (!hasGui)
+                    {
+                        throw new NullReferenceException("need gui to continue, but not found");
+                    }
 
+                    return mainMenuGUI;
+                }
+            }
+        }
+        
         public Text textTimer;
         
         //[SyncVar(hook = nameof(OnSetPlayerColor)), SerializeField] private Color[] playerColor = new Color[4];
@@ -55,7 +98,7 @@ namespace Game.Scripts
         {
             var cm = playerChildGameObject.GetComponent<MeshRenderer>().material;
             cm.color = newValue;
-            renders[(int) netId].avatar.color = newValue;
+            MainMenuGUI.renders[GuiIndex].avatar.color = newValue;
         }
         
         /// <summary>
@@ -66,7 +109,7 @@ namespace Game.Scripts
         /// <param name="newValue"></param>
         private void OnSetPlayerName(string oldValue, string newValue)
         {
-            renders[(int) netId].playerName.text = newValue;
+            MainMenuGUI.renders[GuiIndex].playerName.text = newValue;
         }
         
         private void Awake()
@@ -173,7 +216,7 @@ namespace Game.Scripts
         private void RpcUpdateGUIcolor(uint key, Color value)
         {
             Debug.Log($"RpcUpdateGUIcolor netid {netId}");
-            foreach (PlayerGUIRendering render in renders)
+            foreach (PlayerGUIRendering render in MainMenuGUI.renders)
             {
                 if (render.netId == key)
                 {
@@ -187,7 +230,7 @@ namespace Game.Scripts
         private void RpcUpdateGUIname(uint key, string value)
         {
             Debug.Log($"RpcUpdateGUIname netid {netId}");
-            foreach (PlayerGUIRendering render in renders)
+            foreach (PlayerGUIRendering render in MainMenuGUI.renders)
             {
                 if (render.netId == key)
                 {
@@ -247,6 +290,7 @@ namespace Game.Scripts
         // This runs when the server starts... ON the server on all clients
         public override void OnStartServer()
         {
+
         }
     }
 }
