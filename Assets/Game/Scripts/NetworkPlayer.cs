@@ -12,8 +12,15 @@ namespace Game.Scripts
     [RequireComponent(typeof(CameraMovement))]
     public class NetworkPlayer : NetworkBehaviour
     {
-        //for debugging
+        /// <summary>
+        /// for debugging only to show at the inspector window
+        /// </summary>
         public uint playerID;
+        /// <summary>
+        /// this is used as the index in the GUI elements (gui renderer class PlayerGUIRendering)
+        /// because netid starts from 1, but csharp arrays starts from 0
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public int GuiIndex
         {
             get
@@ -29,12 +36,20 @@ namespace Game.Scripts
                 }
             }
         }
-        public MainMenuGUI mainMenuGUI;
+        /// <summary>
+        /// this is to contain the main menu gui, but because this is in a different scene, it will be set in code using the public getter
+        /// </summary>
+        private MainMenuGUI mainMenuGUI;
+        /// <summary>
+        /// this is to prevent null on the game object, because unity game object cannot accurately be compared with == null
+        /// until a property is used, and thats why we need the try catch to check the count of renders element
+        /// otherwise for other objects, using the object?.property syntax would be easier.
+        /// </summary>
+        /// <exception cref="NullReferenceException"></exception>
         public MainMenuGUI MainMenuGUI
         {
             get
             {
-                //prevent null
                 if (mainMenuGUI != null)
                 {
                     return mainMenuGUI;
@@ -73,15 +88,17 @@ namespace Game.Scripts
         
         public Text textTimer;
         
-        //[SyncVar(hook = nameof(OnSetPlayerColor)), SerializeField] private Color[] playerColor = new Color[4];
-        public readonly SyncDictionary<uint, string> playerNames = new SyncDictionary<uint, string>();
+        // although the gui needs to display all players' name/colour/hp etc,
+        // we dont need SyncList/SyncDict here, we'll use a list in the GUI as we only need them there.
+        // each variables here per client will be managed by mirror
         
         [SyncVar(hook = nameof(OnSetPlayerColour)), SerializeField] private Color playerColour;
         [SyncVar(hook = nameof(OnSetPlayerName)), SerializeField] private string playerName;
         
-        public readonly Dictionary<uint, Color> playerColoursNormal = new Dictionary<uint, Color>();
-
-        public Dictionary<uint, Material> cachedMaterial = new Dictionary<uint, Material>();
+        /// <summary>
+        /// to change the object colour
+        /// </summary>
+        private Material cachedMaterial;
 
         [Tooltip("this is the real player model object, in the child of the root player prefab")]
         [SerializeField] public GameObject playerChildGameObject;
@@ -89,20 +106,21 @@ namespace Game.Scripts
         // Typical naming convention for SyncVarHooks is OnSet<VariableName>
         
         /// <summary>
-        /// when player colour is changed, this function is called
+        /// when player colour is changed, this function is called and update the player object's material
+        /// then update the gui
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="key"></param>
         /// <param name="newValue"></param>
         private void OnSetPlayerColour(Color oldValue, Color newValue)
         {
-            var cm = playerChildGameObject.GetComponent<MeshRenderer>().material;
-            cm.color = newValue;
+            cachedMaterial = playerChildGameObject.GetComponent<MeshRenderer>().material;
+            cachedMaterial.color = newValue;
             MainMenuGUI.renders[GuiIndex].avatar.color = newValue;
         }
         
         /// <summary>
-        /// when player name is changed, this function is called
+        /// when player name is changed, this function is called, and update the gui here
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="key"></param>
@@ -125,8 +143,8 @@ namespace Game.Scripts
                 if(Input.GetKeyDown(KeyCode.Return))
                 {
                     // Run a function that tells every client to change the colour of this gameObject
-                    CmdRandomColor(netId);
-                    CmdRandomName(netId);
+                    CmdRandomColor();
+                    CmdRandomName();
                     //CmdTestToggleGUI();
                     Debug.Log($"player {netId }colour changed");
                 }
@@ -146,72 +164,61 @@ namespace Game.Scripts
             // GameObject newEnemy = Instantiate(enemyToSpawn);
             // NetworkServer.Spawn(newEnemy);
         }
-        
-        // RULES FOR COMMANDS:
-        // 1. Cannot return anything
-        // 2. Must follow the correct naming convention: The function name MUST start with 'Cmd' exactly like that
-        // 3. The function must have the attribute [Command] found in Mirror namespace
-        // 4. Can only be certain serializable types (see Command in the documentation)
+
+        /// <summary>
+        /// RULES FOR COMMANDS:
+        /// 1. Cannot return anything
+        /// 2. Must follow the correct naming convention: The function name MUST start with 'Cmd' exactly like that
+        /// 3. The function must have the attribute [Command] found in Mirror namespace
+        /// 4. Can only be certain serializable types (see Command in the documentation)
+        /// This is called by the client, and being run in the server
+        /// then to propagate the change to all other cliets, call an RPC function to deal with the change
+        /// in this case update tgui
+        /// </summary>
         [Command]
-        public void CmdRandomColor(uint _netId)
+        public void CmdRandomColor()
         {
             // SyncVar MUST be set on the server, otherwise it won't be synced between clients
             playerColour = Random.ColorHSV(0, 1, 1, 1, 1, 1);
+            
             RpcUpdateGUIcolor(netId, playerColour);
         }
         
+        /// <summary>
+        /// RULES FOR CLIENT RPC:
+        /// 1. Cannot return anything
+        /// 2. Must follow the correct naming convention: The function name MUST start with 'Rpc' exactly like that
+        /// 3. The function must have the attribute [ClientRpc] found in Mirror namespace
+        /// 4. Can only be certain serializable types (see Command in the documentation)
+        ///
+        /// this is run on the client
+        ///
+        /// <example>
+        /// [ClientRpc]
+        /// public void RpcRandomColor(float _hue)
+        /// {
+        ///     // This is running on every instance of the same object that the client was calling from.
+        ///     // i.e. Red GO on Red Client runs Cmd, Red GO on Red, Green and Blue client's run Rpc
+        ///     MeshRenderer rend = gameObject.GetComponent<MeshRenderer>();
+        ///     rend.material.color = Color.HSVToRGB(_hue, 1, 1);
+        /// }
+        /// </example>
+        /// </summary>
         [ClientRpc]
-        public void RpcRandomColor(uint _netId)
+        public void RpcRandomColor()
         {
-            //this is run on client
             
         }
 
         [Command]
-        public void CmdRandomName(uint _netId)
+        public void CmdRandomName()
         {
             // SyncVar MUST be set on the server, otherwise it won't be synced between clients
-            playerName = DateTime.Now.ToString("hhmmss");
+            playerName = DateTime.Now.ToString("mmss");
+            playerName = $"Bot{playerName}";
             RpcUpdateGUIname(netId, playerName);
         }
         
-        [Command]
-        public void CmdTestToggleGUI()
-        {
-            //test if a client can toggle a server gui and shown on every client
-            //if this works it means the gui doesn't need to be in player prefab
-            //this works by togling the menu in the server only.
-            //the second client doesn't see anything.
-            //now test if rpc can do this?
-            //yes rpc can do this, the command just need to call the RPC
-            //so it means both command and rpc need to be called for it to be the same on all
-            //LocalTestToggleGUI();
-            RpcTestToggleGUI();
-        }
-
-        public void LocalTestToggleGUI()
-        {
-            RpcTestToggleGUI();
-        }
-        
-        [ClientRpc]
-        public void RpcTestToggleGUI()
-        {
-            var guiObjects = SceneManager.GetSceneByName("GUI").GetRootGameObjects();
-            foreach (var go in guiObjects)
-            {
-                var menu = go.GetComponent<MainMenuGUI>();
-                try
-                {
-                    menu.ToggleMenu();
-                    break;
-                }
-                catch (NullReferenceException)
-                {
-                    continue;
-                }
-            }
-        }
         [ClientRpc]
         private void RpcUpdateGUIcolor(uint key, Color value)
         {
@@ -240,20 +247,48 @@ namespace Game.Scripts
             }
         }
         
-        // RULES FOR CLIENT RPC:
-        // 1. Cannot return anything
-        // 2. Must follow the correct naming convention: The function name MUST start with 'Rpc' exactly like that
-        // 3. The function must have the attribute [ClientRpc] found in Mirror namespace
-        // 4. Can only be certain serializable types (see Command in the documentation)
-        // [ClientRpc]
-        // public void RpcRandomColor(float _hue)
-        // {
-        //     // This is running on every instance of the same object that the client was calling from.
-        //     // i.e. Red GO on Red Client runs Cmd, Red GO on Red, Green and Blue client's run Rpc
-        //     MeshRenderer rend = gameObject.GetComponent<MeshRenderer>();
-        //     rend.material.color = Color.HSVToRGB(_hue, 1, 1);
-        // }
+        #region test gui code
+        /// <summary>
+        ///test if a client can toggle a server gui and shown on every client
+        ///if this works it means the gui doesn't need to be in player prefab
+        ///this works by togling the menu in the server only.
+        ///the second client doesn't see anything.
+        ///now test if rpc can do this?
+        ///yes rpc can do this, the command just need to call the RPC
+        ///so it means both command and rpc need to be called for it to be the same on all
+        ///LocalTestToggleGUI();
+        /// </summary>
+        [Command]
+        public void CmdTestToggleGUI()
+        {
+            RpcTestToggleGUI();
+        }
 
+        public void LocalTestToggleGUI()
+        {
+            RpcTestToggleGUI();
+        }
+        
+        [ClientRpc]
+        public void RpcTestToggleGUI()
+        {
+            var guiObjects = SceneManager.GetSceneByName("GUI").GetRootGameObjects();
+            foreach (var go in guiObjects)
+            {
+                var menu = go.GetComponent<MainMenuGUI>();
+                try
+                {
+                    menu.ToggleMenu();
+                    break;
+                }
+                catch (NullReferenceException)
+                {
+                    continue;
+                }
+            }
+        }
+        #endregion
+        
         // This is run via the network starting and the player connecting...
         // NOT Unity
         // It is run when the object is spawned via the networking system NOT when Unity
@@ -265,21 +300,23 @@ namespace Game.Scripts
             GameManager.Instance.LoadLocalScene("GUI");
             Debug.Log("loaded scene in network player");
         }
-
-        // This is run via the network starting and the player connecting...
-        // NOT Unity
-        // It is run when the object is spawned via the networking system NOT when Unity
-        // instantiates the object
+        
+        /// <summary>
+        /// This is run via the network starting and the player connecting...
+        /// NOT Unity
+        /// It is run when the object is spawned via the networking system NOT when Unity
+        /// instantiates the object
+        /// This will run REGARDLESS if we are the local or remote player
+        /// isLocalPlayer is true if this object is the client's local player otherwise it's false
+        /// </summary>
         public override void OnStartClient()
         {
-            // This will run REGARDLESS if we are the local or remote player
-            // isLocalPlayer is true if this object is the client's local player otherwise it's false
             PlayerController controller = gameObject.GetComponent<PlayerController>();
             controller.enabled = isLocalPlayer;
             
             MyNetworkManager.AddPlayer(this);
+            //for debugging
             playerID = netId;
-//            playerGUI.AssignPlayer(netId);
         }
 
         public override void OnStopClient()
