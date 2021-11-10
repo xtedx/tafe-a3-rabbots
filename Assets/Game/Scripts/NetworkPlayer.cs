@@ -115,7 +115,10 @@ namespace Game.Scripts
         private void OnSetPlayerColour(Color oldValue, Color newValue)
         {
             cachedMaterial = playerChildGameObject.GetComponent<MeshRenderer>().material;
+            //the scarf colour
             cachedMaterial.color = newValue;
+            //the lines/eyes colour
+            cachedMaterial.SetColor("_EmissionColor", newValue);
             MainMenuGUI.renders[GuiIndex].avatar.color = newValue;
         }
         
