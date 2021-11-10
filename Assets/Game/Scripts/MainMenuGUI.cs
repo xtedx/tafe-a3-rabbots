@@ -102,10 +102,10 @@ namespace Game.Scripts
             var sceneName = SceneManager.GetActiveScene().name;
             switch (sceneName)
             {
-                case "Offline Start Scene":
+                case GameManager.OFFLINE_SCENE:
                     OnStartOffline();
                     break;
-                case "Online Lobby":
+                case GameManager.ONLINE_SCENE:
                     OnStartOnline();
                     break;
                 default:

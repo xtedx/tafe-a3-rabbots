@@ -16,6 +16,7 @@ namespace Game.Scripts
         public const string MAP2_SCENE = "Map 2";
         public const string OFFLINE_SCENE = "Offline Start Scene";
         public const string ONLINE_SCENE = "Online Lobby";
+        public const string GUI_SCENE = "GUI";
         
         #endregion
 
@@ -27,7 +28,7 @@ namespace Game.Scripts
         {
             FlagAsPersistant();
             RegisterListeners();
-            LoadLocalScene("GUI");
+            LoadLocalScene(GameManager.GUI_SCENE);
             Debug.Log("loaded gui scene");
         }
 

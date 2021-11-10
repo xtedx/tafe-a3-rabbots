@@ -57,7 +57,7 @@ namespace Game.Scripts
                 else
                 {
                     //initialise the GUI
-                    var guiObjects = SceneManager.GetSceneByName("GUI").GetRootGameObjects();
+                    var guiObjects = SceneManager.GetSceneByName(GameManager.GUI_SCENE).GetRootGameObjects();
                     bool hasGui = false;
                     foreach (var go in guiObjects)
                     {
@@ -176,7 +176,7 @@ namespace Game.Scripts
         /// 4. Can only be certain serializable types (see Command in the documentation)
         /// This is called by the client, and being run in the server
         /// then to propagate the change to all other cliets, call an RPC function to deal with the change
-        /// in this case update tgui
+        /// in this case update gui
         /// </summary>
         [Command]
         public void CmdRandomColor()
@@ -277,7 +277,7 @@ namespace Game.Scripts
         [ClientRpc]
         public void RpcTestToggleGUI()
         {
-            var guiObjects = SceneManager.GetSceneByName("GUI").GetRootGameObjects();
+            var guiObjects = SceneManager.GetSceneByName(GameManager.GUI_SCENE).GetRootGameObjects();
             foreach (var go in guiObjects)
             {
                 var menu = go.GetComponent<MainMenuGUI>();
@@ -301,8 +301,7 @@ namespace Game.Scripts
         public override void OnStartLocalPlayer()
         {
             // This is run if we are the local player and NOT a remote player
-            //GetComponent<NetworkSceneManager>().LoadNetworkScene("GUI");
-            GameManager.Instance.LoadLocalScene("GUI");
+            GameManager.Instance.LoadLocalScene(GameManager.GUI_SCENE);
             Debug.Log("loaded scene in network player");
         }
         
