@@ -16,6 +16,11 @@ namespace TeddyToolKit.Core.Editor
         private int incrementBy = 1;
         private int digits = 3;
 
+        private string suffix = ".x";
+        
+        private string searchstr = "";
+        private string replacestr = "";
+
         /// <summary>
         /// add a menu along the File Edit Assets ...
         /// </summary>
@@ -30,9 +35,39 @@ namespace TeddyToolKit.Core.Editor
         /// </summary>
         private void OnGUI()
         {
+            RenameSequenceGUI();
+            RenameAppendGUI();
+            RenameReplaceGUI();
+        }
+
+        private void RenameAppendGUI()
+        {
+            EditorGUILayout.BeginVertical(GUI.skin.box);
+            {
+                // brackets just for code readability
+                suffix = EditorGUILayout.TextField("Suffix", suffix);
+            }
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.BeginVertical(GUI.skin.box);
+            {
+                EditorGUILayout.HelpBox(
+                    "* Add suffix to selected objects",
+                    MessageType.Info);
+            }
+            EditorGUILayout.EndVertical();
+
+            if (GUILayout.Button("Append"))
+            {
+                RenameAppend();
+            }
+        }
+
+        private void RenameSequenceGUI()
+        {
             GUILayout.Label("Rename the selected Objects", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical(GUI.skin.box);
-            { // brackets just for code readibility
+            {
+                // brackets just for code readability
                 prefix = EditorGUILayout.TextField("Prefix", prefix);
             }
             EditorGUILayout.EndVertical();
@@ -51,16 +86,69 @@ namespace TeddyToolKit.Core.Editor
             }
             EditorGUILayout.EndVertical();
 
-            if (GUILayout.Button("Rename"))
+            if (GUILayout.Button("Rename Sequence"))
             {
-                Rename();
+                RenameSequence();
             }
         }
 
+        private void RenameReplaceGUI()
+        {
+            EditorGUILayout.BeginVertical(GUI.skin.box);
+            {
+                // brackets just for code readability
+                searchstr = EditorGUILayout.TextField("Search for String", searchstr);
+                replacestr = EditorGUILayout.TextField("Replace with String", replacestr);
+            }
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.BeginVertical(GUI.skin.box);
+            {
+                EditorGUILayout.HelpBox(
+                    "* Search and replace",
+                    MessageType.Info);
+            }
+            EditorGUILayout.EndVertical();
+
+            if (GUILayout.Button("Search and Replace"))
+            {
+                RenameReplace();
+            }
+        }
+        
+        /// <summary>
+        /// replace text to the selected objects
+        /// </summary>
+        private void RenameReplace()
+        {
+            foreach (GameObject obj in Selection.objects)
+            {
+                if (
+                    searchstr == ""
+                    || replacestr == ""
+                )
+                {
+                    throwError();
+                }
+
+                obj.name = obj.name.Replace(searchstr, replacestr);
+            }
+        }
+        
+        /// <summary>
+        /// append text to the selected objects
+        /// </summary>
+        private void RenameAppend()
+        {
+            foreach (GameObject obj in Selection.objects)
+            {
+                obj.name = $"{obj.name}{suffix}";
+            }
+        }
+        
         /// <summary>
         /// loop through all the selected object and rename
         /// </summary>
-        private void Rename()
+        private void RenameSequence()
         {
             var i = startNum;
             var padChar = "0";
