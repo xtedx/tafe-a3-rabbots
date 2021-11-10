@@ -7,7 +7,7 @@ namespace Game.Scripts
 	{
 		[Header("Movement Settings")]
 		public float moveSpeed = 8f;
-		public float dashSpeed = 3f;
+		public float dashForce = 3f;
 		public float turnSensitivity = 5f;
 		public float maxTurnSpeed = 150f;
 
@@ -16,8 +16,10 @@ namespace Game.Scripts
 		public float vertical;
 		public float turn;
 		public float jumpSpeed;
+		public float dashSpeed;
 		public bool isGrounded = true;
 		public bool isFalling;
+		public bool isDashing;
 		public Vector3 direction;
 		public Vector3 velocity;
 		
@@ -75,9 +77,9 @@ namespace Game.Scripts
 				isFalling = false;
 
 			//don't dash when there is no input
-			if (horizontal == 0 && vertical == 0) jumpSpeed = 0;
+			//if (horizontal == 0 && vertical == 0) jumpSpeed = 0;
 			
-			if ((isGrounded || !isFalling) && jumpSpeed < 1f && Input.GetKeyUp(KeyCode.Space))
+			if ((isGrounded || !isFalling) && jumpSpeed < 1f && Input.GetKeyUp(KeyCode.J))
 			{
 				jumpSpeed = Mathf.Lerp(jumpSpeed, 1f, 0.5f);
 			}
@@ -86,6 +88,13 @@ namespace Game.Scripts
 				isFalling = true;
 				jumpSpeed = 0;
 			}
+			
+			if (Input.GetKeyUp(KeyCode.Space))
+			{
+				isDashing = true;
+
+			}
+			
 
 		}
 		
@@ -94,36 +103,39 @@ namespace Game.Scripts
 			if (!isLocalPlayer || characterController == null)
 				return;
 
-			var rotation = new Vector3(0f, turn * Time.fixedDeltaTime, 0f);
-			transform.Rotate(rotation);
-			
-
-			//effeciency according to rider:
-			var mytransform = transform;
-
-			Vector3 direction = new Vector3(horizontal, 0, vertical);
-			direction = Vector3.ClampMagnitude(direction, 1f);
-			direction = mytransform.TransformDirection(direction);
-			direction *= moveSpeed;
-
-			//use atan x/y because we are facing positive y, standard atan y/x starts the angle 0deg from positive x if drawn on cartesian
-			//atan is in rad, and convert to deg by multiplying
-			//use z instead of y because we don't move up
-			float turnTo = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-			
 			if (jumpSpeed > 0)
 			{
-				//characterController.Move(direction * Time.fixedDeltaTime);
+				direction = new Vector3(horizontal, jumpSpeed, vertical);
+				direction = Vector3.ClampMagnitude(direction, 1f);
+				direction = transform.TransformDirection(direction);
+				direction *= moveSpeed;
+				
+				characterController.Move(direction * Time.fixedDeltaTime);
 				//dash forward to the transform face direction instead of jump
-				// characterController.SimpleMove(transform.forward * dashSpeed);
-				characterController.SimpleMove(direction * dashSpeed);
-				//Debug.Log($"dash facing {facing}");
 			}
 			else
-			{
-				//normal movement asdf
+			{	
+				//effeciency according to rider:
+				var mytransform = transform;
+
+				Vector3 direction = new Vector3(horizontal, 0, vertical);
+				direction = Vector3.ClampMagnitude(direction, 1f);
+				direction = mytransform.TransformDirection(direction);
+				direction *= moveSpeed;
+			
+				//use atan x/y because we are facing positive y, standard atan y/x starts the angle 0deg from positive x if drawn on cartesian
+				//atan is in rad, and convert to deg by multiplying
+				//use z instead of y because we don't move up
+				float turnTo = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+				//normal movement asdw
 				characterController.SimpleMove(direction);
-				playerChildGameObject.transform.rotation = Quaternion.Euler(0,turnTo,0);
+				playerChildGameObject.transform.rotation = Quaternion.Euler(0, turnTo, 0);
+			}
+
+			if (isDashing)
+			{
+				characterController.SimpleMove(direction * dashForce);
+				isDashing = false;
 			}
 
 

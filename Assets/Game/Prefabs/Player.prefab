@@ -2763,15 +2763,17 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   moveSpeed: 8
-  dashSpeed: 20
+  dashForce: 8
   turnSensitivity: 5
   maxTurnSpeed: 150
   horizontal: 0
   vertical: 0
   turn: 0
   jumpSpeed: 0
+  dashSpeed: 0
   isGrounded: 1
   isFalling: 0
+  isDashing: 0
   direction: {x: 0, y: 0, z: 0}
   velocity: {x: 0, y: 0, z: 0}
   characterController: {fileID: 3159658014847237616}
