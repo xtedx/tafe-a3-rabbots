@@ -69,7 +69,7 @@ namespace Game.Scripts
                             hasGui = true;
                             break;
                         }
-                        catch (NullReferenceException nre)
+                        catch (NullReferenceException)
                         {
                             continue;
                         }
@@ -93,7 +93,11 @@ namespace Game.Scripts
         // each variables here per client will be managed by mirror
         
         [SyncVar(hook = nameof(OnSetPlayerColour)), SerializeField] private Color playerColour;
-        [SyncVar(hook = nameof(OnSetPlayerName)), SerializeField] private string playerName;
+        [SyncVar, SerializeField] private string playerName;
+        [SyncVar, SerializeField] private int playerHP;
+        
+        [Header("Game Settings")]
+        [SerializeField] private int maxPlayerHP;
         
         /// <summary>
         /// to change the object colour
@@ -119,18 +123,6 @@ namespace Game.Scripts
             cachedMaterial.color = newValue;
             //the lines/eyes colour
             cachedMaterial.SetColor("_EmissionColor", newValue);
-
-        }
-        
-        /// <summary>
-        /// when player name is changed, this function is called, and update the gui here
-        /// </summary>
-        /// <param name="operation"></param>
-        /// <param name="key"></param>
-        /// <param name="newValue"></param>
-        private void OnSetPlayerName(string oldValue, string newValue)
-        {
-            
         }
         
         private void Awake()
@@ -188,6 +180,20 @@ namespace Game.Scripts
         }
         
         /// <summary>
+        /// when player is hit, reduce hp by 1, then convert it to percentage 0-1 and pass it to update gui
+        /// </summary>
+        [Command]
+        public void CmdPlayerIsHit()
+        {
+            //sanity check
+            if (playerHP < 1) return;
+
+            playerHP--;
+            float hpPercent = playerHP / (float)maxPlayerHP;
+            RpcUpdateGUIhp(netId, hpPercent);
+        }
+        
+        /// <summary>
         /// RULES FOR CLIENT RPC:
         /// 1. Cannot return anything
         /// 2. Must follow the correct naming convention: The function name MUST start with 'Rpc' exactly like that
@@ -230,9 +236,29 @@ namespace Game.Scripts
             {
                 if (render.netId == key)
                 {
-                    Debug.Log($"in update gui render {render.avatar.name} for {key} color is {value}");
+                    Debug.Log($"in update gui render {render.avatar.name} for {key} value is {value}");
                     render.avatar.color = value;
                     render.hp.color = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// update the fill amount for health bar
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value">fillamount takes a float 0-1, so convert the hp to a percentage first before passing</param>
+        [ClientRpc]
+        private void RpcUpdateGUIhp(uint key, float value)
+        {
+            Debug.Log($"RpcUpdateGUIhp netid {netId}");
+            if (value < 0 || value >= 1) throw new Exception("invalid hp fillamount, expecting 0-1 only");
+            foreach (PlayerGUIRendering render in MainMenuGUI.renders)
+            {
+                if (render.netId == key)
+                {
+                    Debug.Log($"in update gui render {render.hp.name} for {key} value is {value}");
+                    render.hp.fillAmount = value;
                 }
             }
         }
@@ -245,7 +271,7 @@ namespace Game.Scripts
             {
                 if (render.netId == key)
                 {
-                    Debug.Log($"in update gui render {render.playerName.text} for {key} color is {value}");
+                    Debug.Log($"in update gui render {render.playerName.name} for {key} value is {value}");
                     render.playerName.text = value;
                     render.playerID.text = key.ToString();
                 }
