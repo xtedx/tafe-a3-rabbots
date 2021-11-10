@@ -107,7 +107,7 @@ namespace Game.Scripts
         
         /// <summary>
         /// when player colour is changed, this function is called and update the player object's material
-        /// then update the gui
+        /// then update the gui with rpc
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="key"></param>
@@ -119,7 +119,7 @@ namespace Game.Scripts
             cachedMaterial.color = newValue;
             //the lines/eyes colour
             cachedMaterial.SetColor("_EmissionColor", newValue);
-            MainMenuGUI.renders[GuiIndex].avatar.color = newValue;
+
         }
         
         /// <summary>
@@ -130,7 +130,7 @@ namespace Game.Scripts
         /// <param name="newValue"></param>
         private void OnSetPlayerName(string oldValue, string newValue)
         {
-            MainMenuGUI.renders[GuiIndex].playerName.text = newValue;
+            
         }
         
         private void Awake()
@@ -232,6 +232,7 @@ namespace Game.Scripts
                 {
                     Debug.Log($"in update gui render {render.avatar.name} for {key} color is {value}");
                     render.avatar.color = value;
+                    render.hp.color = value;
                 }
             }
         }
@@ -246,6 +247,7 @@ namespace Game.Scripts
                 {
                     Debug.Log($"in update gui render {render.playerName.text} for {key} color is {value}");
                     render.playerName.text = value;
+                    render.playerID.text = key.ToString();
                 }
             }
         }

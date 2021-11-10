@@ -17,8 +17,8 @@ namespace Game.Scripts
     {
         public Image avatar;
         public Text playerName;
-        public Text hp;
-        public Slider slider;
+        public Text playerID;
+        public Image hp;
 
         /// <summary>
         /// used to check if this netid/player id is the same
@@ -154,7 +154,7 @@ namespace Game.Scripts
         public void OnStartOnline()
         {
             topPanel.SetActive(true);
-            topTimerBlock.SetActive(false);
+            topTimerBlock.SetActive(true);
             mainPanelGUI.SetActive(false);
             bottomPanel.SetActive(true);
         }
