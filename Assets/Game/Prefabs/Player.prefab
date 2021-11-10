@@ -2762,21 +2762,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  moveSpeed: 8
+  controller: {fileID: 3159658014847237616}
+  speed: 8
+  jumpForce: 8
   dashForce: 8
-  turnSensitivity: 5
-  maxTurnSpeed: 150
-  horizontal: 0
-  vertical: 0
-  turn: 0
-  jumpSpeed: 0
-  dashSpeed: 0
-  isGrounded: 1
-  isFalling: 0
-  isDashing: 0
+  gravity: 9.81
+  turnSmoothTime: 0.1
+  IsTurnSmooth: 0
+  IsSimpleMove: 0
   direction: {x: 0, y: 0, z: 0}
-  velocity: {x: 0, y: 0, z: 0}
-  characterController: {fileID: 3159658014847237616}
 --- !u!114 &5150798556030799788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4395,7 +4389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e09fb12279d81b54d8425594ce62d25b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.28879273
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e09fb12279d81b54d8425594ce62d25b, type: 3}
       propertyPath: m_LocalPosition.z

@@ -1,51 +1,96 @@
 using Mirror;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Game.Scripts
 {
+	/// <summary>
+	/// player controller, for the character
+	/// </summary>
 	public class PlayerController : NetworkBehaviour
 	{
-		[Header("Movement Settings")]
-		public float moveSpeed = 8f;
-		public float dashForce = 3f;
-		public float turnSensitivity = 5f;
-		public float maxTurnSpeed = 150f;
-
-		[Header("Diagnostics")]
-		public float horizontal;
-		public float vertical;
-		public float turn;
-		public float jumpSpeed;
-		public float dashSpeed;
-		public bool isGrounded = true;
-		public bool isFalling;
-		public bool isDashing;
-		public Vector3 direction;
-		public Vector3 velocity;
-		
-		public CharacterController characterController;
+		/// <summary>
+		/// built in character controller object from unity
+		/// </summary>
+		[SerializeField] private CharacterController controller;
+	
+		/// <summary>
+		/// the actual model object to rotate
+		/// </summary>
 		private GameObject playerChildGameObject;
+		private Camera mainCamera;
 
+		[Space]
+    
+		[Header("Movement Settings")]
+		/// <summary>
+		/// speed of the character
+		/// </summary>
+		[SerializeField] private float speed;
+		/// <summary>
+		/// how high can the player jump
+		/// </summary>
+		[SerializeField] private float jumpForce;
+		/// <summary>
+		/// how far can the player dash
+		/// </summary>
+		[SerializeField] private float dashForce;
+		/// <summary>
+		/// gravity to simulate player falling
+		/// </summary>
+		[SerializeField] private float gravity = 9.81f;
+		/// <summary>
+		/// how long does it take to turn face
+		/// </summary>
+		[SerializeField] private float turnSmoothTime = 0.5f;
+		[SerializeField] private bool IsTurnSmooth;
+		[SerializeField] private bool IsSimpleMove;
+		
+		
+		private float turnSmoothVelocity; // to hold temp value for angle smoothing
+
+		[Header("Diagnostics")] public Vector3 direction;
+		
+		/// <summary>
+		/// speed of character falling in air
+		/// </summary>
+		private Vector3 verticalVelocity;
+		/// <summary>
+		/// speed of character dashing
+		/// </summary>
+		private Vector3 horizontalVelocity;
+    
+		private Vector3 playerKeyboardInput;
+    
+		private Animator animator;
+		private float animationBlend;
+    
+		// Start is called before the first frame update
 		void Start()
 		{
 			//only enable control if is local player
-			characterController.enabled = isLocalPlayer;
+			controller.enabled = isLocalPlayer;
 			//get the actual model to turn when moving
 			playerChildGameObject = gameObject.GetComponent<NetworkPlayer>().playerChildGameObject;
+			
+			//animation for later
+			//animator = GetComponentInChildren<Animator>();
 		}
-		
+    
 		public override void OnStartLocalPlayer()
 		{
-			Camera.main.orthographic = false;
-			Camera.main.transform.SetParent(transform);
-			Camera.main.transform.localPosition = new Vector3(0f, 3f, -8f);
-			Camera.main.transform.localEulerAngles = new Vector3(10f, 0f, 0f);
+			mainCamera = Camera.main;
+			mainCamera.orthographic = false;
+			mainCamera.transform.SetParent(transform);
+			mainCamera.transform.localPosition = new Vector3(0f, 3f, -8f);
+			mainCamera.transform.localEulerAngles = new Vector3(10f, 0f, 0f);
 		}
-		
 		void OnValidate()
 		{
-			if (characterController == null)
-				characterController = GetComponent<CharacterController>();
+			if (controller == null)
+				controller = GetComponent<CharacterController>();
 		}
 		
 		/// <summary>
@@ -53,95 +98,115 @@ namespace Game.Scripts
 		/// </summary>
 		void OnDisable()
 		{
-			if (isLocalPlayer && Camera.main != null)
+			if (isLocalPlayer && mainCamera != null)
 			{
-				Camera.main.orthographic = true;
-				Camera.main.transform.SetParent(null);
-				Camera.main.transform.localPosition = new Vector3(0f, 70f, 0f);
-				Camera.main.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
+				mainCamera.orthographic = true;
+				mainCamera.transform.SetParent(null);
+				mainCamera.transform.localPosition = new Vector3(0f, 70f, 0f);
+				mainCamera.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
 			}
 		}
-
+    
 		// Update is called once per frame
 		void Update()
 		{
+			//only process if this is the local player, not for other clients
 			if (!isLocalPlayer)
 				return;
-
-			horizontal = Input.GetAxis("Horizontal");
-			vertical = Input.GetAxis("Vertical");
-
-			// see CameraMovement.cs for right mouse hold and rotate camera.
-
-			if (isGrounded)
-				isFalling = false;
-
-			//don't dash when there is no input
-			//if (horizontal == 0 && vertical == 0) jumpSpeed = 0;
-			
-			if ((isGrounded || !isFalling) && jumpSpeed < 1f && Input.GetKeyUp(KeyCode.J))
-			{
-				jumpSpeed = Mathf.Lerp(jumpSpeed, 1f, 0.5f);
-			}
-			else if (!isGrounded)
-			{
-				isFalling = true;
-				jumpSpeed = 0;
-			}
-			
-			if (Input.GetKeyUp(KeyCode.Space))
-			{
-				isDashing = true;
-
-			}
-			
-
+	    
+			movePlayer();
 		}
-		
-		void FixedUpdate()
-		{
-			if (!isLocalPlayer || characterController == null)
-				return;
 
-			if (jumpSpeed > 0)
+		/// <summary>
+		/// reads input from user to move the player
+		/// </summary>
+		private void movePlayer()
+		{
+			//normalise so that it does not get too fast when moving diagonally
+			//basically normalise the vector to a direction, or use .normalize
+			//Vector3 direction = transform.TransformDirection(playerKeyboardInput);
+        
+			//playerKeyboardInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+			playerKeyboardInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+			direction = playerKeyboardInput.normalized;
+
+			#region dash logic
+			if (Input.GetKeyDown(KeyCode.Space))
 			{
-				direction = new Vector3(horizontal, jumpSpeed, vertical);
-				direction = Vector3.ClampMagnitude(direction, 1f);
-				direction = transform.TransformDirection(direction);
-				direction *= moveSpeed;
-				
-				characterController.Move(direction * Time.fixedDeltaTime);
-				//dash forward to the transform face direction instead of jump
+				//amplify the direction of movement to dash
+				Debug.Log($"Dash!!! {direction * dashForce} direction {direction}, speed {speed}, deltatime {Time.deltaTime}, dashforce {dashForce}");
+				controller.Move(direction * dashForce);
+				return;
+			}
+			#endregion dash logic
+			
+			#region jump logic
+			if (controller.isGrounded)
+			{
+				verticalVelocity.y = -1f;
+				//only jump when grounded
+				if (Input.GetKeyDown(KeyCode.J))
+				{
+					verticalVelocity.y = jumpForce;
+				}
 			}
 			else
-			{	
-				//effeciency according to rider:
-				var mytransform = transform;
-
-				Vector3 direction = new Vector3(horizontal, 0, vertical);
-				direction = Vector3.ClampMagnitude(direction, 1f);
-				direction = mytransform.TransformDirection(direction);
-				direction *= moveSpeed;
-			
-				//use atan x/y because we are facing positive y, standard atan y/x starts the angle 0deg from positive x if drawn on cartesian
-				//atan is in rad, and convert to deg by multiplying
-				//use z instead of y because we don't move up
-				float turnTo = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-				//normal movement asdw
-				characterController.SimpleMove(direction);
-				playerChildGameObject.transform.rotation = Quaternion.Euler(0, turnTo, 0);
-			}
-
-			if (isDashing)
 			{
-				characterController.SimpleMove(direction * dashForce);
-				isDashing = false;
+				//standard physics vertical velocity formula
+				//reduce vertical position by gravity at every frame
+				verticalVelocity.y -= gravity * 2f * Time.deltaTime;
 			}
+			controller.Move(verticalVelocity * Time.deltaTime);
+			#endregion jump logic
+			
+			#region normal move logic
+			//move only if there is input
+			if (direction.magnitude < 0.1f)
+			{
+				//animator.SetFloat(Animator.StringToHash("speed"), 0);
+				return;
+			}
+			
+			direction = turnTo(direction, IsTurnSmooth);
+			controller.Move(direction * speed * Time.deltaTime);
+			//do i still need this?
+			//playerChildGameObject.transform.rotation = Quaternion.Euler(0, turnTo, 0);
 
+			#endregion normal move logic
+			
+			//lerp to the full speed for nice blending, but doesn't seem to work well for me
+			//animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime);
+			//animator.SetFloat(Animator.StringToHash("speed"), animationBlend);
+		}
 
-			isGrounded = characterController.isGrounded;
-			velocity = characterController.velocity;
-			this.direction = direction;
+		/// <summary>
+		/// make the character turn to a given direction
+		/// </summary>
+		/// <param name="direction"></param>
+		/// <param name="isSmooth"></param>
+		/// <returns></returns>
+		private Vector3 turnTo(Vector3 direction, bool isSmooth)
+		{
+			//use atan x/y because we are facing positive y, standard atan y/x starts the angle 0deg from positive x if drawn on cartesian
+			//atan is in rad, and convert to deg by multiplying
+			//use z instead of y because we don't move up
+			float turnTo = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+			//make character go forward to the angle where main camera is facing.
+			turnTo += mainCamera.transform.eulerAngles.y;
+
+			if (isSmooth)
+			{
+				//smooth the angle to make it anime nicely
+				turnTo =
+					Mathf.SmoothDampAngle(playerChildGameObject.transform.eulerAngles.y, turnTo, ref turnSmoothVelocity, turnSmoothTime);
+
+			}
+			//turn object
+			playerChildGameObject.transform.rotation = Quaternion.Euler(0, turnTo, 0);
+        
+			//to move, now we need to convert the angle to a direction
+			direction = Quaternion.Euler(0, turnTo, 0) * Vector3.forward;
+			return direction.normalized;
 		}
 	}
 }
