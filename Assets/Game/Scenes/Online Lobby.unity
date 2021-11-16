@@ -385,6 +385,62 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2806696553781761159, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806696554711975421, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504194137100751, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504194163022357, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504194466559591, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504194597990959, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504194742313028, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504195147842867, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504195204827123, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504195264860464, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504195629563536, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504195780622745, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040504196034701003, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 4305867885246215790, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: 5899675809612831029, guid: 64825ba6df3daa1409c698ccc5a53d63, type: 3}
       propertyPath: m_RootOrder
       value: 5
