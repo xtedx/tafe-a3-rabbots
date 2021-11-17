@@ -88,6 +88,8 @@ namespace Game.Scripts
         }
         
         public Text textTimer;
+        
+        private bool hasAddedToGui = false;
         private bool hasChangedColour = false;
         private bool hasChangedName = false;
 
@@ -135,6 +137,11 @@ namespace Game.Scripts
 
         private void Update()
         {
+            //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
+            RegisterPlayerInGUI(netId);
+            GetPlayerColourFromGUI(netId);
+            GetPlayerNameFromGUI(netId);
+            
             // First determine if this function is being run on the local player
             if(isLocalPlayer)
             {
@@ -389,8 +396,8 @@ namespace Game.Scripts
             controller.enabled = isLocalPlayer;
             
             MyNetworkManager.AddPlayer(this);
-            GetPlayerColourFromGUI(netId);
-            GetPlayerNameFromGUI(netId);
+            //RegisterPlayerInGUI(netid) should be in the update because of some execution issue, should use sceneloadedevent next time.
+
             //for debugging
             playerID = netId;
         }
@@ -405,5 +412,61 @@ namespace Game.Scripts
         {
 
         }
+        
+        /// <summary>
+        /// registers the player in the gui slots. only take the first slot available and breaks out
+        /// empty slot is when the netid is gui is 0
+        /// </summary>
+        /// <param name="key"></param>
+        private void RegisterPlayerInGUI(uint key)
+        {
+            //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
+            if(MainMenuGUI == null)
+                return;
+
+            if (hasAddedToGui)
+                return;
+        
+            var i = 0;
+            foreach (PlayerGUIRendering render in MainMenuGUI.renders)
+//        foreach (PlayerGUIRendering render in FindObjectOfType<UiManager>().renders)
+            {
+                if (render.netId == key)
+                {
+                    Debug.Log($"RegisterPlayerInGUI trying to register the same ID {key}");
+                    return;
+                }
+                if (render.netId == 0) //0 means empty slot
+                {
+                    Debug.Log($"registered player {key} in the gui slots {i}");
+                    render.netId = key;
+                    Debug.Log($"player colour should be from gui {render.avatar.color}");
+                    hasAddedToGui = true;
+                    break;
+                }
+
+                i++;
+            }
+        }
+    
+        /// <summary>
+        /// registers the player in the gui slots. only take the first slot available and breaks out
+        /// empty slot is when the netid is gui is 0
+        /// </summary>
+        /// <param name="key"></param>
+        private void UnRegisterPlayerInGUI(uint key)
+        {
+            foreach (PlayerGUIRendering render in MainMenuGUI.renders)
+            {
+                if (render.netId == key)
+                {
+                    Debug.Log($"unregistered player {key} in the gui slots");
+                    render.netId = 0; //0 means empty slot
+                    break;
+                }
+            }
+        }
+
+
     }
 }

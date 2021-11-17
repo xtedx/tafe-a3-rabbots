@@ -478,22 +478,22 @@ MonoBehaviour:
     playerName: {fileID: 1599250133}
     playerID: {fileID: 615352475}
     hp: {fileID: 1499788297}
-    netId: 1
+    netId: 0
   - avatar: {fileID: 792989483}
     playerName: {fileID: 1833621978}
     playerID: {fileID: 931754583}
     hp: {fileID: 1121772345}
-    netId: 2
+    netId: 0
   - avatar: {fileID: 1239058889}
     playerName: {fileID: 1556861384}
     playerID: {fileID: 41268396}
     hp: {fileID: 525548426}
-    netId: 3
+    netId: 0
   - avatar: {fileID: 1534065803}
     playerName: {fileID: 858229079}
     playerID: {fileID: 480300485}
     hp: {fileID: 624700216}
-    netId: 4
+    netId: 0
 --- !u!114 &56258789
 MonoBehaviour:
   m_ObjectHideFlags: 0
