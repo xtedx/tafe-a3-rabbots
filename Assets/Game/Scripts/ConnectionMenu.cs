@@ -62,7 +62,6 @@ namespace Game.Scripts
             Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
             MyNetworkManager.Instance.StopClient();
-            MyNetworkManager.Instance.OnStartServer();
         }
         
         public void ButtonDiscoverServers()
