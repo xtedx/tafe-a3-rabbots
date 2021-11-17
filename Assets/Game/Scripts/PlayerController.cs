@@ -1,8 +1,5 @@
 using Mirror;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Game.Scripts
 {
@@ -271,31 +268,20 @@ namespace Game.Scripts
 		
 		#region collisions
 
-		[Server]
-		private void OnTriggerEnter(Collider other)
+		/// <summary>
+		/// oncollisionenter does not work for character controller class, use this instead.
+		/// </summary>
+		/// <param name="hit"></param>
+		private void OnControllerColliderHit(ControllerColliderHit hit)
 		{
-			if (other.CompareTag("Player"))
+			if (hit.gameObject.CompareTag("Player"))
 			{
-				var enemy = other.gameObject.GetComponent<NetworkPlayer>();
-				Debug.Log($"hit another player {enemy.name}");
+				var enemy = hit.gameObject.GetComponent<NetworkPlayer>();
+				Debug.Log($"controller colliderhit with another player {enemy.name}");
 			}
-			else
+			else if (hit.gameObject.CompareTag("environment"))
 			{
-				Debug.Log($"player hits something else {other.gameObject.name}");
-			}
-		}
-		
-		[Server]
-		private void OnCollisionEnter(Collision other)
-		{
-			if (other.gameObject.CompareTag("Player"))
-			{
-				var enemy = other.gameObject.GetComponent<NetworkPlayer>();
-				Debug.Log($"collision with another player {enemy.name}");
-			}
-			else
-			{
-				Debug.Log($"player collides with something else {other.gameObject.name}");
+				Debug.Log($"controller colliderhit with something else {hit.gameObject.name}");
 			}
 		}
 
