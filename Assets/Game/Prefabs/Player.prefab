@@ -72,6 +72,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   controller: {fileID: 3159658014847237616}
+  netPlayer: {fileID: 0}
   speed: 8
   jumpForce: 8
   dashForce: 8
@@ -105,7 +106,7 @@ MonoBehaviour:
   textTimer: {fileID: 0}
   playerColour: {r: 0, g: 0, b: 0, a: 0}
   playerName: 
-  playerHP: 0
+  playerHP: 10
   maxPlayerHP: 0
   playerChildGameObject: {fileID: 2202655215716278411}
 --- !u!143 &3159658014847237616

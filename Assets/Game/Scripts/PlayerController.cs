@@ -12,7 +12,8 @@ namespace Game.Scripts
 		/// built in character controller object from unity
 		/// </summary>
 		[SerializeField] private CharacterController controller;
-	
+		[SerializeField] private NetworkPlayer netPlayer;
+
 		/// <summary>
 		/// the actual model object to rotate
 		/// </summary>
@@ -75,10 +76,6 @@ namespace Game.Scripts
 		/// speed of character falling in air
 		/// </summary>
 		private Vector3 verticalVelocity;
-		/// <summary>
-		/// speed of character dashing
-		/// </summary>
-		private Vector3 horizontalVelocity;
     
 		private Vector3 playerKeyboardInput;
     
@@ -88,13 +85,15 @@ namespace Game.Scripts
 		// Start is called before the first frame update
 		void Start()
 		{
+			netPlayer = gameObject.GetComponent<NetworkPlayer>();
 			//only enable control if is local player
 			controller.enabled = isLocalPlayer;
 			//get the actual model to turn when moving
-			playerChildGameObject = gameObject.GetComponent<NetworkPlayer>().playerChildGameObject;
+			playerChildGameObject = netPlayer.playerChildGameObject;
 			//keep the original speed to revert after dash boost
 			originalSpeed = speed;
-			
+
+
 			//animation for later
 			//animator = GetComponentInChildren<Animator>();
 		}
@@ -162,6 +161,7 @@ namespace Game.Scripts
 					isDashing = true;
 					canDash = false;
 					dashModeTimer = dashModeDuration;
+					netPlayer.CmdPlayerDashStart();
 					return;
 				}
 			}
@@ -175,6 +175,7 @@ namespace Game.Scripts
 				{
 					isDashing = false;
 					speed = originalSpeed;
+					netPlayer.CmdPlayerDashStop();
 					Debug.Log("dash is complete");
 				}
 			}
@@ -277,11 +278,18 @@ namespace Game.Scripts
 			if (hit.gameObject.CompareTag("Player"))
 			{
 				var enemy = hit.gameObject.GetComponent<NetworkPlayer>();
-				Debug.Log($"controller colliderhit with another player {enemy.name}");
+				var mytime = netPlayer.playerDashTimeList[netPlayer.GuiIndex];
+				var enemytime = netPlayer.playerDashTimeList[enemy.GuiIndex];
+				if (mytime > enemytime)
+				{
+					//i lose
+					netPlayer.CmdPlayerIsHit();
+				}
+				Debug.Log($"{netPlayer.playerID} controller colliderhit with another player {enemy.playerID}, mytime {mytime}, enemytime{enemytime}");
 			}
 			else if (hit.gameObject.CompareTag("environment"))
 			{
-				Debug.Log($"controller colliderhit with something else {hit.gameObject.name}");
+				//Debug.Log($"controller colliderhit with something else {hit.gameObject.name}");
 			}
 		}
 

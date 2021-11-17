@@ -100,9 +100,10 @@ namespace Game.Scripts
         [SyncVar(hook = nameof(OnSetPlayerColour)), SerializeField] private Color playerColour;
         [SyncVar, SerializeField] private string playerName;
         [SyncVar, SerializeField] private int playerHP;
+        public SyncList<double> playerDashTimeList = new SyncList<double>();
         
         [Header("Game Settings")]
-        [SerializeField] private int maxPlayerHP;
+        [SerializeField] private int maxPlayerHP = 10;
         
         /// <summary>
         /// to change the object colour
@@ -173,8 +174,8 @@ namespace Game.Scripts
         private void GetPlayerColourFromGUI(uint key)
         {
             //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
-            // if(MainMenuGUI == null)
-            //     return;
+            if(MainMenuGUI == null)
+                return;
 
             if (hasChangedColour)
                 return;
@@ -242,6 +243,27 @@ namespace Game.Scripts
             playerHP--;
             float hpPercent = playerHP / (float)maxPlayerHP;
             RpcUpdateGUIhp(netId, hpPercent);
+        }
+        
+        /// <summary>
+        /// when player is dashes, keep the time it started, and remove when done.
+        /// this is used to compare who dashes last and it wins the hit, if both are dashing at the same time 
+        /// </summary>
+        [Command]
+        public void CmdPlayerDashStart()
+        {
+            //sanity check
+            if (playerDashTimeList.Count < 4) return;
+            //store timestamp
+            playerDashTimeList[GuiIndex] = NetworkTime.time;
+        }
+        [Command]
+        public void CmdPlayerDashStop()
+        {
+            //sanity check
+            if (playerDashTimeList.Count < 4) return;
+            //reset timestamp
+            playerDashTimeList[GuiIndex] = Double.MaxValue;
         }
         
         /// <summary>
@@ -380,6 +402,14 @@ namespace Game.Scripts
             // This is run if we are the local player and NOT a remote player
             GameManager.Instance.LoadLocalScene(GameManager.GUI_SCENE);
             Debug.Log("loaded scene in network player");
+
+            MyNetworkManager.AddPlayer(this);
+            Debug.Log($"added player {netId} to network manager");
+
+            //initialise player parameters
+            playerHP = maxPlayerHP;
+            playerName = $"StartClient{netId}";
+            //RegisterPlayerInGUI(netid) should be in the update because of some execution issue, should use sceneloadedevent next time.
         }
         
         /// <summary>
@@ -394,9 +424,6 @@ namespace Game.Scripts
         {
             PlayerController controller = gameObject.GetComponent<PlayerController>();
             controller.enabled = isLocalPlayer;
-            
-            MyNetworkManager.AddPlayer(this);
-            //RegisterPlayerInGUI(netid) should be in the update because of some execution issue, should use sceneloadedevent next time.
 
             //for debugging
             playerID = netId;
@@ -410,7 +437,11 @@ namespace Game.Scripts
         // This runs when the server starts... ON the server on all clients
         public override void OnStartServer()
         {
-
+            //initialise array/list
+            for (var i = 0; i < 4; i++)
+            {
+                playerDashTimeList.Add(Double.MaxValue);
+            }
         }
         
         /// <summary>

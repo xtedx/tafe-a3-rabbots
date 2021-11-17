@@ -432,7 +432,7 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 6470882793094827169, guid: a697121d645e5c84688ccdcbae4a7ee6, type: 3}
   autoCreatePlayer: 1
-  playerSpawnMethod: 0
+  playerSpawnMethod: 1
   spawnPrefabs: []
   myNetworkDiscovery: {fileID: 1735330469}
 --- !u!114 &1735330469
