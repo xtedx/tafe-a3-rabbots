@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1619386076656088248}
   - component: {fileID: 2438396402142001949}
   - component: {fileID: 446449902379290583}
+  - component: {fileID: 2343393703958479985}
   m_Layer: 0
   m_Name: Big Long Socket Pipe
   m_TagString: Untagged
@@ -82,6 +83,34 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2343393703958479985
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103998659308613122}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 7303844310412870235, guid: 999c9ae5cbc6b994cbd322bfb72888d3, type: 3}
+--- !u!64 &2600792221468437432
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6676858772858040202}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 668457573247270315, guid: ece4cccd48e37954a92d63bef379f747, type: 3}
 --- !u!1001 &5794336652338549467
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -139,6 +168,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ece4cccd48e37954a92d63bef379f747, type: 3}
+--- !u!1 &6676858772858040202 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ece4cccd48e37954a92d63bef379f747, type: 3}
+  m_PrefabInstance: {fileID: 5794336652338549467}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6332948387085104432 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ece4cccd48e37954a92d63bef379f747, type: 3}
