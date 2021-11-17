@@ -168,7 +168,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1562155756403114033}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 55, y: 0, z: 0}
+  m_LocalPosition: {x: 55, y: 20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5699177322649656564}
@@ -243,20 +243,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4816879749076784568, guid: c9d47d4dcf580614b8f01238c02bef9a, type: 3}
---- !u!64 &3820907623543165012
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2107984723688480178}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4162253513501663206, guid: 292aab2edf1eed042928db5cfa559978, type: 3}
 --- !u!64 &690083875629788927
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -271,20 +257,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 7303844310412870235, guid: 999c9ae5cbc6b994cbd322bfb72888d3, type: 3}
---- !u!64 &7304527509375369029
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2478719184536806880}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4162253513501663206, guid: 292aab2edf1eed042928db5cfa559978, type: 3}
 --- !u!1 &2784801800654025677
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,7 +282,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2784801800654025677}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 55}
+  m_LocalPosition: {x: 0, y: 20, z: 55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5699177322649656564}
@@ -853,7 +825,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5342591451916153888}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -55, y: 0, z: 0}
+  m_LocalPosition: {x: -55, y: 20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5699177322649656564}
@@ -1031,7 +1003,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7064057337964196495}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -55}
+  m_LocalPosition: {x: 0, y: 20, z: -55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5699177322649656564}
@@ -1088,20 +1060,6 @@ Transform:
   m_Father: {fileID: 868820619497434714}
   m_RootOrder: 77
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!64 &2857684589897886742
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200814097062496937}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4162253513501663206, guid: 292aab2edf1eed042928db5cfa559978, type: 3}
 --- !u!1 &7403550413841113007
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,6 +1404,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &4375500871899485586 stripped
@@ -1515,6 +1477,10 @@ PrefabInstance:
     - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
       propertyPath: m_Name
       value: Tire (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
@@ -1648,6 +1614,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.013
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
 --- !u!1 &988298330641387599 stripped
@@ -1713,6 +1683,10 @@ PrefabInstance:
     - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
       propertyPath: m_Name
       value: Mattress (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
@@ -2090,6 +2064,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &5793873658055056188 stripped
@@ -2218,6 +2196,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Body (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 8819416026893879370, guid: ea83af3871e1e2143b5ff4b6ce90d6cd, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea83af3871e1e2143b5ff4b6ce90d6cd, type: 3}
 --- !u!4 &7835527029671078153 stripped
@@ -2283,6 +2265,10 @@ PrefabInstance:
     - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
       propertyPath: m_Name
       value: Mattress (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
@@ -2354,6 +2340,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &4300946581315295690 stripped
@@ -2419,6 +2409,10 @@ PrefabInstance:
     - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
       propertyPath: m_Name
       value: Mattress (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
@@ -2668,6 +2662,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Big Long Straight Pipe
       objectReference: {fileID: 0}
+    - target: {fileID: 2117647338426887136, guid: 9c6e76c85f70b724a9b4adfd8762fd45, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c6e76c85f70b724a9b4adfd8762fd45, type: 3}
 --- !u!1001 &969664366349163051
@@ -2791,6 +2789,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &6365196485571793771 stripped
@@ -2852,6 +2854,10 @@ PrefabInstance:
     - target: {fileID: 2103998659308613122, guid: 3f6b6b88b20662f4fbd6e204aa20f78a, type: 3}
       propertyPath: m_Name
       value: Big Long Socket Pipe.002
+      objectReference: {fileID: 0}
+    - target: {fileID: 2103998659308613122, guid: 3f6b6b88b20662f4fbd6e204aa20f78a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f6b6b88b20662f4fbd6e204aa20f78a, type: 3}
@@ -2927,6 +2933,10 @@ PrefabInstance:
     - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Name
       value: Picket Fence Hill (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 2332618040639756355, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Convex
@@ -3108,6 +3118,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: socket_pipe_4x5m
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 999c9ae5cbc6b994cbd322bfb72888d3, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 999c9ae5cbc6b994cbd322bfb72888d3, type: 3}
 --- !u!4 &1452882911790954668 stripped
@@ -3130,6 +3144,10 @@ PrefabInstance:
     - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Name
       value: Picket Fence Hill (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 2332618040639756355, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Convex
@@ -3200,6 +3218,10 @@ PrefabInstance:
     - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_Name
       value: Barrel (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
@@ -3514,6 +3536,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.016
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
 --- !u!1 &1474497716217924253 stripped
@@ -3642,6 +3668,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.007
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
 --- !u!1 &1647978593925738793 stripped
@@ -3707,6 +3737,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
       propertyPath: m_Name
       value: straight_pipe_1.5x3m
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
@@ -3778,6 +3812,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.010
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
@@ -4031,6 +4069,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &5291425373994536407 stripped
@@ -4159,6 +4201,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.006
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
 --- !u!1 &1313081258754161784 stripped
@@ -4220,6 +4266,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 38912e60453c88447b732e194104b972, type: 3}
       propertyPath: m_Name
       value: forklift
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 38912e60453c88447b732e194104b972, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38912e60453c88447b732e194104b972, type: 3}
@@ -4292,6 +4342,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.002
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
 --- !u!1 &1378603829762061149 stripped
@@ -4350,6 +4404,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.486
       objectReference: {fileID: 0}
+    - target: {fileID: -6948632732658236248, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: -5678825993448753230, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.4125642
@@ -4382,6 +4440,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: container_20ft_1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921403343257670700, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: 6100933049049988589, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.49981076
@@ -4412,16 +4478,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
---- !u!1 &4521958070943563179 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -6948632732658236248, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
-  m_PrefabInstance: {fileID: 2400497424449419523}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4321896093707349295 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1921403343257670700, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
-  m_PrefabInstance: {fileID: 2400497424449419523}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2799830275091160808 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
@@ -4430,6 +4486,16 @@ Transform:
 --- !u!1 &3283456599766664274 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+  m_PrefabInstance: {fileID: 2400497424449419523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4321896093707349295 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1921403343257670700, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+  m_PrefabInstance: {fileID: 2400497424449419523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4521958070943563179 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6948632732658236248, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
   m_PrefabInstance: {fileID: 2400497424449419523}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2512215019001102137
@@ -4494,6 +4560,10 @@ PrefabInstance:
     - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
       propertyPath: m_Name
       value: Tire (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
@@ -4564,6 +4634,10 @@ PrefabInstance:
     - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
       propertyPath: m_Name
       value: Tire (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
@@ -4645,6 +4719,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrel (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
       value: 51
@@ -4702,11 +4780,6 @@ PrefabInstance:
 --- !u!4 &8643142544615436795 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
-  m_PrefabInstance: {fileID: 2619822636862117598}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7200814097062496937 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
   m_PrefabInstance: {fileID: 2619822636862117598}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2717045110298788247
@@ -4767,6 +4840,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.014
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
@@ -4847,6 +4924,10 @@ PrefabInstance:
     - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_Name
       value: Barrel (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
@@ -4970,6 +5051,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &1200600050682082547 stripped
@@ -5039,6 +5124,10 @@ PrefabInstance:
     - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
       propertyPath: m_Name
       value: Tire (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
@@ -5110,6 +5199,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &1429147484127313255 stripped
@@ -5127,6 +5220,10 @@ PrefabInstance:
     - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_Name
       value: Barrel (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
@@ -5556,6 +5653,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &7039334291320319336 stripped
@@ -5617,6 +5718,10 @@ PrefabInstance:
     - target: {fileID: 2117647338426887136, guid: 9c6e76c85f70b724a9b4adfd8762fd45, type: 3}
       propertyPath: m_Name
       value: Big Long Straight Pipe.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 2117647338426887136, guid: 9c6e76c85f70b724a9b4adfd8762fd45, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c6e76c85f70b724a9b4adfd8762fd45, type: 3}
@@ -5745,6 +5850,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &729497495412672605 stripped
@@ -5762,6 +5871,10 @@ PrefabInstance:
     - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Name
       value: Picket Fence Hill (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 2332618040639756355, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Convex
@@ -5884,6 +5997,10 @@ PrefabInstance:
     - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
       propertyPath: m_Name
       value: Mattress (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
@@ -6075,6 +6192,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &8066886999594666480 stripped
@@ -6092,6 +6213,10 @@ PrefabInstance:
     - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_Name
       value: Barrel (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
@@ -6211,6 +6336,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &7964990469252274643 stripped
@@ -6290,6 +6419,10 @@ PrefabInstance:
     - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Name
       value: Picket Fence Hill (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 2332618040639756355, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Convex
@@ -6413,6 +6546,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &7548779263252756193 stripped
@@ -6479,6 +6616,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: socket_pipe_1.5x3m.001
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c9d47d4dcf580614b8f01238c02bef9a, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9d47d4dcf580614b8f01238c02bef9a, type: 3}
 --- !u!1 &3573457800205768474 stripped
@@ -6496,6 +6637,10 @@ PrefabInstance:
     - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Name
       value: Picket Fence Hill (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 2332618040639756355, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Convex
@@ -6623,6 +6768,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &164984564809147555 stripped
@@ -6684,6 +6833,10 @@ PrefabInstance:
     - target: {fileID: 2103998659308613122, guid: 3f6b6b88b20662f4fbd6e204aa20f78a, type: 3}
       propertyPath: m_Name
       value: Pile of Pipes
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676858772858040202, guid: 3f6b6b88b20662f4fbd6e204aa20f78a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f6b6b88b20662f4fbd6e204aa20f78a, type: 3}
@@ -6875,6 +7028,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &1665934234761768471 stripped
@@ -7003,6 +7160,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &1215776826853350246 stripped
@@ -7069,6 +7230,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &1412306135172695068 stripped
@@ -7134,6 +7299,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.008
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
@@ -7267,6 +7436,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: broken_pipe_3
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bef12238b85aea449a83abce1311ef32, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bef12238b85aea449a83abce1311ef32, type: 3}
 --- !u!4 &5748638012796770101 stripped
@@ -7342,16 +7515,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: broken_pipe_2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7236b725475662747b2af4cdba38fa9c, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7236b725475662747b2af4cdba38fa9c, type: 3}
---- !u!4 &5701970723835951078 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7236b725475662747b2af4cdba38fa9c, type: 3}
-  m_PrefabInstance: {fileID: 5236491561614069773}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4929938031887740252 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7236b725475662747b2af4cdba38fa9c, type: 3}
+  m_PrefabInstance: {fileID: 5236491561614069773}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5701970723835951078 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7236b725475662747b2af4cdba38fa9c, type: 3}
   m_PrefabInstance: {fileID: 5236491561614069773}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5303083951748968560
@@ -7364,6 +7541,10 @@ PrefabInstance:
     - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Name
       value: Picket Fence Hill (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 2332618040639756355, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Convex
@@ -7487,6 +7668,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &8528919267727881727 stripped
@@ -7557,16 +7742,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: broken_pipe_1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5be65059463ca604ca7ed9e5e4497380, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5be65059463ca604ca7ed9e5e4497380, type: 3}
---- !u!1 &5134979571503211300 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5be65059463ca604ca7ed9e5e4497380, type: 3}
-  m_PrefabInstance: {fileID: 5441040385803230837}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5478853360128260510 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5be65059463ca604ca7ed9e5e4497380, type: 3}
+  m_PrefabInstance: {fileID: 5441040385803230837}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5134979571503211300 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5be65059463ca604ca7ed9e5e4497380, type: 3}
   m_PrefabInstance: {fileID: 5441040385803230837}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5450002108203866310
@@ -7632,6 +7821,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &8603766876516664396 stripped
@@ -7649,6 +7842,10 @@ PrefabInstance:
     - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_Name
       value: Barrel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
@@ -7768,6 +7965,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.004
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
 --- !u!1 &4641006121252543604 stripped
@@ -7838,6 +8039,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &8157542213441573203 stripped
@@ -7903,6 +8108,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.009
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
@@ -8027,6 +8236,10 @@ PrefabInstance:
     - target: {fileID: 3495896458685128607, guid: c6e2aa18285371c4595c860d97d13ebe, type: 3}
       propertyPath: m_Name
       value: Picket Fence (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3495896458685128607, guid: c6e2aa18285371c4595c860d97d13ebe, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6e2aa18285371c4595c860d97d13ebe, type: 3}
@@ -8156,6 +8369,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.015
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
 --- !u!1 &6885241582009195758 stripped
@@ -8280,6 +8497,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Big Long Socket Pipe.001
       objectReference: {fileID: 0}
+    - target: {fileID: 2103998659308613122, guid: 3f6b6b88b20662f4fbd6e204aa20f78a, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f6b6b88b20662f4fbd6e204aa20f78a, type: 3}
 --- !u!1001 &6104135505299879457
@@ -8340,6 +8561,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
@@ -8406,6 +8631,10 @@ PrefabInstance:
     - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
       propertyPath: m_Name
       value: Mattress (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
@@ -8486,6 +8715,10 @@ PrefabInstance:
     - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Name
       value: Picket Fence Hill (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 2332618040639756355, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Convex
@@ -8601,6 +8834,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -15.066
       objectReference: {fileID: 0}
+    - target: {fileID: -6948632732658236248, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: -5678825993448753230, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.8898928
@@ -8625,6 +8862,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: container_20ft_3
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921403343257670700, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: 6100933049049988589, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.63007957
@@ -8647,9 +8892,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
---- !u!1 &5081311312748927577 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -6948632732658236248, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+--- !u!4 &6818370201314048282 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
   m_PrefabInstance: {fileID: 6419053267217800945}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6184681705326961568 stripped
@@ -8657,14 +8902,14 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
   m_PrefabInstance: {fileID: 6419053267217800945}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &6818370201314048282 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
-  m_PrefabInstance: {fileID: 6419053267217800945}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4881687346418600669 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1921403343257670700, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+  m_PrefabInstance: {fileID: 6419053267217800945}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5081311312748927577 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6948632732658236248, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
   m_PrefabInstance: {fileID: 6419053267217800945}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6553868287394857413
@@ -8677,6 +8922,10 @@ PrefabInstance:
     - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_Name
       value: Barrel (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
@@ -8737,11 +8986,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
   m_PrefabInstance: {fileID: 6553868287394857413}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2107984723688480178 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
-  m_PrefabInstance: {fileID: 6553868287394857413}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6632208723854188824
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8800,6 +9044,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.012
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
@@ -8929,6 +9177,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.003
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
 --- !u!1 &5802344390095720219 stripped
@@ -9053,6 +9305,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Picket Fence
       objectReference: {fileID: 0}
+    - target: {fileID: 3495896458685128607, guid: c6e2aa18285371c4595c860d97d13ebe, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6e2aa18285371c4595c860d97d13ebe, type: 3}
 --- !u!4 &6098643212007529638 stripped
@@ -9133,6 +9389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrel (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
       value: 53
@@ -9202,6 +9462,10 @@ PrefabInstance:
     - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Name
       value: Picket Fence Hill (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 2332618040639756355, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Convex
@@ -9328,6 +9592,10 @@ PrefabInstance:
     - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
       propertyPath: m_Name
       value: Tire (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
@@ -9471,6 +9739,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrel (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
       value: 59
@@ -9525,11 +9797,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
---- !u!1 &2478719184536806880 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
-  m_PrefabInstance: {fileID: 7337271426648095127}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3925696229837921970 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
@@ -9549,6 +9816,10 @@ PrefabInstance:
     - target: {fileID: 585607699002159335, guid: 3570bae2b999489448691ba6a58fe03f, type: 3}
       propertyPath: m_Name
       value: Car (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 585607699002159335, guid: 3570bae2b999489448691ba6a58fe03f, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     - target: {fileID: 5562594017079695628, guid: 3570bae2b999489448691ba6a58fe03f, type: 3}
       propertyPath: m_RootOrder
@@ -9734,6 +10005,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &5821847524208723032 stripped
@@ -9800,6 +10075,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &4175286524838892666 stripped
@@ -9858,6 +10137,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6948632732658236248, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: -5678825993448753230, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.92213005
@@ -9878,6 +10161,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: container_20ft_2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921403343257670700, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: 6100933049049988589, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.795282
@@ -9896,9 +10187,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
---- !u!1 &8565400867346294620 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1921403343257670700, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+--- !u!4 &7781905563824018587 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
   m_PrefabInstance: {fileID: 7814968681403822960}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6968530208931286561 stripped
@@ -9906,14 +10197,14 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
   m_PrefabInstance: {fileID: 7814968681403822960}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &7781905563824018587 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
-  m_PrefabInstance: {fileID: 7814968681403822960}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8351124808651618264 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6948632732658236248, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
+  m_PrefabInstance: {fileID: 7814968681403822960}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8565400867346294620 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1921403343257670700, guid: cc1d8bad31dd154468779b3328be4740, type: 3}
   m_PrefabInstance: {fileID: 7814968681403822960}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7844131981593770034
@@ -10051,6 +10342,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Picket Fence Hill (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1146557577617591564, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: 2332618040639756355, guid: 8dbcec55d3df75145af7ccc260a04f3a, type: 3}
       propertyPath: m_Convex
       value: 0
@@ -10169,6 +10464,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &2668473477141069075 stripped
@@ -10235,6 +10534,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.011
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
 --- !u!1 &8968966649215753464 stripped
@@ -10300,6 +10603,10 @@ PrefabInstance:
     - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
       propertyPath: m_Name
       value: Mattress (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
@@ -10371,6 +10678,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &5480249946444054801 stripped
@@ -10436,6 +10747,10 @@ PrefabInstance:
     - target: {fileID: 8819416026893879370, guid: ea83af3871e1e2143b5ff4b6ce90d6cd, type: 3}
       propertyPath: m_Name
       value: Body (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8819416026893879370, guid: ea83af3871e1e2143b5ff4b6ce90d6cd, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea83af3871e1e2143b5ff4b6ce90d6cd, type: 3}
@@ -10564,6 +10879,10 @@ PrefabInstance:
     - target: {fileID: 8819416026893879370, guid: ea83af3871e1e2143b5ff4b6ce90d6cd, type: 3}
       propertyPath: m_Name
       value: Body (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8819416026893879370, guid: ea83af3871e1e2143b5ff4b6ce90d6cd, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea83af3871e1e2143b5ff4b6ce90d6cd, type: 3}
@@ -10764,6 +11083,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mattress (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139391845001221010, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6babfaaafeb5bc64280fd999aa1aa087, type: 3}
 --- !u!4 &2380510060569365243 stripped
@@ -10829,6 +11152,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
       propertyPath: m_Name
       value: straight_pipe_1.5x3m.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b4ccb56ab14a544691e1487a2eab7c8, type: 3}
@@ -11096,6 +11423,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrel (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 5167058737960623223, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     - target: {fileID: 6028603112803002149, guid: 7d7127529f0bf8d4b83e3c662a34e9f2, type: 3}
       propertyPath: m_RootOrder
       value: 56
@@ -11217,6 +11548,10 @@ PrefabInstance:
     - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
       propertyPath: m_Name
       value: Tire (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
@@ -11350,6 +11685,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tire (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
 --- !u!4 &4626052008388591176 stripped
@@ -11419,6 +11758,10 @@ PrefabInstance:
     - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
       propertyPath: m_Name
       value: Tire (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7163629890849143965, guid: 2a776eb6639da8441a70be482220a847, type: 3}
+      propertyPath: m_TagString
+      value: environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a776eb6639da8441a70be482220a847, type: 3}
