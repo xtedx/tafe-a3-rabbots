@@ -2710,7 +2710,7 @@ GameObject:
   - component: {fileID: 3436148225348063280}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2766,10 +2766,13 @@ MonoBehaviour:
   speed: 8
   jumpForce: 8
   dashForce: 8
+  dashCooldown: 1
   gravity: 9.81
   turnSmoothTime: 0.1
-  IsTurnSmooth: 0
-  IsSimpleMove: 0
+  isTurnSmooth: 0
+  isSimpleMove: 0
+  canDash: 0
+  dashCooldownTimer: 1
   direction: {x: 0, y: 0, z: 0}
 --- !u!114 &5150798556030799788
 MonoBehaviour:
@@ -2789,6 +2792,8 @@ MonoBehaviour:
   textTimer: {fileID: 0}
   playerColour: {r: 0, g: 0, b: 0, a: 0}
   playerName: 
+  playerHP: 0
+  maxPlayerHP: 0
   playerChildGameObject: {fileID: 2202655215716278411}
 --- !u!143 &3159658014847237616
 CharacterController:
@@ -4442,6 +4447,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e09fb12279d81b54d8425594ce62d25b, type: 3}
       propertyPath: m_Name
       value: rabbot_player
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e09fb12279d81b54d8425594ce62d25b, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e09fb12279d81b54d8425594ce62d25b, type: 3}
