@@ -38,6 +38,10 @@ namespace Game.Scripts
 		/// </summary>
 		[SerializeField] private float dashForce;
 		/// <summary>
+		/// dash cooldown time
+		/// </summary>
+		[SerializeField] private float dashCooldown = 1;
+		/// <summary>
 		/// gravity to simulate player falling
 		/// </summary>
 		[SerializeField] private float gravity = 9.81f;
@@ -45,8 +49,15 @@ namespace Game.Scripts
 		/// how long does it take to turn face
 		/// </summary>
 		[SerializeField] private float turnSmoothTime = 0.5f;
-		[SerializeField] private bool IsTurnSmooth;
-		[SerializeField] private bool IsSimpleMove;
+		[SerializeField] private bool isTurnSmooth;
+		[SerializeField] private bool isSimpleMove;
+		[Space]
+		[Header("Diagnostic")]
+		[SerializeField] private bool canDash;
+		/// <summary>
+		/// dash cooldown timer
+		/// </summary>
+		[SerializeField] private float dashCooldownTimer = 1;
 		
 		
 		private float turnSmoothVelocity; // to hold temp value for angle smoothing
@@ -131,11 +142,12 @@ namespace Game.Scripts
 			direction = playerKeyboardInput.normalized;
 
 			#region dash logic
-			if (Input.GetKeyDown(KeyCode.Space))
+			if (Input.GetKeyDown(KeyCode.Space) && canDash)
 			{
 				//amplify the direction of movement to dash
 				Debug.Log($"Dash!!! {direction * dashForce} direction {direction}, speed {speed}, deltatime {Time.deltaTime}, dashforce {dashForce}");
 				controller.Move(direction * dashForce);
+				canDash = false;
 				return;
 			}
 			#endregion dash logic
@@ -167,12 +179,28 @@ namespace Game.Scripts
 				return;
 			}
 			
-			direction = turnTo(direction, IsTurnSmooth);
+			direction = turnTo(direction, isTurnSmooth);
 			controller.Move(direction * speed * Time.deltaTime);
 			//do i still need this?
 			//playerChildGameObject.transform.rotation = Quaternion.Euler(0, turnTo, 0);
 
 			#endregion normal move logic
+			
+			#region cool down logic
+			if (!canDash)
+			{
+				//reduce timer
+				dashCooldownTimer -= Time.deltaTime;
+
+				//reset if time is up
+				if (dashCooldownTimer <= 0)
+				{
+					canDash = true;
+					dashCooldownTimer = dashCooldown;
+					Debug.Log("can dash again");
+				}
+			}
+			#endregion
 			
 			//lerp to the full speed for nice blending, but doesn't seem to work well for me
 			//animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime);
