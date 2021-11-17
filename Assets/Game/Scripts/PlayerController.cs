@@ -42,6 +42,10 @@ namespace Game.Scripts
 		/// </summary>
 		[SerializeField] private float dashCooldown = 1;
 		/// <summary>
+		/// how long is the speed boost for
+		/// </summary>
+		[SerializeField] private float dashModeDuration = 0.2f;
+		/// <summary>
 		/// gravity to simulate player falling
 		/// </summary>
 		[SerializeField] private float gravity = 9.81f;
@@ -53,11 +57,17 @@ namespace Game.Scripts
 		[SerializeField] private bool isSimpleMove;
 		[Space]
 		[Header("Diagnostic")]
-		[SerializeField] private bool canDash;
+		[SerializeField] private bool canDash = true;
+		[SerializeField] private bool isDashing = false;
+		
+		
 		/// <summary>
 		/// dash cooldown timer
 		/// </summary>
 		[SerializeField] private float dashCooldownTimer = 1;
+		[SerializeField] private float dashModeTimer;
+		[SerializeField] private float originalSpeed;
+		
 		
 		
 		private float turnSmoothVelocity; // to hold temp value for angle smoothing
@@ -85,6 +95,8 @@ namespace Game.Scripts
 			controller.enabled = isLocalPlayer;
 			//get the actual model to turn when moving
 			playerChildGameObject = gameObject.GetComponent<NetworkPlayer>().playerChildGameObject;
+			//keep the original speed to revert after dash boost
+			originalSpeed = speed;
 			
 			//animation for later
 			//animator = GetComponentInChildren<Animator>();
@@ -142,14 +154,34 @@ namespace Game.Scripts
 			direction = playerKeyboardInput.normalized;
 
 			#region dash logic
-			if (Input.GetKeyDown(KeyCode.Space) && canDash)
+
+			if (!isDashing)
 			{
-				//amplify the direction of movement to dash
-				Debug.Log($"Dash!!! {direction * dashForce} direction {direction}, speed {speed}, deltatime {Time.deltaTime}, dashforce {dashForce}");
-				controller.Move(direction * dashForce);
-				canDash = false;
-				return;
+				if (Input.GetKeyDown(KeyCode.Space) && canDash)
+				{
+					//amplify the speed of movement for a period of time
+					Debug.Log("dash = speed boost!");
+					speed *= dashForce;
+					isDashing = true;
+					canDash = false;
+					dashModeTimer = dashModeDuration;
+					return;
+				}
 			}
+			else
+			{
+				//reduce timer
+				dashModeTimer -= Time.deltaTime;
+
+				//reset if time is up
+				if (dashModeTimer <= 0)
+				{
+					isDashing = false;
+					speed = originalSpeed;
+					Debug.Log("dash is complete");
+				}
+			}
+
 			#endregion dash logic
 			
 			#region jump logic
