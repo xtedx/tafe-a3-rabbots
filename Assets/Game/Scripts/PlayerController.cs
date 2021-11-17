@@ -236,5 +236,37 @@ namespace Game.Scripts
 			direction = Quaternion.Euler(0, turnTo, 0) * Vector3.forward;
 			return direction.normalized;
 		}
+		
+		#region collisions
+
+		[Server]
+		private void OnTriggerEnter(Collider other)
+		{
+			if (other.CompareTag("Player"))
+			{
+				var enemy = other.gameObject.GetComponent<NetworkPlayer>();
+				Debug.Log($"hit another player {enemy.name}");
+			}
+			else
+			{
+				Debug.Log($"player hits something else {other.gameObject.name}");
+			}
+		}
+		
+		[Server]
+		private void OnCollisionEnter(Collision other)
+		{
+			if (other.gameObject.CompareTag("Player"))
+			{
+				var enemy = other.gameObject.GetComponent<NetworkPlayer>();
+				Debug.Log($"collision with another player {enemy.name}");
+			}
+			else
+			{
+				Debug.Log($"player collides with something else {other.gameObject.name}");
+			}
+		}
+
+		#endregion
 	}
 }

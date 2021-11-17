@@ -58,6 +58,7 @@ namespace Game.Scripts
                 {
                     //initialise the GUI
                     var guiObjects = SceneManager.GetSceneByName(GameManager.GUI_SCENE).GetRootGameObjects();
+                    //strange argument exception but it can get the objects fine. ignore
                     bool hasGui = false;
                     foreach (var go in guiObjects)
                     {
@@ -87,7 +88,9 @@ namespace Game.Scripts
         }
         
         public Text textTimer;
-        
+        private bool hasChangedColour = false;
+        private bool hasChangedName = false;
+
         // although the gui needs to display all players' name/colour/hp etc,
         // we dont need SyncList/SyncDict here, we'll use a list in the GUI as we only need them there.
         // each variables here per client will be managed by mirror
@@ -138,10 +141,10 @@ namespace Game.Scripts
                 if(Input.GetKeyDown(KeyCode.Return))
                 {
                     // Run a function that tells every client to change the colour of this gameObject
-                    CmdRandomColor();
-                    CmdRandomName();
+                    //CmdRandomColor();
+                    //CmdRandomName();
                     //CmdTestToggleGUI();
-                    Debug.Log($"player {netId }colour changed");
+                    //Debug.Log($"player {netId }colour changed");
                 }
 
                 if(Input.GetKeyDown(KeyCode.X))
@@ -160,6 +163,47 @@ namespace Game.Scripts
             // NetworkServer.Spawn(newEnemy);
         }
 
+        private void GetPlayerColourFromGUI(uint key)
+        {
+            //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
+            // if(MainMenuGUI == null)
+            //     return;
+
+            if (hasChangedColour)
+                return;
+        
+            foreach (PlayerGUIRendering render in MainMenuGUI.renders)
+            {
+                if (render.netId == key)
+                {
+                    Debug.Log($"in get player colour gui render {render.avatar.name} for {key} value is {render.avatar.color}");
+                    playerColour = render.avatar.color;
+                    hasChangedColour = true;
+                }
+            }
+        }
+        
+        private void GetPlayerNameFromGUI(uint key)
+        {
+            //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
+            // if(MainMenuGUI == null)
+            //     return;
+
+            if (hasChangedName)
+                return;
+        
+            foreach (PlayerGUIRendering render in MainMenuGUI.renders)
+            {
+                if (render.netId == key)
+                {
+                    Debug.Log($"in get player name gui render {render.avatar.name} for {key} value is {render.avatar.color}");
+                    playerName = render.playerName.text;
+                    playerID = UInt32.Parse(render.playerID.text);
+                    hasChangedName = true;
+                }
+            }
+        }
+        
         /// <summary>
         /// RULES FOR COMMANDS:
         /// 1. Cannot return anything
@@ -345,6 +389,8 @@ namespace Game.Scripts
             controller.enabled = isLocalPlayer;
             
             MyNetworkManager.AddPlayer(this);
+            GetPlayerColourFromGUI(netId);
+            GetPlayerNameFromGUI(netId);
             //for debugging
             playerID = netId;
         }
