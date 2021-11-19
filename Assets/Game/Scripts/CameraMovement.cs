@@ -22,7 +22,7 @@ public class CameraMovement : MonoBehaviour
 		pitch = transform.eulerAngles.y;
 	}
 
-	// Update is called once per framewwwwwww
+	// Update is called once per frame
 	void Update()
 	{
 		//if (UIManager.Instance.isMenu()) return;

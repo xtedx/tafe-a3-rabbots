@@ -79,7 +79,7 @@ namespace Game.Scripts
         // Start is called before the first frame update
         private void Start()
         {
-            Restart();
+            //Restart();
         }
 
         // Update is called once per frame

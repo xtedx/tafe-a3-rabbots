@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine;
 
@@ -63,8 +64,10 @@ namespace Game.Scripts
 		/// dash cooldown timer
 		/// </summary>
 		[SerializeField] private float dashCooldownTimer = 1;
+		[SerializeField] private float hitCooldownTimer = 1;
 		[SerializeField] private float dashModeTimer;
 		[SerializeField] private float originalSpeed;
+		
 		
 		
 		
@@ -134,6 +137,9 @@ namespace Game.Scripts
 				return;
 	    
 			movePlayer();
+			//reduce hitCooldown
+			if (hitCooldownTimer > 0) hitCooldownTimer -= Time.deltaTime;
+
 		}
 
 		/// <summary>
@@ -175,7 +181,6 @@ namespace Game.Scripts
 				{
 					isDashing = false;
 					speed = originalSpeed;
-					netPlayer.CmdPlayerDashStop();
 					Debug.Log("dash is complete");
 				}
 			}
@@ -277,22 +282,20 @@ namespace Game.Scripts
 		{
 			if (hit.gameObject.CompareTag("Player"))
 			{
-				var enemy = hit.gameObject.GetComponent<NetworkPlayer>();
-				var mytime = netPlayer.playerDashTimeList[netPlayer.GuiIndex];
-				var enemytime = netPlayer.playerDashTimeList[enemy.GuiIndex];
-				if (mytime > enemytime)
-				{
-					//i lose
-					netPlayer.CmdPlayerIsHit();
-				}
-				Debug.Log($"{netPlayer.playerID} controller colliderhit with another player {enemy.playerID}, mytime {mytime}, enemytime{enemytime}");
+				//prevents multiple hit
+				if (hitCooldownTimer > 0) return;
+				hitCooldownTimer = 0.5f;
+				
+				//call server command to decide who wins the hit
+				netPlayer.CmdDecidePlayerCollision(isDashing);
+				Debug.Log("called CmdDecidePlayerCollision");
 			}
 			else if (hit.gameObject.CompareTag("environment"))
 			{
 				//Debug.Log($"controller colliderhit with something else {hit.gameObject.name}");
 			}
 		}
-
+		
 		#endregion
 	}
 }
