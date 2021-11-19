@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using NetworkGame.Networking;
 using UnityEngine;
@@ -60,32 +61,6 @@ namespace Game.Scripts
                     //initialise the GUI
                     mainMenuGUI = GameObject.FindObjectOfType<Scripts.MainMenuGUI>();
                     return mainMenuGUI;
-                    var guiObjects = SceneManager.GetSceneByName(MyNetworkManager.GUI_SCENE).GetRootGameObjects();
-                    //strange argument exception but it can get the objects fine. ignore
-                    bool hasGui = false;
-                    foreach (var go in guiObjects)
-                    {
-                        mainMenuGUI = go.GetComponent<MainMenuGUI>();
-                        try
-                        {
-                            var testnull = mainMenuGUI.renders.Count;
-                            //if no exception after this line, then all good
-                            hasGui = true;
-                            break;
-                        }
-                        catch (NullReferenceException)
-                        {
-                            continue;
-                        }
-                    }
-
-                    //if after looping but still no gui then fatal error
-                    if (!hasGui)
-                    {
-                        throw new NullReferenceException("need gui to continue, but not found");
-                    }
-
-                    return mainMenuGUI;
                 }
             }
         }
@@ -93,8 +68,6 @@ namespace Game.Scripts
         public Text textTimer;
         
         private bool hasAddedToGui = false;
-        private bool hasChangedColour = false;
-        private bool hasChangedName = false;
 
         // although the gui needs to display all players' name/colour/hp etc,
         // we dont need SyncList/SyncDict here, we'll use a list in the GUI as we only need them there.
@@ -103,7 +76,13 @@ namespace Game.Scripts
         [SyncVar(hook = nameof(OnSetPlayerColour)), SerializeField] private Color playerColour;
         [SyncVar, SerializeField] private string playerName;
         [SyncVar, SerializeField] private int playerHP;
-        public SyncList<double> playerDashTimeList = new SyncList<double>();
+        [SyncVar(hook = nameof(OnTimerTick)), SerializeField] private double timer;
+        public readonly SyncList<double> playerDashTimeList = new SyncList<double>();
+        public readonly SyncList<Color> playerColourList = new SyncList<Color>();
+        public readonly SyncList<string> playerNameList = new SyncList<string>();
+        public readonly SyncList<int> playerHPList = new SyncList<int>();
+        public readonly SyncList<int> playerIDList = new SyncList<int>();
+        
         
         [Header("Game Settings")]
         [SerializeField] private int maxPlayerHP = 10;
@@ -133,18 +112,113 @@ namespace Game.Scripts
             //the lines/eyes colour
             cachedMaterial.SetColor("_EmissionColor", newValue);
         }
-        
-        private void Awake()
+
+        private void OnTimerTick(double oldValue, double newValue)
         {
-            // This will run REGARDLESS if we are the local or remote player
+            mainMenuGUI.UpdateTimerText((int)newValue);
+        }
+
+        void Start()
+        {
+            RegisterSyncVarListeners();
+        }
+
+        /// <summary>
+        /// register listeners to run when the sync list values are changed
+        /// usually in the called in start() function
+        /// for gui updates, storing in database, etc.
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void RegisterSyncVarListeners()
+        {
+            playerColourList.Callback += OnPlayerColourListUpdated;
+            playerNameList.Callback += OnPlayerNameListUpdated;
+            playerHPList.Callback += OnPlayerHPListUpdated;
+            playerIDList.Callback += OnplayerIDListUpdated;
+        }
+
+        private void OnplayerIDListUpdated(SyncList<int>.Operation op, int itemindex, int olditem, int newitem)
+        {
+            if (playerIDList.Count == 4)
+            {
+                for (var i = 0; i < MainMenuGUI.renders.Count; i++)
+                {
+                    try
+                    {
+                        MainMenuGUI.renders[i].playerID.text = playerIDList[i].ToString();
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Debug.Log($"OnplayerIDListUpdated no player id at {i}");
+                    }
+                }
+            }
+        }
+
+        private void OnPlayerHPListUpdated(SyncList<int>.Operation op, int itemindex, int olditem, int newitem)
+        {
+            if (playerHPList.Count == 4)
+            {
+                for (var i = 0; i < MainMenuGUI.renders.Count; i++)
+                {
+                    try
+                    {
+                        float hpPercent = playerHPList[i] / (float)maxPlayerHP;
+                        MainMenuGUI.renders[i].hp.fillAmount = hpPercent;
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Debug.Log($"OnplayerHPListUpdated no player id at {i}");
+                    }
+                }
+            }
+        }
+
+        private void OnPlayerColourListUpdated(SyncList<Color>.Operation op, int itemindex, Color olditem, Color newitem)
+        {
+            //player can't change colour for now
+            if (playerColourList.Count == 4)
+            {
+                for (var i = 0; i < MainMenuGUI.renders.Count; i++)
+                {
+                    try
+                    {
+                        //can only change my own colour
+                        if (GuiIndex == i)
+                        {
+                            playerColour = playerColourList[i];
+                        }
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Debug.Log($"OnplayerColourListUpdated no player id at {i}");
+                    }
+                }
+            }
+        }
+
+        private void OnPlayerNameListUpdated(SyncList<string>.Operation op, int itemindex, string olditem, string newitem)
+        {
+            if (playerNameList.Count == 4)
+            {
+                for (var i = 0; i < MainMenuGUI.renders.Count; i++)
+                {
+                    try
+                    {
+                        MainMenuGUI.renders[i].playerName.text = playerNameList[i];
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        Debug.Log($"OnplayerNameListUpdated no player id at {i}");
+                    }
+                }
+            }
         }
 
         private void Update()
         {
             //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
             RegisterPlayerInGUI(netId);
-            GetPlayerColourFromGUI(netId);
-            GetPlayerNameFromGUI(netId);
             
             // First determine if this function is being run on the local player
             if(isLocalPlayer)
@@ -174,46 +248,25 @@ namespace Game.Scripts
             // NetworkServer.Spawn(newEnemy);
         }
 
-        private void GetPlayerColourFromGUI(uint key)
-        {
-            //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
-            if(MainMenuGUI == null)
-                return;
-
-            if (hasChangedColour)
-                return;
-        
-            foreach (PlayerGUIRendering render in MainMenuGUI.renders)
-            {
-                if (render.netId == key)
-                {
-                    Debug.Log($"in get player colour gui render {render.avatar.name} for {key} value is {render.avatar.color}");
-                    playerColour = render.avatar.color;
-                    hasChangedColour = true;
-                }
-            }
-        }
-        
-        private void GetPlayerNameFromGUI(uint key)
-        {
-            //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
-            if(MainMenuGUI == null)
-                return;
-
-            if (hasChangedName)
-                return;
-        
-            foreach (PlayerGUIRendering render in MainMenuGUI.renders)
-            {
-                if (render.netId == key)
-                {
-                    Debug.Log($"in get player name gui render {render.avatar.name} for {key} value is {render.avatar.color}");
-                    playerName = render.playerName.text;
-                    playerID = UInt32.Parse(render.playerID.text);
-                    hasChangedName = true;
-                }
-            }
-        }
+        // private void GetPlayerColourFromGUI(uint key)
+        // {
+        //     //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
+        //     if(MainMenuGUI == null)
+        //         return;
+        //
+        //     if (hasChangedColour)
+        //         return;
+        //
+        //     foreach (PlayerGUIRendering render in MainMenuGUI.renders)
+        //     {
+        //         if (render.netId == key)
+        //         {
+        //             Debug.Log($"in get player colour gui render {render.avatar.name} for {key} value is {render.avatar.color}");
+        //             playerColour = render.avatar.color;
+        //             hasChangedColour = true;
+        //         }
+        //     }
+        // }
         
         /// <summary>
         /// RULES FOR COMMANDS:
@@ -241,11 +294,11 @@ namespace Game.Scripts
         public void CmdPlayerIsHit()
         {
             //sanity check
-            if (playerHP < 1) return;
+            if (playerHPList[GuiIndex] < 1) return;
 
-            playerHP--;
-            float hpPercent = playerHP / (float)maxPlayerHP;
-            RpcUpdateGUIhp(netId, hpPercent);
+            playerHPList[GuiIndex]--;
+
+            // RpcUpdateGUIhp(netId, hpPercent);
         }
         
         /// <summary>
@@ -407,9 +460,6 @@ namespace Game.Scripts
             // MyNetworkManager.Instance.LoadLocalScene(MyNetworkManager.GUI_SCENE);
             // Debug.Log("loaded scene in network player");
             
-            //initialise player parameters
-            playerHP = maxPlayerHP;
-            playerName = $"StartClient{netId}";
             //RegisterPlayerInGUI(netid) should be in the update because of some execution issue, should use sceneloadedevent next time.
         }
         
@@ -445,7 +495,19 @@ namespace Game.Scripts
             for (var i = 0; i < 4; i++)
             {
                 playerDashTimeList.Add(Double.MaxValue);
+                playerIDList.Add(i + 1);
+                playerHPList.Add(maxPlayerHP);
             }
+            //default player colours
+            playerColourList.Add(Color.red);
+            playerColourList.Add(Color.blue);
+            playerColourList.Add(Color.yellow);
+            playerColourList.Add(Color.green);
+            //default player names
+            playerNameList.Add("Redy");
+            playerNameList.Add("Bluey");
+            playerNameList.Add("Yellowy");
+            playerNameList.Add("Greeny");
         }
         
         /// <summary>
@@ -464,7 +526,6 @@ namespace Game.Scripts
         
             var i = 0;
             foreach (PlayerGUIRendering render in MainMenuGUI.renders)
-//        foreach (PlayerGUIRendering render in FindObjectOfType<UiManager>().renders)
             {
                 if (render.netId == key)
                 {
@@ -476,6 +537,12 @@ namespace Game.Scripts
                     Debug.Log($"registered player {key} in the gui slots {i}");
                     render.netId = key;
                     Debug.Log($"player colour should be from gui {render.avatar.color}");
+                    
+                    //trigger all gui update functions manually for the first time only
+                    OnplayerIDListUpdated(SyncList<int>.Operation.OP_SET, 0,0,0);
+                    OnPlayerColourListUpdated(SyncList<Color>.Operation.OP_SET, 0, Color.black, Color.white);
+                    OnPlayerNameListUpdated(SyncList<string>.Operation.OP_SET, 0, null, null);
+                    OnPlayerHPListUpdated(SyncList<int>.Operation.OP_SET, 0, 0, 0);
                     hasAddedToGui = true;
                     break;
                 }
@@ -501,7 +568,5 @@ namespace Game.Scripts
                 }
             }
         }
-
-
     }
 }
