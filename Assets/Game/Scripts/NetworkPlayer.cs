@@ -72,20 +72,16 @@ namespace Game.Scripts
         // although the gui needs to display all players' name/colour/hp etc,
         // we dont need SyncList/SyncDict here, we'll use a list in the GUI as we only need them there.
         // each variables here per client will be managed by mirror
-        
         [SyncVar(hook = nameof(OnSetPlayerColour)), SerializeField] private Color playerColour;
-        [SyncVar, SerializeField] private string playerName;
-        [SyncVar, SerializeField] private int playerHP;
-        [SyncVar(hook = nameof(OnTimerTick)), SerializeField] private double timer;
-        public readonly SyncList<double> playerDashTimeList = new SyncList<double>();
-        public readonly SyncList<Color> playerColourList = new SyncList<Color>();
-        public readonly SyncList<string> playerNameList = new SyncList<string>();
-        public readonly SyncList<int> playerHPList = new SyncList<int>();
-        public readonly SyncList<int> playerIDList = new SyncList<int>();
-        
+        [SyncVar(hook = nameof(OnSetPlayerName)), SerializeField] private string playerName1;
+        [SyncVar(hook = nameof(OnSetPlayerHP)), SerializeField] private int playerHP;
+        [SyncVar(hook = nameof(OnTimerTick)), SerializeField] private int gameTimer;
+        [SyncVar, SerializeField] private double playerDashTime;
         
         [Header("Game Settings")]
         [SerializeField] private int maxPlayerHP = 10;
+        [SerializeField] private int maxGameTime = 99;
+        
         
         /// <summary>
         /// to change the object colour
@@ -113,106 +109,19 @@ namespace Game.Scripts
             cachedMaterial.SetColor("_EmissionColor", newValue);
         }
 
-        private void OnTimerTick(double oldValue, double newValue)
+        private void OnSetPlayerHP(int oldValue, int newValue)
         {
-            mainMenuGUI.UpdateTimerText((int)newValue);
+            UpdateGUIhp(netId, newValue);
         }
-
-        void Start()
+        
+        private void OnSetPlayerName(string oldValue, string newValue)
         {
-            RegisterSyncVarListeners();
+            UpdateGUIname(netId, newValue);
         }
-
-        /// <summary>
-        /// register listeners to run when the sync list values are changed
-        /// usually in the called in start() function
-        /// for gui updates, storing in database, etc.
-        /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
-        private void RegisterSyncVarListeners()
+        
+        private void OnTimerTick(int oldValue, int newValue)
         {
-            playerColourList.Callback += OnPlayerColourListUpdated;
-            playerNameList.Callback += OnPlayerNameListUpdated;
-            playerHPList.Callback += OnPlayerHPListUpdated;
-            playerIDList.Callback += OnplayerIDListUpdated;
-        }
-
-        private void OnplayerIDListUpdated(SyncList<int>.Operation op, int itemindex, int olditem, int newitem)
-        {
-            if (playerIDList.Count == 4)
-            {
-                for (var i = 0; i < MainMenuGUI.renders.Count; i++)
-                {
-                    try
-                    {
-                        MainMenuGUI.renders[i].playerID.text = playerIDList[i].ToString();
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        Debug.Log($"OnplayerIDListUpdated no player id at {i}");
-                    }
-                }
-            }
-        }
-
-        private void OnPlayerHPListUpdated(SyncList<int>.Operation op, int itemindex, int olditem, int newitem)
-        {
-            if (playerHPList.Count == 4)
-            {
-                for (var i = 0; i < MainMenuGUI.renders.Count; i++)
-                {
-                    try
-                    {
-                        float hpPercent = playerHPList[i] / (float)maxPlayerHP;
-                        MainMenuGUI.renders[i].hp.fillAmount = hpPercent;
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        Debug.Log($"OnplayerHPListUpdated no player id at {i}");
-                    }
-                }
-            }
-        }
-
-        private void OnPlayerColourListUpdated(SyncList<Color>.Operation op, int itemindex, Color olditem, Color newitem)
-        {
-            //player can't change colour for now
-            if (playerColourList.Count == 4)
-            {
-                for (var i = 0; i < MainMenuGUI.renders.Count; i++)
-                {
-                    try
-                    {
-                        //can only change my own colour
-                        if (GuiIndex == i)
-                        {
-                            playerColour = playerColourList[i];
-                        }
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        Debug.Log($"OnplayerColourListUpdated no player id at {i}");
-                    }
-                }
-            }
-        }
-
-        private void OnPlayerNameListUpdated(SyncList<string>.Operation op, int itemindex, string olditem, string newitem)
-        {
-            if (playerNameList.Count == 4)
-            {
-                for (var i = 0; i < MainMenuGUI.renders.Count; i++)
-                {
-                    try
-                    {
-                        MainMenuGUI.renders[i].playerName.text = playerNameList[i];
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        Debug.Log($"OnplayerNameListUpdated no player id at {i}");
-                    }
-                }
-            }
+            mainMenuGUI.UpdateTimerText(newValue);
         }
 
         private void Update()
@@ -227,14 +136,17 @@ namespace Game.Scripts
                 {
                     // Run a function that tells every client to change the colour of this gameObject
                     //CmdRandomColor();
-                    //CmdRandomName();
+                    CmdRandomName();
                     //CmdTestToggleGUI();
                     //Debug.Log($"player {netId }colour changed");
                 }
+            }
 
+            if (isLocalPlayer && MyNetworkManager.Instance.IsHost)
+            {
                 if(Input.GetKeyDown(KeyCode.X))
                 {
-                    CmdSpawnEnemy();
+                    CmdTimerStart();
                 }
             }
         }
@@ -248,26 +160,6 @@ namespace Game.Scripts
             // NetworkServer.Spawn(newEnemy);
         }
 
-        // private void GetPlayerColourFromGUI(uint key)
-        // {
-        //     //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
-        //     if(MainMenuGUI == null)
-        //         return;
-        //
-        //     if (hasChangedColour)
-        //         return;
-        //
-        //     foreach (PlayerGUIRendering render in MainMenuGUI.renders)
-        //     {
-        //         if (render.netId == key)
-        //         {
-        //             Debug.Log($"in get player colour gui render {render.avatar.name} for {key} value is {render.avatar.color}");
-        //             playerColour = render.avatar.color;
-        //             hasChangedColour = true;
-        //         }
-        //     }
-        // }
-        
         /// <summary>
         /// RULES FOR COMMANDS:
         /// 1. Cannot return anything
@@ -286,6 +178,27 @@ namespace Game.Scripts
             
             RpcUpdateGUIcolor(netId, playerColour);
         }
+
+        [Command]
+        public void CmdTimerTick(int value)
+        {
+            gameTimer = value;
+        }
+        
+        [Command]
+        public void CmdTimerDone()
+        {
+            Debug.Log("GAME OVER");
+        }
+
+        [Command]
+        public void CmdTimerStart()
+        {
+            if (MyNetworkManager.Instance.IsHost)
+            {
+                GetComponent<Timer>().Restart();
+            }
+        }
         
         /// <summary>
         /// when player is hit, reduce hp by 1, then convert it to percentage 0-1 and pass it to update gui
@@ -294,32 +207,65 @@ namespace Game.Scripts
         public void CmdPlayerIsHit()
         {
             //sanity check
-            if (playerHPList[GuiIndex] < 1) return;
-
-            playerHPList[GuiIndex]--;
-
-            // RpcUpdateGUIhp(netId, hpPercent);
+            if (playerHP < 1) return;
+            
+            playerHP--;
+            RpcUpdateGUIhp(netId, playerHP);
         }
         
         /// <summary>
-        /// when player is dashes, keep the time it started, and remove when done.
-        /// this is used to compare who dashes last and it wins the hit, if both are dashing at the same time 
+        /// when player collides, if not dashing it will definitely lose, otherwise 50% chance of losing hp.
+        /// why can't this call another command? so i had to copy paste.
+        /// </summary>
+        [Command]
+        public void CmdDecidePlayerCollision(bool isDashing)
+        {
+            if (!isDashing)
+            {
+                //sanity check
+                if (playerHP < 1) return;
+            
+                playerHP--;
+                RpcUpdateGUIhp(netId, playerHP);
+                //CmdPlayerIsHit();
+            }
+            else
+            {
+                if (Random.value < 0.4f)
+                {
+                    //sanity check
+                    if (playerHP < 1) return;
+            
+                    playerHP--;
+                    RpcUpdateGUIhp(netId, playerHP);
+                    //CmdPlayerIsHit();
+                }
+            }
+        }
+        
+        [Command]
+        public void CmdPlayerAddHP()
+        {
+            //sanity check
+            if (playerHP > 1) return;
+
+            playerHP++;
+            RpcUpdateGUIhp(netId, playerHP);
+        }
+        
+        /// <summary>
+        /// this is used to compare who dashes last and it wins the hit, if both are dashing at the same time
+ 		/// dash rule: on dash, a time snapshot is taken, the number of seconds from game start.
+        /// the number gets bigger over time, so the bigger number means the later start to dash
+        /// the character that dashes last will win the collision battle
+        /// when player is dashes, keep the time it started. this does not need to be reset because the smaller number loses anyway 
+
         /// </summary>
         [Command]
         public void CmdPlayerDashStart()
         {
-            //sanity check
-            if (playerDashTimeList.Count < 4) return;
             //store timestamp
-            playerDashTimeList[GuiIndex] = NetworkTime.time;
-        }
-        [Command]
-        public void CmdPlayerDashStop()
-        {
-            //sanity check
-            if (playerDashTimeList.Count < 4) return;
-            //reset timestamp
-            playerDashTimeList[GuiIndex] = Double.MaxValue;
+            playerDashTime = NetworkTime.time;
         }
         
         /// <summary>
@@ -352,13 +298,24 @@ namespace Game.Scripts
         public void CmdRandomName()
         {
             // SyncVar MUST be set on the server, otherwise it won't be synced between clients
-            playerName = DateTime.Now.ToString("mmss");
-            playerName = $"Bot{playerName}";
-            RpcUpdateGUIname(netId, playerName);
+            playerName1 = DateTime.Now.ToString("mmss");
+            playerName1 = $"Bot{playerName1}";
+            RpcUpdateGUIname(netId, playerName1);
         }
-        
+
+        [Command]
+        public void CmdUpdateGUIcolor(uint key, Color value)
+        {
+            RpcUpdateGUIcolor(key, value);
+        }
+
         [ClientRpc]
         private void RpcUpdateGUIcolor(uint key, Color value)
+        {
+            UpdateGUIcolor(key, value);
+        }
+        
+        private void UpdateGUIcolor(uint key, Color value)
         {
             Debug.Log($"RpcUpdateGUIcolor netid {netId}");
             foreach (PlayerGUIRendering render in MainMenuGUI.renders)
@@ -372,28 +329,52 @@ namespace Game.Scripts
             }
         }
 
+        [Command]
+        private void CmdUpdateGUIhp(uint key, int value)
+        {
+            RpcUpdateGUIhp(key, value);
+        }
+
         /// <summary>
         /// update the fill amount for health bar
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value">fillamount takes a float 0-1, so convert the hp to a percentage first before passing</param>
         [ClientRpc]
-        private void RpcUpdateGUIhp(uint key, float value)
+        private void RpcUpdateGUIhp(uint key, int value)
+        {
+            UpdateGUIhp(key, value);
+        }
+        
+        private void UpdateGUIhp(uint key, int value)
         {
             Debug.Log($"RpcUpdateGUIhp netid {netId}");
-            if (value < 0 || value >= 1) throw new Exception("invalid hp fillamount, expecting 0-1 only");
+            float hpPercent = value / (float)maxPlayerHP;
+
+            if (hpPercent < 0 || hpPercent > 1) throw new Exception("invalid hp fillamount, expecting 0-1 only");
             foreach (PlayerGUIRendering render in MainMenuGUI.renders)
             {
                 if (render.netId == key)
                 {
                     Debug.Log($"in update gui render {render.hp.name} for {key} value is {value}");
-                    render.hp.fillAmount = value;
+                    render.hp.fillAmount = hpPercent;
                 }
             }
         }
-        
+
+        [Command]
+        private void CmdUpdateGUIname(uint key, string value)
+        {
+            RpcUpdateGUIname(key, value);
+        }
+
         [ClientRpc]
         private void RpcUpdateGUIname(uint key, string value)
+        {
+            UpdateGUIname(key, value);
+        }
+        
+        private void UpdateGUIname(uint key, string value)
         {
             Debug.Log($"RpcUpdateGUIname netid {netId}");
             foreach (PlayerGUIRendering render in MainMenuGUI.renders)
@@ -488,26 +469,32 @@ namespace Game.Scripts
             MyNetworkManager.RemovePlayer(this);
         }
 
-        // This runs when the server starts... ON the server on all clients
+        /// <summary>
+        /// This runs when the server starts... ON the server on all clients
+        /// set some default values
+        /// </summary>
         public override void OnStartServer()
         {
-            //initialise array/list
-            for (var i = 0; i < 4; i++)
+            playerHP = maxPlayerHP;
+            switch (netId%4)
             {
-                playerDashTimeList.Add(Double.MaxValue);
-                playerIDList.Add(i + 1);
-                playerHPList.Add(maxPlayerHP);
+                case 1:
+                    playerColour = Color.red;
+                    playerName1 = "Redy";
+                    break;
+                case 2:
+                    playerColour = Color.blue;
+                    playerName1 = "Bluey";
+                    break;
+                case 3:
+                    playerColour = Color.yellow;
+                    playerName1 = "Yellowy";
+                    break;
+                case 4:
+                    playerColour = Color.green;
+                    playerName1 = "Greeny";
+                    break;
             }
-            //default player colours
-            playerColourList.Add(Color.red);
-            playerColourList.Add(Color.blue);
-            playerColourList.Add(Color.yellow);
-            playerColourList.Add(Color.green);
-            //default player names
-            playerNameList.Add("Redy");
-            playerNameList.Add("Bluey");
-            playerNameList.Add("Yellowy");
-            playerNameList.Add("Greeny");
         }
         
         /// <summary>
@@ -538,11 +525,10 @@ namespace Game.Scripts
                     render.netId = key;
                     Debug.Log($"player colour should be from gui {render.avatar.color}");
                     
-                    //trigger all gui update functions manually for the first time only
-                    OnplayerIDListUpdated(SyncList<int>.Operation.OP_SET, 0,0,0);
-                    OnPlayerColourListUpdated(SyncList<Color>.Operation.OP_SET, 0, Color.black, Color.white);
-                    OnPlayerNameListUpdated(SyncList<string>.Operation.OP_SET, 0, null, null);
-                    OnPlayerHPListUpdated(SyncList<int>.Operation.OP_SET, 0, 0, 0);
+                    //set default values here ,or get values from server trigger rpc calls to update ui
+                    UpdateGUIcolor(key, playerColour);
+                    UpdateGUIhp(key, playerHP);
+                    UpdateGUIname(key, playerName1);
                     hasAddedToGui = true;
                     break;
                 }
