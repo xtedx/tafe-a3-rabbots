@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Mirror;
+using NetworkGame.Networking;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -57,7 +58,9 @@ namespace Game.Scripts
                 else
                 {
                     //initialise the GUI
-                    var guiObjects = SceneManager.GetSceneByName(GameManager.GUI_SCENE).GetRootGameObjects();
+                    mainMenuGUI = GameObject.FindObjectOfType<Scripts.MainMenuGUI>();
+                    return mainMenuGUI;
+                    var guiObjects = SceneManager.GetSceneByName(MyNetworkManager.GUI_SCENE).GetRootGameObjects();
                     //strange argument exception but it can get the objects fine. ignore
                     bool hasGui = false;
                     foreach (var go in guiObjects)
@@ -194,8 +197,8 @@ namespace Game.Scripts
         private void GetPlayerNameFromGUI(uint key)
         {
             //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
-            // if(MainMenuGUI == null)
-            //     return;
+            if(MainMenuGUI == null)
+                return;
 
             if (hasChangedName)
                 return;
@@ -376,7 +379,7 @@ namespace Game.Scripts
         [ClientRpc]
         public void RpcTestToggleGUI()
         {
-            var guiObjects = SceneManager.GetSceneByName(GameManager.GUI_SCENE).GetRootGameObjects();
+            var guiObjects = SceneManager.GetSceneByName(MyNetworkManager.GUI_SCENE).GetRootGameObjects();
             foreach (var go in guiObjects)
             {
                 var menu = go.GetComponent<MainMenuGUI>();
@@ -400,12 +403,10 @@ namespace Game.Scripts
         public override void OnStartLocalPlayer()
         {
             // This is run if we are the local player and NOT a remote player
-            GameManager.Instance.LoadLocalScene(GameManager.GUI_SCENE);
-            Debug.Log("loaded scene in network player");
-
-            MyNetworkManager.AddPlayer(this);
-            Debug.Log($"added player {netId} to network manager");
-
+            // MyNetworkManager.Instance.UnLoadLocalScene(MyNetworkManager.GUI_SCENE);
+            // MyNetworkManager.Instance.LoadLocalScene(MyNetworkManager.GUI_SCENE);
+            // Debug.Log("loaded scene in network player");
+            
             //initialise player parameters
             playerHP = maxPlayerHP;
             playerName = $"StartClient{netId}";
@@ -424,6 +425,9 @@ namespace Game.Scripts
         {
             PlayerController controller = gameObject.GetComponent<PlayerController>();
             controller.enabled = isLocalPlayer;
+            
+            MyNetworkManager.AddPlayer(this);
+            Debug.Log($"added player {netId} to network manager");
 
             //for debugging
             playerID = netId;

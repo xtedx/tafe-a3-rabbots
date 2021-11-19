@@ -102,10 +102,10 @@ namespace Game.Scripts
             var sceneName = SceneManager.GetActiveScene().name;
             switch (sceneName)
             {
-                case GameManager.OFFLINE_SCENE:
+                case MyNetworkManager.OFFLINE_SCENE:
                     OnStartOffline();
                     break;
-                case GameManager.ONLINE_SCENE:
+                case MyNetworkManager.ONLINE_SCENE:
                     OnStartOnline();
                     break;
                 default:
@@ -126,8 +126,8 @@ namespace Game.Scripts
         private void ShowMapChoiceButtons()
         {
             //if in online lobby
-            var isHostInLobby = (GameManager.Instance.IsHost() && GameManager.Instance.IsInLobby());
-            mapChoice.SetActive(isHostInLobby);
+            //var isHostInLobby = (MyNetworkManager.Instance.IsHost && MyNetworkManager.Instance.IsInLobby());
+            //mapChoice.SetActive(isHostInLobby);
             //Debug.Log($"isInLobby {isInLobby} active {SceneManager.GetActiveScene().name} network {MyNetworkManager.Instance.onlineScene}");
         }
 
@@ -227,7 +227,7 @@ namespace Game.Scripts
 
         public void ButtonMapChoice(string sceneMapName)
         {
-            GameManager.Instance.StartGame(sceneMapName);
+            //MyNetworkManager.Instance.StartGame(sceneMapName);
         }
     }
 }

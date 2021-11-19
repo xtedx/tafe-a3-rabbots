@@ -127,6 +127,8 @@ namespace Game.Scripts
         // Start is called before the first frame update
         void Start()
         {
+            Debug.Log($"Called {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            RegisterListeners();
             //automatically start to discover servers
             ButtonDiscoverServers();
         }
@@ -137,8 +139,7 @@ namespace Game.Scripts
 
         private void OnEnable()
         {
-            Debug.Log($"Called {System.Reflection.MethodBase.GetCurrentMethod().Name}");
-            RegisterListeners();
+
         }
 
         private void RegisterListeners()

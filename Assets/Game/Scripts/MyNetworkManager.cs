@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using Game.Scripts;
 using JetBrains.Annotations;
 using Mirror;
+using NetworkGame.Networking;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using NetworkPlayer = Game.Scripts.NetworkPlayer;
 
 /*
@@ -13,6 +15,16 @@ using NetworkPlayer = Game.Scripts.NetworkPlayer;
 
 public class MyNetworkManager : NetworkManager
 {
+        #region constant definitions
+
+        public const string MAP1_SCENE = "Map 1";
+        public const string MAP2_SCENE = "Map 2";
+        public const string OFFLINE_SCENE = "Offline Start Scene";
+        public const string ONLINE_SCENE = "Online Lobby";
+        public const string GUI_SCENE = "GUI";
+            
+        #endregion
+        
         /// <summary> A reference to the CustomNetworkManager version of the singleton. </summary>
         public static MyNetworkManager Instance => singleton as MyNetworkManager;
         
@@ -79,11 +91,11 @@ public class MyNetworkManager : NetworkManager
 
     public override void OnValidate()
     {
-            if (myNetworkDiscovery == null)
-            {
-                Debug.Log($"My Network Manager Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
-                myNetworkDiscovery = GetComponent<MyNetworkDiscovery>();
-            }
+        if (myNetworkDiscovery == null)
+        {
+            Debug.Log($"My Network Manager Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            myNetworkDiscovery = GetComponent<MyNetworkDiscovery>();
+        }
         base.OnValidate();
     }
 
@@ -158,9 +170,7 @@ public class MyNetworkManager : NetworkManager
     /// Called on the server when a scene is completed loaded, when the scene load was initiated by the server with ServerChangeScene().
     /// </summary>
     /// <param name="sceneName">The name of the new scene.</param>
-    public override void OnServerSceneChanged(string sceneName)
-    {
-    }
+    public override void OnServerSceneChanged(string sceneName) { }
 
     /// <summary>
     /// Called from ClientChangeScene immediately before SceneManager.LoadSceneAsync is executed
@@ -173,7 +183,8 @@ public class MyNetworkManager : NetworkManager
 
     /// <summary>
     /// Called on clients when a scene has completed loaded, when the scene load was initiated by the server.
-    /// <para>Scene changes can cause player objects to be destroyed. The default implementation of OnClientSceneChanged in the NetworkManager is to add a player object for the connection if no player object exists.</para>
+    /// <para>Scene changes can cause player objects to be destroyed.
+    /// The default implementation of OnClientSceneChanged in the NetworkManager is to add a player object for the connection if no player object exists.</para>
     /// </summary>
     /// <param name="conn">The network connection that the scene change message arrived on.</param>
     public override void OnClientSceneChanged(NetworkConnection conn)
@@ -280,20 +291,18 @@ public class MyNetworkManager : NetworkManager
     /// This is invoked when a host is started.
     /// <para>StartHost has multiple signatures, but they all cause this hook to be called.</para>
     /// </summary>
-        public override void OnStartHost()
-        {
-            IsHost = true;
-        }
+    public override void OnStartHost()
+    {
+        IsHost = true;
+        Debug.Log("i am host");
+        myNetworkDiscovery.AdvertiseServer();
+    }
 
     /// <summary>
     /// This is invoked when a server is started - including when a host is started.
     /// <para>StartServer has multiple signatures, but they all cause this hook to be called.</para>
     /// </summary>
-        public override void OnStartServer()
-        {
-            myNetworkDiscovery.AdvertiseServer();
-            Debug.Log("advertising server after being host");
-        }
+    public override void OnStartServer() { }
 
     /// <summary>
     /// This is invoked when the client is started.
@@ -303,15 +312,15 @@ public class MyNetworkManager : NetworkManager
     /// <summary>
     /// This is called when a host is stopped.
     /// </summary>
-    public override void OnStopHost() { }
+    public override void OnStopHost()
+    {
+        IsHost = false;
+    }
 
     /// <summary>
     /// This is called when a server is stopped - including when a host is stopped.
     /// </summary>
-        public override void OnStopServer()
-        {
-            IsHost = false;
-        }
+    public override void OnStopServer() { }
 
     /// <summary>
     /// This is called when a client is stopped.
