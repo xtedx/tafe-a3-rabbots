@@ -49,7 +49,7 @@ public class MyNetworkManager : NetworkManager
         }
         
         #region game manager
-        
+
         #endregion
 
         /// <summary> Adds a player to the dictionary. </summary>

@@ -42,6 +42,13 @@ namespace Game.Scripts
         [Tooltip("the toggle group used for the tab heads")]
         [SerializeField]
         private ToggleGroup tabGroup;
+        [SerializeField]
+        private Toggle tabControl;
+        [SerializeField]
+        private Toggle tabConnection;
+        [SerializeField]
+        private Toggle tabSetting;
+        
         [Tooltip("the body for each tab")]
         [SerializeField]
         private List<GameObject> tabBody;
@@ -63,6 +70,16 @@ namespace Game.Scripts
         private GameObject topTimerBlock;
         [SerializeField]
         private GameObject bottomPanel;
+        
+        [Space]
+        [SerializeField]
+        public Slider sliderMaxTime;
+        [SerializeField]
+        public Slider sliderMaxHP;
+        [SerializeField]
+        private Button buttonReady;
+        [SerializeField]
+        private Button buttonStartGame;
         
         [Space]
         [SerializeField] public List<PlayerGUIRendering> renders = new List<PlayerGUIRendering>(4);
@@ -97,6 +114,11 @@ namespace Game.Scripts
             }
         }
 
+        private void Awake()
+        {
+
+        }
+
         private void Start()
         {
             var sceneName = SceneManager.GetActiveScene().name;
@@ -111,6 +133,10 @@ namespace Game.Scripts
                 default:
                     break;
             }
+            //make sure only host can change this and start game
+            sliderMaxTime.interactable = MyNetworkManager.Instance.IsHost;
+            sliderMaxHP.interactable = MyNetworkManager.Instance.IsHost;
+            buttonStartGame.interactable = MyNetworkManager.Instance.IsHost;
         }
         private void Update()
         {
@@ -155,7 +181,8 @@ namespace Game.Scripts
         {
             topPanel.SetActive(true);
             topTimerBlock.SetActive(true);
-            mainPanelGUI.SetActive(false);
+            mainPanelGUI.SetActive(true);
+            tabSetting.isOn = true;
             bottomPanel.SetActive(true);
         }
 
@@ -168,7 +195,21 @@ namespace Game.Scripts
             topPanel.SetActive(true);
             topTimerBlock.SetActive(false);
             mainPanelGUI.SetActive(true);
+            tabConnection.isOn = true;
             bottomPanel.SetActive(false);
+        }
+        
+        /// <summary>
+        /// set up the gui layout to show what is necessary for online mode after starting a game
+        /// main menu off, bottom bar on with players, to bar on, timer on
+        /// </summary>
+        public void OnStartGame()
+        {
+            topPanel.SetActive(true);
+            topTimerBlock.SetActive(true);
+            tabControl.isOn = true;
+            mainPanelGUI.SetActive(false);
+            bottomPanel.SetActive(true);
         }
 
         #region events related
@@ -199,7 +240,7 @@ namespace Game.Scripts
         {
             if (txtTimer) txtTimer.text = value.ToString("00");
         }
-
+        
         /// <summary>
         /// called everytime the active tab head is changed and show the corresponding body
         /// the tabs are indexed in the object name using .int from 1 and above 
@@ -229,5 +270,11 @@ namespace Game.Scripts
         {
             //MyNetworkManager.Instance.StartGame(sceneMapName);
         }
+
+        public void ButtonStartGame()
+        {
+            MyNetworkManager.LocalPlayer.LocalGameStart((int) sliderMaxTime.value, (int) sliderMaxHP.value);
+        }
+
     }
 }

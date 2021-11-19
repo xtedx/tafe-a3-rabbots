@@ -79,8 +79,8 @@ namespace Game.Scripts
         [SyncVar, SerializeField] private double playerDashTime;
         
         [Header("Game Settings")]
-        [SerializeField] private int maxPlayerHP = 10;
-        [SerializeField] private int maxGameTime = 99;
+        [SyncVar(hook = nameof(OnSetMaxHP)), SerializeField] private int maxPlayerHP = 10;
+        [SyncVar(hook = nameof(OnSetMaxTime)), SerializeField] private int maxGameTime = 99;
         
         
         /// <summary>
@@ -112,6 +112,15 @@ namespace Game.Scripts
         private void OnSetPlayerHP(int oldValue, int newValue)
         {
             UpdateGUIhp(netId, newValue);
+        }
+        private void OnSetMaxHP(int oldValue, int newValue)
+        {
+            UpdateGUImaxHp(netId, newValue);
+        }
+        private void OnSetMaxTime(int oldValue, int newValue)
+        {
+            GetComponent<Timer>().startingTime = newValue;
+            UpdateGUImaxTime(netId, newValue);
         }
         
         private void OnSetPlayerName(string oldValue, string newValue)
@@ -363,6 +372,42 @@ namespace Game.Scripts
         }
 
         [Command]
+        private void CmdUpdateGUImaxHp(uint key, int value)
+        {
+            RpcUpdateGUImaxHp(key, value);
+        }
+        
+        [ClientRpc]
+        private void RpcUpdateGUImaxHp(uint key, int value)
+        {
+            UpdateGUImaxHp(key, value);
+        }
+        
+        private void UpdateGUImaxHp(uint key, int value)
+        {
+            Debug.Log($"UpdateGUImaxHp netid {netId}");
+            MainMenuGUI.sliderMaxHP.value = (float)value;
+        }
+        
+        [Command]
+        private void CmdUpdateGUImaxTime(uint key, int value)
+        {
+            RpcUpdateGUImaxTime(key, value);
+        }
+        
+        [ClientRpc]
+        private void RpcUpdateGUImaxTime(uint key, int value)
+        {
+            UpdateGUImaxTime(key, value);
+        }
+        
+        private void UpdateGUImaxTime(uint key, int value)
+        {
+            Debug.Log($"UpdateGUImaxTime netid {netId}");
+            MainMenuGUI.sliderMaxTime.value = (float)value;
+        }
+
+        [Command]
         private void CmdUpdateGUIname(uint key, string value)
         {
             RpcUpdateGUIname(key, value);
@@ -525,10 +570,7 @@ namespace Game.Scripts
                     render.netId = key;
                     Debug.Log($"player colour should be from gui {render.avatar.color}");
                     
-                    //set default values here ,or get values from server trigger rpc calls to update ui
-                    UpdateGUIcolor(key, playerColour);
-                    UpdateGUIhp(key, playerHP);
-                    UpdateGUIname(key, playerName1);
+                    UpdateGUI(key);
                     hasAddedToGui = true;
                     break;
                 }
@@ -536,7 +578,18 @@ namespace Game.Scripts
                 i++;
             }
         }
-    
+
+        /// <summary>
+        ///set default values here ,or get values from server trigger rpc calls to update ui
+        /// </summary>
+        /// <param name="key"></param>
+        public void UpdateGUI(uint key)
+        {
+            UpdateGUIcolor(key, playerColour);
+            UpdateGUIhp(key, playerHP);
+            UpdateGUIname(key, playerName1);
+        }
+
         /// <summary>
         /// registers the player in the gui slots. only take the first slot available and breaks out
         /// empty slot is when the netid is gui is 0
@@ -554,5 +607,49 @@ namespace Game.Scripts
                 }
             }
         }
+
+        
+        public void LocalGameStart(int maxTime, int maxHP)
+        {
+            if (isLocalPlayer)
+            {
+                CmdGameStart(maxTime, maxHP);
+            }
+        }
+
+        [Command]
+        public void CmdGameStart(int maxTime, int maxHP)
+        {
+            maxGameTime = maxTime;
+            playerHP = maxPlayerHP = maxHP;
+            //update settings
+            UpdateGUI(1);
+            ServerGameStart();
+        }
+        
+        [SyncVar(hook = nameof(OnReceivedGameStarted))]
+        public bool gameStarted = false;
+        
+        private void OnReceivedGameStarted(bool _old, bool _new)
+        {
+            // If you want a countdown or some sort of match starting
+            // indicator, replace the contents of this function
+            // with that and then call the Unload
+			
+            if(_new)
+            {
+                //SceneManager.UnloadSceneAsync("Lobby");
+                GameObject.FindObjectOfType<MainMenuGUI>().OnStartGame();
+                CmdTimerStart();
+
+            }
+        }
+        
+        [Server]
+        public void ServerGameStart()
+        {
+            gameStarted = true;
+        }
+        
     }
 }
