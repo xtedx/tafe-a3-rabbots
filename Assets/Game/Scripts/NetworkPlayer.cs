@@ -198,6 +198,17 @@ namespace Game.Scripts
         public void CmdTimerDone()
         {
             Debug.Log("GAME OVER");
+            //decides who wins by checking the hp of each player
+            MyNetworkManager.LocalPlayer.ServerGameOver();
+        }
+
+        [Server]
+        public void ServerGameOver()
+        {
+            foreach (var pair in MyNetworkManager.Instance.players)
+            {
+                Debug.Log($"{pair.Value.playerName1} score {pair.Value.playerHP}");
+            }
         }
 
         [Command]
@@ -405,6 +416,8 @@ namespace Game.Scripts
         {
             Debug.Log($"UpdateGUImaxTime netid {netId}");
             MainMenuGUI.sliderMaxTime.value = (float)value;
+            // MainMenuGUI.sliderMaxTime.onValueChanged.Invoke(value);
+
         }
 
         [Command]
@@ -608,6 +621,21 @@ namespace Game.Scripts
             }
         }
 
+        public void LocalMaxTimeChanged(int maxTime)
+        {
+            if (isLocalPlayer)
+            {
+                CmdUpdateGUImaxTime(1, maxTime);
+            }
+        }
+        
+        public void LocalMaxHPChanged(int maxHP)
+        {
+            if (isLocalPlayer)
+            {
+                CmdUpdateGUImaxHp(1, maxHP);
+            }
+        }
         
         public void LocalGameStart(int maxTime, int maxHP)
         {

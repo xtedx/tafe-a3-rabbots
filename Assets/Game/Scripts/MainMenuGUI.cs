@@ -48,6 +48,8 @@ namespace Game.Scripts
         private Toggle tabConnection;
         [SerializeField]
         private Toggle tabSetting;
+        [SerializeField]
+        private Toggle tabGameOver;
         
         [Tooltip("the body for each tab")]
         [SerializeField]
@@ -80,6 +82,10 @@ namespace Game.Scripts
         private Button buttonReady;
         [SerializeField]
         private Button buttonStartGame;
+        [SerializeField]
+        private Button buttonNewGame;
+        [SerializeField]
+        private Button buttonQuit;
         
         [Space]
         [SerializeField] public List<PlayerGUIRendering> renders = new List<PlayerGUIRendering>(4);
@@ -137,7 +143,11 @@ namespace Game.Scripts
             sliderMaxTime.interactable = MyNetworkManager.Instance.IsHost;
             sliderMaxHP.interactable = MyNetworkManager.Instance.IsHost;
             buttonStartGame.interactable = MyNetworkManager.Instance.IsHost;
+
+            sliderMaxTime.onValueChanged.AddListener(OnSliderMaxTimeChanged);
+            sliderMaxHP.onValueChanged.AddListener(OnSliderMaxHpChanged);
         }
+
         private void Update()
         {
             UIKeyPress();
@@ -276,5 +286,14 @@ namespace Game.Scripts
             MyNetworkManager.LocalPlayer.LocalGameStart((int) sliderMaxTime.value, (int) sliderMaxHP.value);
         }
 
+        public void OnSliderMaxTimeChanged(float value)
+        {
+            MyNetworkManager.LocalPlayer.LocalMaxTimeChanged((int) value);
+        }
+
+        public void OnSliderMaxHpChanged(float value)
+        {
+            MyNetworkManager.LocalPlayer.LocalMaxHPChanged((int) value);
+        }
     }
 }
