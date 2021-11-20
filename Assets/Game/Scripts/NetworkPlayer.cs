@@ -205,12 +205,23 @@ namespace Game.Scripts
         [Server]
         public void ServerGameOver()
         {
+            string summary = "";
             foreach (var pair in MyNetworkManager.Instance.players)
             {
-                Debug.Log($"{pair.Value.playerName1} score {pair.Value.playerHP}");
+                summary += $"{pair.Value.playerName1} remaining HP: {pair.Value.playerHP}\n";
             }
+
+            summary += "biggest HP wins!";
+            RpcGameOver(summary);
         }
 
+        [ClientRpc]
+        public void RpcGameOver(string summmary)
+        {
+            MainMenuGUI.OnGameOver();
+            MainMenuGUI.textGameOverSummary.text = summmary;
+        }
+        
         [Command]
         public void CmdTimerStart()
         {

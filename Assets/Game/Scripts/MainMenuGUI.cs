@@ -86,6 +86,9 @@ namespace Game.Scripts
         private Button buttonNewGame;
         [SerializeField]
         private Button buttonQuit;
+        [SerializeField]
+        public Text textGameOverSummary;
+        
         
         [Space]
         [SerializeField] public List<PlayerGUIRendering> renders = new List<PlayerGUIRendering>(4);
@@ -209,10 +212,6 @@ namespace Game.Scripts
             bottomPanel.SetActive(false);
         }
         
-        /// <summary>
-        /// set up the gui layout to show what is necessary for online mode after starting a game
-        /// main menu off, bottom bar on with players, to bar on, timer on
-        /// </summary>
         public void OnStartGame()
         {
             topPanel.SetActive(true);
@@ -220,6 +219,15 @@ namespace Game.Scripts
             tabControl.isOn = true;
             mainPanelGUI.SetActive(false);
             bottomPanel.SetActive(true);
+        }
+        
+        public void OnGameOver()
+        {
+            topPanel.SetActive(true);
+            topTimerBlock.SetActive(false);
+            mainPanelGUI.SetActive(true);
+            tabGameOver.isOn = true;
+            bottomPanel.SetActive(false);
         }
 
         #region events related
@@ -285,7 +293,12 @@ namespace Game.Scripts
         {
             MyNetworkManager.LocalPlayer.LocalGameStart((int) sliderMaxTime.value, (int) sliderMaxHP.value);
         }
-
+        
+        public void ButtonQuit()
+        {
+            Application.Quit();
+        }
+        
         public void OnSliderMaxTimeChanged(float value)
         {
             MyNetworkManager.LocalPlayer.LocalMaxTimeChanged((int) value);
