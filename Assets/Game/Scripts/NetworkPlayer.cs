@@ -427,8 +427,6 @@ namespace Game.Scripts
         {
             Debug.Log($"UpdateGUImaxTime netid {netId}");
             MainMenuGUI.sliderMaxTime.value = (float)value;
-            // MainMenuGUI.sliderMaxTime.onValueChanged.Invoke(value);
-
         }
 
         [Command]

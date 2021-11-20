@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Game.Scripts
 {
@@ -162,14 +163,6 @@ namespace Game.Scripts
             //ShowMapChoiceButtons();
         }
 
-        private void ShowMapChoiceButtons()
-        {
-            //if in online lobby
-            //var isHostInLobby = (MyNetworkManager.Instance.IsHost && MyNetworkManager.Instance.IsInLobby());
-            //mapChoice.SetActive(isHostInLobby);
-            //Debug.Log($"isInLobby {isInLobby} active {SceneManager.GetActiveScene().name} network {MyNetworkManager.Instance.onlineScene}");
-        }
-
         private void ShowNetworkStatus()
         {
             txtNetworkStatus.text =
@@ -284,11 +277,6 @@ namespace Game.Scripts
             }
         }
 
-        public void ButtonMapChoice(string sceneMapName)
-        {
-            //MyNetworkManager.Instance.StartGame(sceneMapName);
-        }
-
         public void ButtonStartGame()
         {
             MyNetworkManager.LocalPlayer.LocalGameStart((int) sliderMaxTime.value, (int) sliderMaxHP.value);
@@ -308,5 +296,6 @@ namespace Game.Scripts
         {
             MyNetworkManager.LocalPlayer.LocalMaxHPChanged((int) value);
         }
+        
     }
 }
