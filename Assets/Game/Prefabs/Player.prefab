@@ -372,8 +372,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6601767269025522841}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 05c5c71b76c69b942a01a1d32bee7524, type: 2}
+  m_Avatar: {fileID: 9000000, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
+  m_Controller: {fileID: 9100000, guid: ab6ea1d3cc24db24ebaf5d08576486cc, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -389,6 +389,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6601767269025522836}
     m_Modifications:
+    - target: {fileID: -8957171262915878184, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 540335c1a7f85524abfbf948fecf922c, type: 2}
     - target: {fileID: -8679921383154817045, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -433,10 +437,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2306333340705738890, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 540335c1a7f85524abfbf948fecf922c, type: 2}
+    - target: {fileID: -913933731476564676, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -913933731476564676, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 540335c1a7f85524abfbf948fecf922c, type: 2}
+    - target: {fileID: -913933731476564676, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 152b958cbd5baa740bf939933c7f37cd, type: 2}
     - target: {fileID: 919132149155446097, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
       propertyPath: m_Name
       value: rabbot_player
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: ab6ea1d3cc24db24ebaf5d08576486cc, type: 2}
+    - target: {fileID: 8509722215188012327, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 540335c1a7f85524abfbf948fecf922c, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ca7f48ef57194641bbe5a37ad17cce3, type: 3}
 --- !u!1 &4611866449941104836 stripped

@@ -167,7 +167,7 @@ namespace Game.Scripts
 					isDashing = true;
 					canDash = false;
 					dashModeTimer = dashModeDuration;
-					animator.SetFloat(Animator.StringToHash("speed"), speed);
+					startAnimation(2);
 					netPlayer.CmdPlayerDashStart();
 					return;
 				}
@@ -182,9 +182,11 @@ namespace Game.Scripts
 				{
 					isDashing = false;
 					speed = originalSpeed;
+					startAnimation(0);
 					Debug.Log("dash is complete");
 				}
 			}
+
 
 			#endregion dash logic
 			
@@ -211,16 +213,14 @@ namespace Game.Scripts
 			//move only if there is input
 			if (direction.magnitude < 0.1f)
 			{
-				animator.SetFloat(Animator.StringToHash("speed"), 0);
+				startAnimation(0);
 				return;
 			}
-			
-			animator.SetFloat(Animator.StringToHash("speed"), speed);
 
 			direction = turnTo(direction, isTurnSmooth);
 			controller.Move(direction * speed * Time.deltaTime);
-			//do i still need this?
-			//playerChildGameObject.transform.rotation = Quaternion.Euler(0, turnTo, 0);
+
+			startAnimation(1);
 
 			#endregion normal move logic
 			
@@ -241,6 +241,32 @@ namespace Game.Scripts
 			#endregion
 			
 			//playeranimation();
+		}
+
+		private void startAnimation(int mode)
+		{
+			if (mode == 0)
+			{
+				animator.SetFloat(Animator.StringToHash("speed"), 0);
+			}
+			else
+			{
+				animator.SetFloat(Animator.StringToHash("speed"), speed);
+			}
+			//testing different way to animate. aparently there is a mirror bug causing animation not work before network client is connected
+			// if (mode == 0)
+			// {
+			// 	animator.Play("Idle");
+			// }
+			// else if (mode == 1)
+			// {
+			// 	animator.Play("Run");
+			// }
+			// else if (mode == 2)
+			// {
+			// 	animator.Play("Dash");
+			// }
+
 		}
 
 		private void playeranimation()
