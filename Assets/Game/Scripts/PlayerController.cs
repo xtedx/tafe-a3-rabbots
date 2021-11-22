@@ -98,7 +98,7 @@ namespace Game.Scripts
 
 
 			//animation for later
-			//animator = GetComponentInChildren<Animator>();
+			animator = GetComponentInChildren<Animator>();
 		}
     
 		public override void OnStartLocalPlayer()
@@ -167,6 +167,7 @@ namespace Game.Scripts
 					isDashing = true;
 					canDash = false;
 					dashModeTimer = dashModeDuration;
+					animator.SetFloat(Animator.StringToHash("speed"), speed);
 					netPlayer.CmdPlayerDashStart();
 					return;
 				}
@@ -210,10 +211,12 @@ namespace Game.Scripts
 			//move only if there is input
 			if (direction.magnitude < 0.1f)
 			{
-				//animator.SetFloat(Animator.StringToHash("speed"), 0);
+				animator.SetFloat(Animator.StringToHash("speed"), 0);
 				return;
 			}
 			
+			animator.SetFloat(Animator.StringToHash("speed"), speed);
+
 			direction = turnTo(direction, isTurnSmooth);
 			controller.Move(direction * speed * Time.deltaTime);
 			//do i still need this?
@@ -237,9 +240,14 @@ namespace Game.Scripts
 			}
 			#endregion
 			
+			//playeranimation();
+		}
+
+		private void playeranimation()
+		{
 			//lerp to the full speed for nice blending, but doesn't seem to work well for me
-			//animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime);
-			//animator.SetFloat(Animator.StringToHash("speed"), animationBlend);
+			animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime);
+			animator.SetFloat(Animator.StringToHash("speed"), animationBlend);
 		}
 
 		/// <summary>
@@ -292,7 +300,12 @@ namespace Game.Scripts
 			}
 			else if (hit.gameObject.CompareTag("environment"))
 			{
-				//Debug.Log($"controller colliderhit with something else {hit.gameObject.name}");
+				if (hit.gameObject.name.StartsWith("Mattress") || hit.gameObject.name.StartsWith("Tire"))
+				{
+					//Debug.Log($"controller colliderhit with something else to animate {hit.gameObject.name}");
+					var a = hit.gameObject.GetComponent<AnimatedProp>();
+					a.Animate();
+				}
 			}
 		}
 		

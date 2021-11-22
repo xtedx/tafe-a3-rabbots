@@ -102,11 +102,16 @@ namespace Game.Scripts
         /// <param name="newValue"></param>
         private void OnSetPlayerColour(Color oldValue, Color newValue)
         {
-            cachedMaterial = playerChildGameObject.GetComponent<MeshRenderer>().material;
-            //the scarf colour
-            cachedMaterial.color = newValue;
-            //the lines/eyes colour
-            cachedMaterial.SetColor("_EmissionColor", newValue);
+            // cachedMaterial = playerChildGameObject.GetComponent<MeshRenderer>().material;
+            var renderers = playerChildGameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+            foreach (var r in renderers)
+            {
+                cachedMaterial = r.material;
+                //the scarf colour
+                cachedMaterial.color = newValue;
+                //the lines/eyes colour
+                cachedMaterial.SetColor("_EmissionColor", newValue);
+            }
         }
 
         private void OnSetPlayerHP(int oldValue, int newValue)

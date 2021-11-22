@@ -254,6 +254,7 @@ GameObject:
   - component: {fileID: 6167295890917365399}
   - component: {fileID: 3601146536360453892}
   - component: {fileID: 1350404577539029752}
+  - component: {fileID: -23792949709110715}
   m_Layer: 0
   m_Name: Mattress
   m_TagString: Untagged
@@ -309,3 +310,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.9766891, y: 1.4638859, z: 0.37939557}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-23792949709110715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9139391845001221010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44938bf35ccebb42ba3b1de580cbd3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
