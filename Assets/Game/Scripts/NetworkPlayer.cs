@@ -76,7 +76,7 @@ namespace Game.Scripts
         [SyncVar(hook = nameof(OnSetPlayerName)), SerializeField] private string playerName1;
         [SyncVar(hook = nameof(OnSetPlayerHP)), SerializeField] private int playerHP;
         [SyncVar(hook = nameof(OnTimerTick)), SerializeField] private int gameTimer;
-        [SyncVar, SerializeField] private double playerDashTime;
+        [SyncVar] public double playerDashTime;
         
         [Header("Game Settings")]
         [SyncVar(hook = nameof(OnSetMaxHP)), SerializeField] private int maxPlayerHP = 10;
@@ -252,29 +252,38 @@ namespace Game.Scripts
         /// <summary>
         /// when player collides, if not dashing it will definitely lose, otherwise 50% chance of losing hp.
         /// why can't this call another command? so i had to copy paste.
+        ///
+        /// this code will be run in the server for that client's instance, so only worry about when the hp is reduced,
+        /// the losing player will reduce hp, and the winning player does nothing
         /// </summary>
         [Command]
-        public void CmdDecidePlayerCollision(bool isDashing)
+        public void CmdDecidePlayerCollision(bool myIsDashing, double myTime, bool enemyIsDashing, double enemyTime)
         {
-            if (!isDashing)
+            //sanity check
+            if (playerHP < 1) return;
+            Debug.Log($"CmdDecidePlayerCollision {netId}, {myIsDashing}, {myTime}, {enemyIsDashing}, {enemyTime}");
+            if (!myIsDashing && enemyIsDashing)
             {
-                //sanity check
-                if (playerHP < 1) return;
-            
                 playerHP--;
                 RpcUpdateGUIhp(netId, playerHP);
                 //CmdPlayerIsHit();
             }
-            else
+            else if (myIsDashing)
             {
-                if (Random.value < 0.4f)
+                //change this to < for the correct logic but hard to test by one person., or > if you want to test alone
+                if (myTime < enemyTime)
                 {
-                    //sanity check
-                    if (playerHP < 1) return;
-            
                     playerHP--;
                     RpcUpdateGUIhp(netId, playerHP);
                     //CmdPlayerIsHit();
+                }
+                else if (myTime > enemyTime)
+                {
+                    
+                }
+                else
+                {
+                    
                 }
             }
         }

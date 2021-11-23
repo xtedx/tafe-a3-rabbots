@@ -13,7 +13,7 @@ namespace Game.Scripts
 		/// built in character controller object from unity
 		/// </summary>
 		[SerializeField] private CharacterController controller;
-		[SerializeField] private NetworkPlayer netPlayer;
+		[SerializeField] public NetworkPlayer netPlayer;
 
 		/// <summary>
 		/// the actual model object to rotate
@@ -58,7 +58,7 @@ namespace Game.Scripts
 		[Space]
 		[Header("Diagnostic")]
 		[SerializeField] private bool canDash = true;
-		[SerializeField] private bool isDashing = false;
+		[SerializeField] public bool isDashing = false;
 		
 		
 		/// <summary>
@@ -97,9 +97,7 @@ namespace Game.Scripts
 			playerChildGameObject = netPlayer.playerChildGameObject;
 			//keep the original speed to revert after dash boost
 			originalSpeed = speed;
-
-
-			//animation for later
+			
 			animator = GetComponentInChildren<Animator>();
 		}
     
@@ -318,6 +316,7 @@ namespace Game.Scripts
 
 		/// <summary>
 		/// oncollisionenter does not work for character controller class, use this instead.
+		/// only the hit on the local player is
 		/// </summary>
 		/// <param name="hit"></param>
 		private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -330,7 +329,8 @@ namespace Game.Scripts
 				_audioManager.playHitFx(true);
 				
 				//call server command to decide who wins the hit
-				netPlayer.CmdDecidePlayerCollision(isDashing);
+				var enemy = hit.gameObject.GetComponent<PlayerController>();
+				netPlayer.CmdDecidePlayerCollision(isDashing, netPlayer.playerDashTime, enemy.isDashing, enemy.netPlayer.playerDashTime);
 				Debug.Log("called CmdDecidePlayerCollision");
 			}
 			else if (hit.gameObject.CompareTag("environment"))
