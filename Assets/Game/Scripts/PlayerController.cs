@@ -162,7 +162,7 @@ namespace Game.Scripts
 				if (Input.GetKeyDown(KeyCode.Space) && canDash)
 				{
 					//amplify the speed of movement for a period of time
-					Debug.Log("dash = speed boost!");
+					// Debug.Log("dash = speed boost!");
 					speed *= dashForce;
 					isDashing = true;
 					canDash = false;
@@ -183,7 +183,7 @@ namespace Game.Scripts
 					isDashing = false;
 					speed = originalSpeed;
 					startAnimation(0);
-					Debug.Log("dash is complete");
+					// Debug.Log("dash is complete");
 				}
 			}
 
@@ -235,12 +235,12 @@ namespace Game.Scripts
 				{
 					canDash = true;
 					dashCooldownTimer = dashCooldown;
-					Debug.Log("can dash again");
+					// Debug.Log("can dash again");
 				}
 			}
 			#endregion
 			
-			//playeranimation();
+			//blendAnimation();
 		}
 
 		private void startAnimation(int mode)
@@ -269,7 +269,7 @@ namespace Game.Scripts
 
 		}
 
-		private void playeranimation()
+		private void blendAnimation()
 		{
 			//lerp to the full speed for nice blending, but doesn't seem to work well for me
 			animationBlend = Mathf.Lerp(animationBlend, speed, Time.deltaTime);
