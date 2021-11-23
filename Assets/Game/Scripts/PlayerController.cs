@@ -327,6 +327,7 @@ namespace Game.Scripts
 				//prevents multiple hit
 				if (hitCooldownTimer > 0) return;
 				hitCooldownTimer = 0.5f;
+				_audioManager.playHitFx(true);
 				
 				//call server command to decide who wins the hit
 				netPlayer.CmdDecidePlayerCollision(isDashing);

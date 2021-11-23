@@ -353,12 +353,12 @@ namespace Game.Scripts
         
         private void UpdateGUIcolor(uint key, Color value)
         {
-            Debug.Log($"RpcUpdateGUIcolor netid {netId}");
+            // Debug.Log($"RpcUpdateGUIcolor netid {netId}");
             foreach (PlayerGUIRendering render in MainMenuGUI.renders)
             {
                 if (render.netId == key)
                 {
-                    Debug.Log($"in update gui render {render.avatar.name} for {key} value is {value}");
+                    // Debug.Log($"in update gui render {render.avatar.name} for {key} value is {value}");
                     render.avatar.color = value;
                     render.hp.color = value;
                 }
@@ -384,7 +384,7 @@ namespace Game.Scripts
         
         private void UpdateGUIhp(uint key, int value)
         {
-            Debug.Log($"RpcUpdateGUIhp netid {netId}");
+            // Debug.Log($"RpcUpdateGUIhp netid {netId}");
             float hpPercent = value / (float)maxPlayerHP;
 
             if (hpPercent < 0 || hpPercent > 1) throw new Exception($"invalid hp fillamount, expecting 0-1 only. key {key} % {hpPercent} {value}/{maxPlayerHP}");
@@ -392,7 +392,7 @@ namespace Game.Scripts
             {
                 if (render.netId == key)
                 {
-                    Debug.Log($"in update gui render {render.hp.name} for {key} value is {value}");
+                    // Debug.Log($"Login update gui render {render.hp.name} for {key} value is {value}");
                     render.hp.fillAmount = hpPercent;
                 }
             }
@@ -412,7 +412,7 @@ namespace Game.Scripts
         
         private void UpdateGUImaxHp(uint key, int value)
         {
-            Debug.Log($"UpdateGUImaxHp netid {netId}");
+            // Debug.Log($"UpdateGUImaxHp netid {netId}");
             MainMenuGUI.sliderMaxHP.SetValueWithoutNotify((float)value);
             MainMenuGUI.textMaxHP.GetComponent<TextUpdater>().SetTextValue(value);
 
@@ -432,7 +432,7 @@ namespace Game.Scripts
         
         private void UpdateGUImaxTime(uint key, int value)
         {
-            Debug.Log($"UpdateGUImaxTime netid {netId}");
+            // Debug.Log($"UpdateGUImaxTime netid {netId}");
             MainMenuGUI.sliderMaxTime.SetValueWithoutNotify((float)value);
             MainMenuGUI.textMaxTime.GetComponent<TextUpdater>().SetTextValue(value);
         }
@@ -451,12 +451,12 @@ namespace Game.Scripts
         
         private void UpdateGUIname(uint key, string value)
         {
-            Debug.Log($"RpcUpdateGUIname netid {netId}");
+            // Debug.Log($"RpcUpdateGUIname netid {netId}");
             foreach (PlayerGUIRendering render in MainMenuGUI.renders)
             {
                 if (render.netId == key)
                 {
-                    Debug.Log($"in update gui render {render.playerName.name} for {key} value is {value}");
+                    // Debug.Log($"in update gui render {render.playerName.name} for {key} value is {value}");
                     render.playerName.text = value;
                     render.playerID.text = key.ToString();
                 }
@@ -598,7 +598,7 @@ namespace Game.Scripts
                 {
                     Debug.Log($"registered player {key} in the gui slots {i}");
                     render.netId = key;
-                    Debug.Log($"player colour should be from gui {render.avatar.color}");
+                    // Debug.Log($"player colour should be from gui {render.avatar.color}");
                     
                     UpdateGUI(key);
                     hasAddedToGui = true;

@@ -19,12 +19,12 @@ public class AnimatedProp : MonoBehaviour
         _audioManager.playBoingFx(true);
         if (name.StartsWith("Mattress"))
         {
-            Debug.Log($"in animatedprop animate {name}");
+            // Debug.Log($"in animatedprop animate {name}");
             _animator.Play("MattressBounce");
         }
         else if (name.StartsWith("Tire"))
         {
-            Debug.Log($"in animatedprop animate2 {name}");
+            // Debug.Log($"in animatedprop animate2 {name}");
             _animator.Play("TireBounce");
         }
     }
