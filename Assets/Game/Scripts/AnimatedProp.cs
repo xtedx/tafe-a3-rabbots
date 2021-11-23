@@ -6,14 +6,17 @@ using UnityEngine;
 public class AnimatedProp : MonoBehaviour
 {
     private Animator _animator;
+    private AudioManager _audioManager;
 
     void Start()
     {
         _animator = GetComponent<Animator>();
+        _audioManager = GameObject.FindObjectOfType<AudioManager>();
     }
 
     public void Animate()
     {
+        _audioManager.playBoingFx(true);
         if (name.StartsWith("Mattress"))
         {
             Debug.Log($"in animatedprop animate {name}");

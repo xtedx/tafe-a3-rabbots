@@ -20,6 +20,7 @@ namespace Game.Scripts
 		/// </summary>
 		private GameObject playerChildGameObject;
 		private Camera mainCamera;
+		private AudioManager _audioManager;
 
 		[Space]
     
@@ -89,6 +90,7 @@ namespace Game.Scripts
 		void Start()
 		{
 			netPlayer = gameObject.GetComponent<NetworkPlayer>();
+			_audioManager = GameObject.FindObjectOfType<AudioManager>();
 			//only enable control if is local player
 			controller.enabled = isLocalPlayer;
 			//get the actual model to turn when moving
@@ -168,6 +170,8 @@ namespace Game.Scripts
 					canDash = false;
 					dashModeTimer = dashModeDuration;
 					startAnimation(2);
+					_audioManager.playRunFx(false);
+					_audioManager.playDashFx(true);
 					netPlayer.CmdPlayerDashStart();
 					return;
 				}
@@ -183,6 +187,7 @@ namespace Game.Scripts
 					isDashing = false;
 					speed = originalSpeed;
 					startAnimation(0);
+					_audioManager.playDashFx(false);
 					// Debug.Log("dash is complete");
 				}
 			}
@@ -214,6 +219,8 @@ namespace Game.Scripts
 			if (direction.magnitude < 0.1f)
 			{
 				startAnimation(0);
+				_audioManager.playRunFx(false);
+				_audioManager.playDashFx(false);
 				return;
 			}
 
@@ -221,6 +228,7 @@ namespace Game.Scripts
 			controller.Move(direction * speed * Time.deltaTime);
 
 			startAnimation(1);
+			_audioManager.playRunFx(true);
 
 			#endregion normal move logic
 			
@@ -245,11 +253,11 @@ namespace Game.Scripts
 
 		private void startAnimation(int mode)
 		{
-			if (mode == 0)
+			if (mode == 0) //idle
 			{
 				animator.SetFloat(Animator.StringToHash("speed"), 0);
 			}
-			else
+			else //run or dash
 			{
 				animator.SetFloat(Animator.StringToHash("speed"), speed);
 			}
@@ -328,6 +336,10 @@ namespace Game.Scripts
 			{
 				if (hit.gameObject.name.StartsWith("Mattress") || hit.gameObject.name.StartsWith("Tire"))
 				{
+					//prevents multiple hit
+					if (hitCooldownTimer > 0) return;
+					hitCooldownTimer = 0.5f;
+					
 					//Debug.Log($"controller colliderhit with something else to animate {hit.gameObject.name}");
 					var a = hit.gameObject.GetComponent<AnimatedProp>();
 					a.Animate();
