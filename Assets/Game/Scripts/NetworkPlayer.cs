@@ -76,7 +76,7 @@ namespace Game.Scripts
         [SyncVar(hook = nameof(OnSetPlayerName)), SerializeField] private string playerName1;
         [SyncVar(hook = nameof(OnSetPlayerHP)), SerializeField] private int playerHP;
         [SyncVar(hook = nameof(OnTimerTick)), SerializeField] private int gameTimer;
-        [SyncVar, SerializeField] private double playerDashTime;
+        [SyncVar, SerializeField] public double playerDashTime;
         
         [Header("Game Settings")]
         [SyncVar(hook = nameof(OnSetMaxHP)), SerializeField] private int maxPlayerHP = 10;
@@ -242,6 +242,7 @@ namespace Game.Scripts
         [Command]
         public void CmdPlayerIsHit()
         {
+            Debug.Log($"{netId} CmdPlayerIsHit");
             //sanity check
             if (playerHP < 1) return;
             
@@ -254,29 +255,52 @@ namespace Game.Scripts
         /// why can't this call another command? so i had to copy paste.
         /// </summary>
         [Command]
-        public void CmdDecidePlayerCollision(bool isDashing)
+        public void CmdDecidePlayerCollision(bool isDashing, uint myNetId, uint enemyNetId)
         {
-            if (!isDashing)
+            var enemy = NetworkServer.spawned[enemyNetId].GetComponent<NetworkPlayer>();
+            // var enemy = MyNetworkManager.Instance.players[enemyNetId];
+            // var enemy = hit.gameObject.GetComponent<NetworkPlayer>();
+            var mytime = playerDashTime;
+            var enemytime = enemy.playerDashTime;
+            Debug.Log($"players hit! netid {netId} mytime {mytime} enemytime {enemytime}");
+            if (mytime < enemytime)
             {
-                //sanity check
-                if (playerHP < 1) return;
-            
-                playerHP--;
-                RpcUpdateGUIhp(netId, playerHP);
-                //CmdPlayerIsHit();
+                //i lose
+                CmdPlayerIsHit();
+                Debug.Log($"player {netId} lost, dash time is earlier");
+            }
+            else if(mytime > enemytime)
+            {
+                enemy.CmdPlayerIsHit();
+                // CmdPlayerAddHP();
+                Debug.Log($"player {netId} won the dash because dash time is later");
             }
             else
             {
-                if (Random.value < 0.4f)
-                {
-                    //sanity check
-                    if (playerHP < 1) return;
-            
-                    playerHP--;
-                    RpcUpdateGUIhp(netId, playerHP);
-                    //CmdPlayerIsHit();
-                }
+                //nothing happens it's a draw
             }
+            
+            // if (!isDashing)
+            // {
+            //     //sanity check
+            //     if (playerHP < 1) return;
+            //
+            //     playerHP--;
+            //     RpcUpdateGUIhp(netId, playerHP);
+            //     //CmdPlayerIsHit();
+            // }
+            // else
+            // {
+            //     if (Random.value < 0.4f)
+            //     {
+            //         //sanity check
+            //         if (playerHP < 1) return;
+            //
+            //         playerHP--;
+            //         RpcUpdateGUIhp(netId, playerHP);
+            //         //CmdPlayerIsHit();
+            //     }
+            // }
         }
         
         [Command]
@@ -358,7 +382,7 @@ namespace Game.Scripts
             {
                 if (render.netId == key)
                 {
-                    Debug.Log($"in update gui render {render.avatar.name} for {key} value is {value}");
+                    // Debug.Log($"in update gui render {render.avatar.name} for {key} value is {value}");
                     render.avatar.color = value;
                     render.hp.color = value;
                 }
@@ -451,12 +475,12 @@ namespace Game.Scripts
         
         private void UpdateGUIname(uint key, string value)
         {
-            Debug.Log($"RpcUpdateGUIname netid {netId}");
+            // Debug.Log($"RpcUpdateGUIname netid {netId}");
             foreach (PlayerGUIRendering render in MainMenuGUI.renders)
             {
                 if (render.netId == key)
                 {
-                    Debug.Log($"in update gui render {render.playerName.name} for {key} value is {value}");
+                    // Debug.Log($"in update gui render {render.playerName.name} for {key} value is {value}");
                     render.playerName.text = value;
                     render.playerID.text = key.ToString();
                 }
@@ -598,7 +622,7 @@ namespace Game.Scripts
                 {
                     Debug.Log($"registered player {key} in the gui slots {i}");
                     render.netId = key;
-                    Debug.Log($"player colour should be from gui {render.avatar.color}");
+                    // Debug.Log($"player colour should be from gui {render.avatar.color}");
                     
                     UpdateGUI(key);
                     hasAddedToGui = true;

@@ -328,9 +328,28 @@ namespace Game.Scripts
 				if (hitCooldownTimer > 0) return;
 				hitCooldownTimer = 0.5f;
 				
+				//how to get values from the other player?
+				var enemy = hit.gameObject.GetComponent<NetworkPlayer>();
+				// var mytime = netPlayer.playerDashTime;
+				// var enemytime = enemy.playerDashTime;
+				// Debug.Log($"mytime {mytime} enemytime {enemytime}");
+				// if (mytime < enemytime)
+				// {
+				// 	//i lose
+				// 	netPlayer.CmdPlayerIsHit();
+				// 	Debug.Log($"player {netId} i lost");
+				// }
+				// else
+				// {
+				// 	netPlayer.CmdPlayerAddHP();
+				// 	Debug.Log($"player {netId} i win the dash because mytime is shorter");
+				// }
+				//Debug.Log($"{netPlayer.playerID} controller colliderhit with another player {enemy.playerID}, mytime {mytime}, enemytime{enemytime}");
+				
+				
 				//call server command to decide who wins the hit
-				netPlayer.CmdDecidePlayerCollision(isDashing);
-				Debug.Log("called CmdDecidePlayerCollision");
+				netPlayer.CmdDecidePlayerCollision(isDashing, netId, enemy.netId);
+				// Debug.Log("called CmdDecidePlayerCollision");
 			}
 			else if (hit.gameObject.CompareTag("environment"))
 			{
