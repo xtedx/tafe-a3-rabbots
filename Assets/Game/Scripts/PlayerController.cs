@@ -172,7 +172,9 @@ namespace Game.Scripts
 					startAnimation(2);
 					_audioManager.playRunFx(false);
 					_audioManager.playDashFx(true);
-					netPlayer.CmdPlayerDashStart();
+					//netPlayer.CmdPlayerDashStart();
+					//try to use the shared variable now
+					netPlayer.playerManager.UpdatePlayerDashStart(netId);
 					return;
 				}
 			}

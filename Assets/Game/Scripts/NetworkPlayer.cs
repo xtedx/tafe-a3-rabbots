@@ -81,6 +81,7 @@ namespace Game.Scripts
         [Header("Game Settings")]
         [SyncVar(hook = nameof(OnSetMaxHP)), SerializeField] private int maxPlayerHP = 10;
         [SyncVar(hook = nameof(OnSetMaxTime)), SerializeField] private int maxGameTime = 99;
+        public PlayerManager playerManager;
         
         
         /// <summary>
@@ -140,6 +141,18 @@ namespace Game.Scripts
 
         private void Update()
         {
+            if (isLocalPlayer)
+            {
+                if (playerManager == null)
+                {
+                    playerManager = FindObjectOfType<PlayerManager>();
+                }
+                else if(!playerManager.hasAuthority)
+                {
+                    CmdAssignAuthority(playerManager.netId);
+                }
+            }
+            
             //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
             RegisterPlayerInGUI(netId);
             
@@ -163,6 +176,13 @@ namespace Game.Scripts
                     CmdTimerStart();
                 }
             }
+        }
+
+        [Command]
+        public void CmdAssignAuthority(uint _netid)
+        {
+            NetworkIdentity.spawned[_netid].RemoveClientAuthority();
+            NetworkIdentity.spawned[_netid].AssignClientAuthority(connectionToClient);
         }
 
         [Command]
@@ -260,8 +280,10 @@ namespace Game.Scripts
             var enemy = NetworkServer.spawned[enemyNetId].GetComponent<NetworkPlayer>();
             // var enemy = MyNetworkManager.Instance.players[enemyNetId];
             // var enemy = hit.gameObject.GetComponent<NetworkPlayer>();
-            var mytime = playerDashTime;
-            var enemytime = enemy.playerDashTime;
+            double mytime;
+            double enemytime;
+            playerManager.dashTimestamp.TryGetValue(myNetId, out mytime);
+            playerManager.dashTimestamp.TryGetValue(enemyNetId, out enemytime);
             Debug.Log($"players hit! netid {netId} mytime {mytime} enemytime {enemytime}");
             if (mytime < enemytime)
             {
@@ -623,6 +645,9 @@ namespace Game.Scripts
                     Debug.Log($"registered player {key} in the gui slots {i}");
                     render.netId = key;
                     // Debug.Log($"player colour should be from gui {render.avatar.color}");
+                    
+                    //initialise dash time
+                    playerManager.dashTimestamp.Add(netId, -1);
                     
                     UpdateGUI(key);
                     hasAddedToGui = true;
