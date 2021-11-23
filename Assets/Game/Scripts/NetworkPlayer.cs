@@ -387,7 +387,7 @@ namespace Game.Scripts
             Debug.Log($"RpcUpdateGUIhp netid {netId}");
             float hpPercent = value / (float)maxPlayerHP;
 
-            if (hpPercent < 0 || hpPercent > 1) throw new Exception("invalid hp fillamount, expecting 0-1 only");
+            if (hpPercent < 0 || hpPercent > 1) throw new Exception($"invalid hp fillamount, expecting 0-1 only. key {key} % {hpPercent} {value}/{maxPlayerHP}");
             foreach (PlayerGUIRendering render in MainMenuGUI.renders)
             {
                 if (render.netId == key)
@@ -413,7 +413,9 @@ namespace Game.Scripts
         private void UpdateGUImaxHp(uint key, int value)
         {
             Debug.Log($"UpdateGUImaxHp netid {netId}");
-            MainMenuGUI.sliderMaxHP.value = (float)value;
+            MainMenuGUI.sliderMaxHP.SetValueWithoutNotify((float)value);
+            MainMenuGUI.textMaxHP.GetComponent<TextUpdater>().SetTextValue(value);
+
         }
         
         [Command]
@@ -431,7 +433,8 @@ namespace Game.Scripts
         private void UpdateGUImaxTime(uint key, int value)
         {
             Debug.Log($"UpdateGUImaxTime netid {netId}");
-            MainMenuGUI.sliderMaxTime.value = (float)value;
+            MainMenuGUI.sliderMaxTime.SetValueWithoutNotify((float)value);
+            MainMenuGUI.textMaxTime.GetComponent<TextUpdater>().SetTextValue(value);
         }
 
         [Command]
@@ -639,7 +642,7 @@ namespace Game.Scripts
         {
             if (isLocalPlayer)
             {
-                CmdUpdateGUImaxTime(1, maxTime);
+                CmdUpdateGUImaxTime(netId, maxTime);
             }
         }
         
@@ -647,7 +650,7 @@ namespace Game.Scripts
         {
             if (isLocalPlayer)
             {
-                CmdUpdateGUImaxHp(1, maxHP);
+                CmdUpdateGUImaxHp(netId, maxHP);
             }
         }
         
@@ -662,11 +665,17 @@ namespace Game.Scripts
         [Command]
         public void CmdGameStart(int maxTime, int maxHP)
         {
+            RpcGameStart(maxTime, maxHP);
+            ServerGameStart();
+        }
+
+        [ClientRpc]
+        public void RpcGameStart(int maxTime, int maxHP)
+        {
             maxGameTime = maxTime;
             playerHP = maxPlayerHP = maxHP;
             //update settings
-            UpdateGUI(1);
-            ServerGameStart();
+            UpdateGUI(netId);
         }
         
         [SyncVar(hook = nameof(OnReceivedGameStarted))]
@@ -682,7 +691,7 @@ namespace Game.Scripts
             {
                 //SceneManager.UnloadSceneAsync("Lobby");
                 GameObject.FindObjectOfType<MainMenuGUI>().OnStartGame();
-                CmdTimerStart();
+                if (hasAuthority) CmdTimerStart();
 
             }
         }

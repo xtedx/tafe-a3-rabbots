@@ -80,6 +80,10 @@ namespace Game.Scripts
         [SerializeField]
         public Slider sliderMaxHP;
         [SerializeField]
+        public Text textMaxTime;
+        [SerializeField]
+        public Text textMaxHP;
+        [SerializeField]
         private Button buttonReady;
         [SerializeField]
         private Button buttonStartGame;
