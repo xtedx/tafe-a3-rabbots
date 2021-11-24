@@ -269,6 +269,9 @@ namespace Game.Scripts
         {
             //sanity check
             if (playerHP < 1) return;
+            var enemy = NetworkServer.spawned[enemyID].gameObject.GetComponent<NetworkPlayer>();
+            if (enemy.playerHP < 1) return;
+            
             // Debug.Log($"CmdDecidePlayerCollision {netId}, {myIsDashing}, {myTime}, {enemyIsDashing}, {enemyTime}");
             if (!myIsDashing && enemyIsDashing)
             {
@@ -289,7 +292,6 @@ namespace Game.Scripts
                 else if (myTime > enemyTime)
                 {
                     //enemy lost
-                    var enemy = NetworkServer.spawned[enemyID].gameObject.GetComponent<NetworkPlayer>();
                     enemy.playerHP--;
                     RpcUpdateGUIhp(enemy.netId, enemy.playerHP);
                 }
