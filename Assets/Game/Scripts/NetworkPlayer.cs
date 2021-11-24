@@ -74,7 +74,7 @@ namespace Game.Scripts
         // each variables here per client will be managed by mirror
         [SyncVar(hook = nameof(OnSetPlayerColour)), SerializeField] private Color playerColour;
         [SyncVar(hook = nameof(OnSetPlayerName)), SerializeField] private string playerName1;
-        [SyncVar(hook = nameof(OnSetPlayerHP)), SerializeField] private int playerHP;
+        [SyncVar(hook = nameof(OnSetPlayerHP)), SerializeField] public int playerHP;
         [SyncVar(hook = nameof(OnTimerTick)), SerializeField] private int gameTimer;
         [SyncVar] public double playerDashTime;
         
@@ -253,15 +253,14 @@ namespace Game.Scripts
         /// when player collides, if not dashing it will definitely lose, otherwise 50% chance of losing hp.
         /// why can't this call another command? so i had to copy paste.
         ///
-        /// this code will be run in the server for that client's instance, so only worry about when the hp is reduced,
-        /// the losing player will reduce hp, and the winning player does nothing
+        /// this code will be run in the server for that client's instance, by setting the playerhp to public, another class can change its value
         /// </summary>
         [Command]
-        public void CmdDecidePlayerCollision(bool myIsDashing, double myTime, bool enemyIsDashing, double enemyTime)
+        public void CmdDecidePlayerCollision(bool myIsDashing, double myTime, bool enemyIsDashing, double enemyTime, uint enemyID)
         {
             //sanity check
             if (playerHP < 1) return;
-            Debug.Log($"CmdDecidePlayerCollision {netId}, {myIsDashing}, {myTime}, {enemyIsDashing}, {enemyTime}");
+            // Debug.Log($"CmdDecidePlayerCollision {netId}, {myIsDashing}, {myTime}, {enemyIsDashing}, {enemyTime}");
             if (!myIsDashing && enemyIsDashing)
             {
                 playerHP--;
@@ -273,17 +272,21 @@ namespace Game.Scripts
                 //change this to < for the correct logic but hard to test by one person., or > if you want to test alone
                 if (myTime < enemyTime)
                 {
+                    //this player lost
                     playerHP--;
                     RpcUpdateGUIhp(netId, playerHP);
                     //CmdPlayerIsHit();
                 }
                 else if (myTime > enemyTime)
                 {
-                    
+                    //enemy lost
+                    var enemy = NetworkServer.spawned[enemyID].gameObject.GetComponent<NetworkPlayer>();
+                    enemy.playerHP--;
+                    RpcUpdateGUIhp(enemy.netId, enemy.playerHP);
                 }
                 else
                 {
-                    
+                    //nothing happens
                 }
             }
         }
@@ -328,7 +331,7 @@ namespace Game.Scripts
         /// {
         ///     // This is running on every instance of the same object that the client was calling from.
         ///     // i.e. Red GO on Red Client runs Cmd, Red GO on Red, Green and Blue client's run Rpc
-        ///     MeshRenderer rend = gameObject.GetComponent<MeshRenderer>();
+        ///     MeshRenderer rend = gameObject.GetComponent&lt;MeshRenderer&gt;();
         ///     rend.material.color = Color.HSVToRGB(_hue, 1, 1);
         /// }
         /// </example>

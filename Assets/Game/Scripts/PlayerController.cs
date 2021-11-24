@@ -330,7 +330,7 @@ namespace Game.Scripts
 				
 				//call server command to decide who wins the hit
 				var enemy = hit.gameObject.GetComponent<PlayerController>();
-				netPlayer.CmdDecidePlayerCollision(isDashing, netPlayer.playerDashTime, enemy.isDashing, enemy.netPlayer.playerDashTime);
+				netPlayer.CmdDecidePlayerCollision(isDashing, netPlayer.playerDashTime, enemy.isDashing, enemy.netPlayer.playerDashTime, enemy.netId);
 				Debug.Log("called CmdDecidePlayerCollision");
 			}
 			else if (hit.gameObject.CompareTag("environment"))
