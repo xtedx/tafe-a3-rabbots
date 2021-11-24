@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using NetworkGame.Networking;
+using TeddyToolKit.HighScore;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -116,10 +117,12 @@ namespace Game.Scripts
 
         private void OnSetPlayerHP(int oldValue, int newValue)
         {
+            // Debug.Log($"net id {netId} OnSetPlayerHP {oldValue} {newValue} ");
             UpdateGUIhp(netId, newValue);
         }
         private void OnSetMaxHP(int oldValue, int newValue)
         {
+            // Debug.Log($"net id {netId} OnSetMaxHP {oldValue} {newValue} ");
             UpdateGUImaxHp(netId, newValue);
         }
         private void OnSetMaxTime(int oldValue, int newValue)
@@ -210,13 +213,19 @@ namespace Game.Scripts
         [Server]
         public void ServerGameOver()
         {
-            string summary = "";
+            List<Score> highScore = new List<Score>(4);
+            string summary = "Player Ranking:\n\n";
             foreach (var pair in MyNetworkManager.Instance.players)
             {
-                summary += $"{pair.Value.playerName1} remaining HP: {pair.Value.playerHP}\n";
+                highScore.Add(new Score(pair.Value.playerHP, pair.Value.playerName1));
             }
 
-            summary += "biggest HP wins!";
+            highScore.Sort();
+            for (var i = 0; i < highScore.Count; i++)
+            {
+                summary += $"#{i+1}. {highScore[i]._name} -- {highScore[i]._value}\n";
+            }
+            summary += $"\nCongratulations {highScore[0]._name}!!";
             RpcGameOver(summary);
         }
 
@@ -677,6 +686,14 @@ namespace Game.Scripts
         [Command]
         public void CmdGameStart(int maxTime, int maxHP)
         {
+            //update settings for all players
+            foreach (var pair in MyNetworkManager.Instance.players)
+            {
+                Debug.Log($"{netId} in RpcGameStart setting for {pair.Value.netId} max time {maxTime}  hp {maxHP}");
+                pair.Value.maxGameTime = maxTime;
+                pair.Value.maxPlayerHP = maxHP;
+                pair.Value.playerHP = maxHP;
+            }
             RpcGameStart(maxTime, maxHP);
             ServerGameStart();
         }
@@ -684,9 +701,6 @@ namespace Game.Scripts
         [ClientRpc]
         public void RpcGameStart(int maxTime, int maxHP)
         {
-            maxGameTime = maxTime;
-            playerHP = maxPlayerHP = maxHP;
-            //update settings
             UpdateGUI(netId);
         }
         

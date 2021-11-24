@@ -48,6 +48,8 @@ namespace Game.Scripts
             if (txtAddress.text == "") txtAddress.text = "localhost";
             MyNetworkManager.Instance.networkAddress = txtAddress.text;
             MyNetworkManager.Instance.StartClient();
+            //save the preference for next time
+            PlayerPrefs.SetString("host_address", txtAddress.text);
         }
         
         public void ButtonStopServer()
@@ -131,6 +133,8 @@ namespace Game.Scripts
             RegisterListeners();
             //automatically start to discover servers
             ButtonDiscoverServers();
+            //add the last connected server text
+            txtAddress.text = PlayerPrefs.GetString("host_address", "localhost");
         }
 
         private void OnValidate()

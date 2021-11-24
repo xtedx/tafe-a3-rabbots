@@ -38,7 +38,7 @@ namespace Game.Scripts
         private Text txtTimer;
         [SerializeField]
         private Text txtNetworkStatus;
-        
+
         [Space]
         [Tooltip("the toggle group used for the tab heads")]
         [SerializeField]
