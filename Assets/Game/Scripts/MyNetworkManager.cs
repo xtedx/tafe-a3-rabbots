@@ -56,7 +56,7 @@ public class MyNetworkManager : NetworkManager
         public static void AddPlayer([NotNull] NetworkPlayer _player)
         {
             Instance.players.Add(_player.netId, _player);
-            Debug.Log($"player id {_player.netId}");
+            // Debug.Log($"player id {_player.netId}");
         }
 
         /// <summary> Removes a player from the dictionary. </summary>
@@ -93,7 +93,7 @@ public class MyNetworkManager : NetworkManager
     {
         if (myNetworkDiscovery == null)
         {
-            Debug.Log($"My Network Manager Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"My Network Manager Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             myNetworkDiscovery = GetComponent<MyNetworkDiscovery>();
         }
         base.OnValidate();
@@ -294,7 +294,6 @@ public class MyNetworkManager : NetworkManager
     public override void OnStartHost()
     {
         IsHost = true;
-        Debug.Log("i am host");
         myNetworkDiscovery.AdvertiseServer();
     }
 

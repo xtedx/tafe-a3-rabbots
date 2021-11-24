@@ -11,8 +11,8 @@ namespace NetworkGame.Networking
     {
         public void LoadNetworkScene(string _scene)
         {
-            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
-            Debug.Log($"isLocalPlayer {isLocalPlayer}");
+            // Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"isLocalPlayer {isLocalPlayer}");
             if(isLocalPlayer) CmdLoadNetworkScene(_scene);
         }
 

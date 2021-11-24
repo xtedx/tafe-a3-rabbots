@@ -163,7 +163,7 @@ namespace Game.Scripts
 
         private void LateUpdate()
         {
-            ShowNetworkStatus();
+            //ShowNetworkStatus();
             //ShowMapChoiceButtons();
         }
 

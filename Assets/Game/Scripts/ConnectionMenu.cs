@@ -27,7 +27,7 @@ namespace Game.Scripts
 
         public void ButtonStartHost()
         {
-            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
             MyNetworkManager.Instance.StartHost();
             myNetworkDiscovery.AdvertiseServer();
@@ -35,7 +35,7 @@ namespace Game.Scripts
         
         public void ButtonStartServer()
         {
-            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
             MyNetworkManager.Instance.StartServer();
             myNetworkDiscovery.AdvertiseServer();
@@ -43,7 +43,7 @@ namespace Game.Scripts
         
         public void ButtonConnectLocalhost()
         {
-            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             //make the default value localhost
             if (txtAddress.text == "") txtAddress.text = "localhost";
             MyNetworkManager.Instance.networkAddress = txtAddress.text;
@@ -54,29 +54,29 @@ namespace Game.Scripts
         
         public void ButtonStopServer()
         {
-            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
             MyNetworkManager.Instance.StopHost();
         }
         
         public void ButtonStopClient()
         {
-            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
             MyNetworkManager.Instance.StopClient();
         }
         
         public void ButtonDiscoverServers()
         {
-            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             discoveredServers.Clear();
             myNetworkDiscovery.StartDiscovery();
         }
         
         public void ButtonDebug()
         {
-            Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
-            Debug.Log($"discoveredServers {discoveredServers}, count {discoveredServers.Count}");
+            // Debug.Log($"Clicked {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"discoveredServers {discoveredServers}, count {discoveredServers.Count}");
             PopulateServerList();
         }
 
@@ -92,7 +92,7 @@ namespace Game.Scripts
             foreach (ServerResponse info in discoveredServers.Values)
             {
                 var ipaddress = info.EndPoint.Address.ToString();
-                Debug.Log(ipaddress);
+                Debug.Log($"discovered {ipaddress}");
                 var button = Instantiate(buttonTemplateIP, buttonTemplateIP.transform.parent);
                 button.gameObject.SetActive(true);
                 button.GetComponentInChildren<Text>().text = ipaddress;
@@ -123,13 +123,13 @@ namespace Game.Scripts
             // Note that you can check the versioning to decide if you can connect to the server or not using this method
             discoveredServers[info.serverId] = info;
             PopulateServerList();
-            Debug.Log($"Called {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"Called {System.Reflection.MethodBase.GetCurrentMethod().Name}");
         }
         
         // Start is called before the first frame update
         void Start()
         {
-            Debug.Log($"Called {System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            // Debug.Log($"Called {System.Reflection.MethodBase.GetCurrentMethod().Name}");
             RegisterListeners();
             //automatically start to discover servers
             ButtonDiscoverServers();
@@ -150,7 +150,7 @@ namespace Game.Scripts
         {
             myNetworkDiscovery = MyNetworkManager.Instance.GetComponent<MyNetworkDiscovery>();
             myNetworkDiscovery.OnServerFound.AddListener(OnDiscoveredServer);
-            Debug.Log($"register listener networkDiscovery {myNetworkDiscovery} {myNetworkDiscovery.OnServerFound}");
+            // Debug.Log($"register listener networkDiscovery {myNetworkDiscovery} {myNetworkDiscovery.OnServerFound}");
             btnStartHost.onClick.AddListener(ButtonStartHost);
             btnStartServer.onClick.AddListener(ButtonStartServer);
             btnConnectLocalhost.onClick.AddListener(ButtonConnectLocalhost);

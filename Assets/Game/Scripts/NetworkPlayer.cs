@@ -145,27 +145,27 @@ namespace Game.Scripts
         {
             //hacky way to avoid error when the ui is not ready, and keep calling from the update method.
             RegisterPlayerInGUI(netId);
-            
-            // First determine if this function is being run on the local player
-            if(isLocalPlayer)
-            {
-                if(Input.GetKeyDown(KeyCode.Return))
-                {
-                    // Run a function that tells every client to change the colour of this gameObject
-                    //CmdRandomColor();
-                    CmdRandomName();
-                    //CmdTestToggleGUI();
-                    //Debug.Log($"player {netId }colour changed");
-                }
-            }
-
-            if (isLocalPlayer && MyNetworkManager.Instance.IsHost)
-            {
-                if(Input.GetKeyDown(KeyCode.X))
-                {
-                    CmdTimerStart();
-                }
-            }
+            //
+            // // First determine if this function is being run on the local player
+            // if(isLocalPlayer)
+            // {
+            //     if(Input.GetKeyDown(KeyCode.Return))
+            //     {
+            //         // Run a function that tells every client to change the colour of this gameObject
+            //         //CmdRandomColor();
+            //         CmdRandomName();
+            //         //CmdTestToggleGUI();
+            //         //Debug.Log($"player {netId }colour changed");
+            //     }
+            // }
+            //
+            // if (isLocalPlayer && MyNetworkManager.Instance.IsHost)
+            // {
+            //     if(Input.GetKeyDown(KeyCode.X))
+            //     {
+            //         CmdTimerStart();
+            //     }
+            // }
         }
 
         [Command]
@@ -556,7 +556,7 @@ namespace Game.Scripts
             controller.enabled = isLocalPlayer;
             
             MyNetworkManager.AddPlayer(this);
-            Debug.Log($"added player {netId} to network manager");
+            // Debug.Log($"added player {netId} to network manager");
 
             //for debugging
             playerID = netId;
@@ -619,7 +619,7 @@ namespace Game.Scripts
                 }
                 if (render.netId == 0) //0 means empty slot
                 {
-                    Debug.Log($"registered player {key} in the gui slots {i}");
+                    // Debug.Log($"registered player {key} in the gui slots {i}");
                     render.netId = key;
                     // Debug.Log($"player colour should be from gui {render.avatar.color}");
                     
@@ -691,7 +691,7 @@ namespace Game.Scripts
             //update settings for all players
             foreach (var pair in MyNetworkManager.Instance.players)
             {
-                Debug.Log($"{netId} in RpcGameStart setting for {pair.Value.netId} max time {maxTime}  hp {maxHP}");
+                // Debug.Log($"{netId} in RpcGameStart setting for {pair.Value.netId} max time {maxTime}  hp {maxHP}");
                 pair.Value.maxGameTime = maxTime;
                 pair.Value.maxPlayerHP = maxHP;
                 pair.Value.playerHP = maxHP;

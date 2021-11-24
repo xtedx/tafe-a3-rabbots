@@ -29,7 +29,7 @@ namespace Game.Scripts
             FlagAsPersistant();
             RegisterListeners();
             LoadLocalScene(GameManager.GUI_SCENE);
-            Debug.Log("loaded gui scene");
+            // Debug.Log("loaded gui scene");
         }
 
         private void OnDisable()
@@ -99,7 +99,7 @@ namespace Game.Scripts
             {
                 //this should only be in the online lobby, by the host and not anytime in the game 
                 GetComponent<NetworkSceneManager>().LoadNetworkScene(sceneMapName);
-                Debug.Log($"loaded {sceneMapName}");
+                // Debug.Log($"loaded {sceneMapName}");
             }
             else
             {
