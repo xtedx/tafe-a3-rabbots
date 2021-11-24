@@ -563,7 +563,7 @@ namespace Game.Scripts
         public override void OnStartServer()
         {
             playerHP = maxPlayerHP;
-            switch (netId%4)
+            switch (netId%5)
             {
                 case 1:
                     playerColour = Color.red;
